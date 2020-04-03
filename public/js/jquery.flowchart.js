@@ -1064,6 +1064,8 @@ jQuery(function ($) {
                 this.data.operators[operatorId].properties = {};
             }
             this.data.operators[operatorId].properties.title = title;
+            this.data.operators[operatorId].height = "80px";
+            console.log(this.data.operators[operatorId])
             this._refreshInternalProperties(this.data.operators[operatorId]);
             this.callbackEvent('afterChange', ['operator_title_change']);
         },

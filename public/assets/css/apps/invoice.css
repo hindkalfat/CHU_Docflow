@@ -60,7 +60,7 @@
     min-width: 200px;
 }
 .tab-title .search {
-    border-bottom: 1px solid #e0e6ed;
+    /* border-bottom: 1px solid #e0e6ed; */
     border-right: 1px solid #e0e6ed;
 }
 .tab-title .search input {
@@ -88,9 +88,9 @@
     border-right: 1px solid #e0e6ed;
     height: calc(100vh - 163px);
 }
-.tab-title .nav-item {
-    border-bottom: 1px solid #e0e6ed;
-}
+ .tab-title .nav-item {
+     height: 80px;
+} 
 .tab-title .list-actions {
     padding: 20px 10px;
     border-radius: 5px;
@@ -149,9 +149,8 @@
 }
 .invoice-inbox {
     position: relative;
-    overflow-x: hidden;
+    overflow-x: auto;
     overflow-y: auto;
-    max-width: 100%;
     width: 100%;
     height: calc(100vh - 104px);
 }

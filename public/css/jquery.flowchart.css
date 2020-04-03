@@ -57,6 +57,17 @@
     visibility : visible;
 }
 
+#condition .flowchart-operator-inputs .flowchart-operator-connector-arrow {
+    top: 14px;
+    border-bottom: 0px;
+}
+
+#condition .flowchart-operator-outputs .flowchart-operator-connector-arrow {
+    top: -10px;
+    position: fixed;
+    visibility: hidden;
+}
+
 .flowchart-operator-connector-small-arrow {
     width: 0px;
     height: 0px;
@@ -71,7 +82,7 @@
 
 .flowchart-operator-connector:hover .flowchart-operator-connector-arrow {
     visibility : visible;
-    border-left: 10px solid rgb(221, 10, 10);
+    border-left: 10px solid rgb(4, 2, 94);
 }
 
 .flowchart-operator-inputs .flowchart-operator-connector-arrow {

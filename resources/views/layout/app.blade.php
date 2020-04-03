@@ -41,8 +41,8 @@
     <link href="{{asset('plugins/noUiSlider/nouislider.min.css')}}" rel="stylesheet" type="text/css">
     <link href="{{asset('plugins/noUiSlider/custom-nouiSlider.css')}}" rel="stylesheet" type="text/css">
     <link href="{{asset('plugins/bootstrap-range-Slider/bootstrap-slider.css')}}" rel="stylesheet" type="text/css">
-	<link rel="stylesheet" type="text/css" href="{{asset('assets/css/forms/switches.css')}}">
-	<link rel="stylesheet" type="text/css" href="{{asset('plugins/bootstrap-select/bootstrap-select.min.css')}}">
+{{-- 	<link rel="stylesheet" type="text/css" href="{{asset('assets/css/forms/switches.css')}}">
+ --}}	<link rel="stylesheet" type="text/css" href="{{asset('plugins/bootstrap-select/bootstrap-select.min.css')}}">
 
 
 
