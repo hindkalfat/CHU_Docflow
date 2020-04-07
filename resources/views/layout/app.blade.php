@@ -91,8 +91,8 @@
 
 	<!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
 	@yield('script')
-    <script src="{{asset('assets/js/libs/jquery-3.1.1.min.js')}}"></script>
-    <script src="{{asset('bootstrap/js/popper.min.js')}}"></script>
+{{--     <script src="{{asset('assets/js/libs/jquery-3.1.1.min.js')}}"></script>
+ --}}    <script src="{{asset('bootstrap/js/popper.min.js')}}"></script>
     <script src="{{asset('bootstrap/js/bootstrap.min.js')}}"></script>
     <script src="{{asset('plugins/perfect-scrollbar/perfect-scrollbar.min.js')}}"></script>
     <script src="{{asset('assets/js/app.js')}}"></script>

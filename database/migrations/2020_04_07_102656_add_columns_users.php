@@ -13,8 +13,15 @@ class AddColumnsUsers extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            //
+        Schema::table('users', function (Blueprint $table) {        
+            $table->string('serviceU')->nullable()->after('nomU');
+            $table->string('centreU')->after('nomU');
+            $table->string('professionU')->after('nomU');
+            $table->string('adresseU')->nullable()->after('nomU');
+            $table->string('emailPersoU')->unique()->after('nomU');
+            $table->string('numTelU')->nullable()->after('nomU');
+            $table->string('villeU')->after('nomU');
+            $table->string('prenomU')->after('nomU');
         });
     }
 

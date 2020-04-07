@@ -54,10 +54,11 @@ function deleteContact() {
 
 function addContact() {
   $("#btn-add").click(function() {
+    
 
     var getParent = $(this).parents('.modal-content');
 
-    var $_name = getParent.find('#c-name');
+     var $_name = getParent.find('#c-name');
     var $_email = getParent.find('#c-email');
     var $_occupation = getParent.find('#c-occupation');
     var $_phone = getParent.find('#c-phone');
@@ -72,7 +73,7 @@ function addContact() {
     var $_occupationValue = $_occupation.val();
     var $_phoneValue = $_phone.val();
     var $_locationValue = $_location.val();
-
+/*
     if ($_nameValue == "") {
       $_getValidationField[0].innerHTML = 'Name must be filled out';
       $_getValidationField[0].style.display = 'block';
@@ -102,7 +103,18 @@ function addContact() {
 
     if ($_nameValue == "" || $_emailValue == "" || (reg.test($_emailValue) == false) || $_phoneValue == "" || (phoneReg.test($_phoneValue) == false)) {
       return false;
-    }
+    } */
+
+    var data = $('#addContactModalTitle').serialize(); 
+
+    $.ajax({
+        type:'POST',
+        data:data,
+        url:'/admin/users',
+        success:function(data){
+            alert("added")
+        }
+    });
 
     $html = '<div class="items">' +
               '<div class="item-content">' +

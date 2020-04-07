@@ -19,9 +19,6 @@ Route::get('/admin', function () {
     return view('admin/dash');
 });
 
-Route::get('/admin/users', function () {
-    return view('admin/utilisateurs');
-});
 
 Route::get('/admin/documents', function () {
     return view('admin/documents');
@@ -65,3 +62,7 @@ Route::get('/user/document', function () {
 Route::get('/pdf', function () {
     return view('admin/pdf');
 });
+
+
+Route::get('/admin/users','UserController@index');
+Route::post('/admin/users','UserController@store');
