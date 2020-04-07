@@ -10,11 +10,12 @@
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
     <link href="{{asset('https://fonts.googleapis.com/css?family=Nunito:400,600,700')}}" rel="stylesheet">
     <link href="{{asset('bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{asset('assets/css/plugins.css')}}" rel="stylesheet" type="text/css" />
+	<link href="{{asset('assets/css/plugins.css')}}" rel="stylesheet" type="text/css" />
+	<link href="{{asset('plugins/perfect-scrollbar/perfect-scrollbar.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/css/components/custom-modal.css')}}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="{{asset('assets/css/forms/theme-checkbox-radio.css')}}">
     <link href="{{asset('assets/css/apps/contacts.css')}}" rel="stylesheet" type="text/css" />
-
+	<link rel="stylesheet" href="{{asset('https://use.fontawesome.com/releases/v5.13.0/css/all.css')}}" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">
 	<title>Home</title>
 
 	<!-- jQuery & jQuery UI are required -->
@@ -40,28 +41,43 @@
 			height: 400px;
 			background: white;
 			margin-bottom: 10px;
-			overflow-x: auto;
-			overflow-y: auto;
+		}
+
+		.nav-item{
+			margin-left: 20px;
 		}
 
 		
-		#start_end {
+		#opstart{
 			height: 50px;
 			width: 50px;
-			background-color: #555;
+			background-color: #8dbf42;
 			border-radius: 50%;
-		} 
-
-		#action {
-			width: 80px;
+		}
+		
+		#opend {
 			height: 50px;
-			background: #A2D0FE;
+			width: 50px;
+			background-color: #e7515a;
+			border-radius: 50%;
 		}
 
-		#condition {
+		#opaction {
+			width: 100px;
+			height: 50px;
+			background: #6AD4FE;
+		}
+
+		#opemail {
+			width: 100px;
+			height: 50px;
+			background: #FEBB55;
+		}
+
+		#opcondition {
 		  height: 50px;
 		  width: 50px;
-		  background-color: #7FDBFF;
+		  background-color: #3b3f5c;
 		  transform: rotate(45deg);
 		} 
 		
@@ -98,27 +114,45 @@
 									<div class="row">
 										<div class="col-md-12 col-sm-12 col-12">
 											<div class="search container layout-top-spacing">
-												<h6 id="aaa" hidden="true">
+												<h6>
 													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-move"><polyline points="5 9 2 12 5 15"></polyline><polyline points="9 5 12 2 15 5"></polyline><polyline points="15 19 12 22 9 19"></polyline><polyline points="19 9 22 12 19 15"></polyline><line x1="2" y1="12" x2="22" y2="12"></line><line x1="12" y1="2" x2="12" y2="22"></line></svg>
 													Glisser-déposer
 												</h6>
 											</div>
 											<ul class="nav nav-pills inv-list-container d-block" id="pills-tab" role="tablist">
 												<li class=" container nav-item layout-top-spacing">
-													<div id="start_end" class="draggable_operator" data-nb-inputs="0" data-nb-outputs="1"></div>
-													Déclencheur
+													<div id="start" class="draggable_operator" data-nb-inputs="0" data-nb-outputs="1">
+														<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#8dbf42" stroke="#8dbf42" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-circle"><circle cx="12" cy="12" r="10"></circle></svg>
+														Début
+													</div>
+												</li>
+
+												<li class=" container nav-item ">
+													<div id="end" class="draggable_operator" data-nb-inputs="1" data-nb-outputs="0">
+														<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#e7515a" stroke="#e7515a" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-circle"><circle cx="12" cy="12" r="10"></circle></svg>
+														Fin
+													</div>
 												</li>
 	
-												<li class=" container nav-item layout-top-spacing">
-													<div id="action" class="draggable_operator" data-nb-inputs="1" data-nb-outputs="1"></div>
-													Tâche
+												<li class=" container nav-item ">
+													<div id="action" class="draggable_operator" data-nb-inputs="2" data-nb-outputs="1">
+														<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1b55e2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+														Tâche
+													</div>
 												</li>
-															</li> 
+
+												<li class=" container nav-item ">
+													<div id="email" class=" container row 	draggable_operator" data-nb-inputs="2" data-nb-outputs="1">
+															<h4><i class="far fa-envelope" style="color:#e2a03f"></i></h4>
+															&nbsp; Email
+													</div>
 												</li>
 	
-												<li class=" container nav-item layout-top-spacing">
-													<div id="condition" class="draggable_operator" data-nb-inputs="1" data-nb-outputs="2"></div>
-													Condition
+												<li class=" container nav-item ">
+													<div id="condition" class=" container row draggable_operator" data-nb-inputs="1" data-nb-outputs="2">
+														<h4><i style="transform:rotate(90deg);" class="fas fa-code-branch"></i></h4>
+														&nbsp; Condition
+													</div>
 												</li>
 											</ul>
 										</div>
@@ -171,7 +205,8 @@
 									<div class="invoice-inbox">
 										<nav class="container layout-top-spacing">
 											<button class="btn btn-outline-primary btn-rounded mb-2 create_operator">Nouvelle action</button>
-											<button hidden="true" id="supp" class="btn btn-outline-primary btn-rounded mb-2 delete_selected_button">Supprimer</button>
+											<button hidden="true" id="supp" class="btn btn-outline-primary btn-rounded mb-2 delete_selected_button">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></button>
 										</nav>
 	
 										<div class="">
@@ -262,6 +297,7 @@
 				},
 				onOperatorUnselect: function() {
 					$operatorProperties.hide();
+					$('#supp').attr("hidden",true);
 					return true;
 				},
 				onLinkSelect: function(linkId) {
@@ -278,8 +314,7 @@
 			$operatorTitle.keyup(function() {
 				var selectedOperatorId = $flowchart.flowchart('getSelectedOperatorId');
 				if (selectedOperatorId != null) {
-					$('#action.flowchart-operator .flowchart-operator-connector-arrow').css("top","-10px");
-					$('#action.flowchart-operator').css("width","auto");
+					///$('#action.flowchart-operator').css("width","auto");
 					$flowchart.flowchart('setOperatorTitle', selectedOperatorId, $operatorTitle.val());
 				}
 			});
@@ -370,6 +405,7 @@
 				helper: function(e) {
 					var $this = $(this);
 					var data = getOperatorData($this);
+					console.log(data)
 					option=$this[0].id;//
 					return $flowchart.flowchart('getOperatorElement', data, option);
 				},
@@ -494,7 +530,7 @@
 			}
 		};
 		if (false) console.log('remove lint unused warning', defaultFlowchartData);
-    </script>
+	</script>
     
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
     <script src="{{asset('bootstrap/js/popper.min.js')}}"></script>
@@ -508,7 +544,8 @@
         });
     </script>
     <script src="{{asset('assets/js/custom.js')}}"></script>
-    <!-- END GLOBAL MANDATORY SCRIPTS -->
+	<!-- END GLOBAL MANDATORY SCRIPTS -->
+	<script src="{{asset('assets/js/apps/invoice.js')}}"></script>
 </body>
 
 </html>

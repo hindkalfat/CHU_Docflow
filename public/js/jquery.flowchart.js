@@ -515,11 +515,16 @@ jQuery(function ($) {
         _getOperatorFullElement: function (operatorData, indice) {
             var infos = this.getOperatorCompleteData(operatorData);
 
-            var $operator = $('<div  id="'+indice+'" class="flowchart-operator"></div>');
+            var $operator = $('<div  id="op'+indice+'" class="flowchart-operator"></div>');
             $operator.addClass(infos.class);
 
             var $operator_title = $('<div class="flowchart-operator-title" id="WFtitle"></div>');
-            $operator_title.html(infos.title);
+            if(indice=="email")
+                $operator_title.html('<i class="far fa-envelope" style="color:white"></i>'+infos.title);
+            else if(indice=="condition")
+                $operator_title.html('Si');
+            else
+                $operator_title.html(infos.title);
             $operator_title.appendTo($operator);
 
             var $operator_body = $('<div class="flowchart-operator-body"></div>');

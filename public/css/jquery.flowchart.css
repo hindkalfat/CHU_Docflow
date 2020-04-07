@@ -46,27 +46,72 @@
     margin-right: 5px;
 }
 
-.flowchart-operator-connector-arrow {
+/* // */
+#opaction .flowchart-operator-connector-arrow {
     width: 0px;
     height: 0px;
     border-top: 10px solid transparent;
     border-bottom: 10px solid transparent;
-    border-left: 10px solid rgb(204, 204, 204);
+    border-left: 10px solid #45CAFE;
     position: absolute;
-    top: 0px;
+    top: -30px;
+}
+
+#opemail .flowchart-operator-connector-arrow {
+    width: 0px;
+    height: 0px;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 10px solid #F4A834;
+    position: absolute;
+    top: -30px;
     visibility : visible;
 }
 
-#condition .flowchart-operator-inputs .flowchart-operator-connector-arrow {
-    top: 14px;
-    border-bottom: 0px;
+#opstart .flowchart-operator-connector-arrow {
+    width: 0px;
+    height: 0px;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 11px solid #86BC34;
+    position: absolute;
+    top: -23px;
+    visibility : visible;
 }
 
-#condition .flowchart-operator-outputs .flowchart-operator-connector-arrow {
-    top: -10px;
-    position: fixed;
-    visibility: hidden;
+#opend .flowchart-operator-connector-arrow {
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 11px solid #D7242F;
+    left:2px;
+    position: absolute;
+    top: -23px;
+    visibility : visible;
 }
+
+#opcondition .flowchart-operator-inputs .flowchart-operator-connector-arrow {
+    border-top: 10px solid transparent;
+    border-bottom: 0px;
+    border-left: 11px solid #252A47;
+    top: -10px;
+    position: absolute;
+}
+
+#opcondition .flowchart-operator-outputs .flowchart-operator-connector-arrow {
+    width: 0px;
+    height: 0px;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 10px solid white;
+    position: fixed;
+    top: -10px;
+    transform: rotate(-45deg);
+}
+#opcondition .flowchart-operator-outputs:hover .flowchart-operator-connector-arrow {
+    visibility : visible;
+    border-left: 10px solid  #252A47;
+} 
+/* // */
 
 .flowchart-operator-connector-small-arrow {
     width: 0px;
@@ -80,10 +125,6 @@
     visibility : hidden;
 }
 
-.flowchart-operator-connector:hover .flowchart-operator-connector-arrow {
-    visibility : visible;
-    border-left: 10px solid rgb(4, 2, 94);
-}
 
 .flowchart-operator-inputs .flowchart-operator-connector-arrow {
     left: -1px;
@@ -133,18 +174,63 @@
 }
 
 
-
-.flowchart-operator .flowchart-operator-title {
+/* // */
+#opaction .flowchart-operator-title {
     width: 100%;
-    padding: 5px;
+    margin-top: 13px;
+    text-align: center;
+    color:white;
     font-weight: bold;
-    box-sizing: border-box;
     height: auto;
+    width:auto;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     cursor: move;
+} 
+
+#opemail .flowchart-operator-title {
+    width: 100%;
+    margin-top: 13px;
+    text-align: center;
+    color:white;
+    font-weight: bold;
+    height: auto;
+    width:auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: move;
+} 
+
+#opstart .flowchart-operator-title {
+    margin-top: 11px;
+    margin-left: 2px;
+    color:white;
+    font-weight: bold;
+    cursor: move;
 }
+
+#opend .flowchart-operator-title {
+    margin-top: 11px;
+    margin-left: 13px;
+    color:white;
+    font-weight: bold;
+    cursor: move;
+}
+
+#opcondition .flowchart-operator-title {
+    width: 100%;
+    margin-top: 13px;
+    text-align: center;
+    color:white;
+    font-weight: bold;
+    height: auto;
+    width:auto;
+    cursor: move;
+    transform:rotate(-45deg);
+} 
+/* // */
 
 .flowchart-operator .flowchart-operator-inputs-outputs {
     display: table;

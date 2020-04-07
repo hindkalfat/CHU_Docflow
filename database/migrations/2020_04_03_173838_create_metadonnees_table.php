@@ -14,7 +14,9 @@ class CreateMetadonneesTable extends Migration
     public function up()
     {
         Schema::create('metadonnees', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('idM');
+            $table->string('libelleM');
+            $table->string('typeM');
             $table->timestamps();
         });
     }

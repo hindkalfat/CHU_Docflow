@@ -89,7 +89,7 @@
     height: calc(100vh - 163px);
 }
  .tab-title .nav-item {
-     height: 80px;
+     height: 60px;
 } 
 .tab-title .list-actions {
     padding: 20px 10px;

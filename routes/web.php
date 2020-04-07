@@ -60,3 +60,8 @@ Route::get('/user/documents', function () {
 Route::get('/user/document', function () {
     return view('user/document');
 });
+
+
+Route::get('/pdf', function () {
+    return view('admin/pdf');
+});

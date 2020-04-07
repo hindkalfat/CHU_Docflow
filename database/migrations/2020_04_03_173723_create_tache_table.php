@@ -14,7 +14,10 @@ class CreateTacheTable extends Migration
     public function up()
     {
         Schema::create('tache', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('idT');
+            $table->string('Etat_avcT');
+            $table->date('date_echeanceT');
+            $table->date('date_rappelT');
             $table->timestamps();
         });
     }

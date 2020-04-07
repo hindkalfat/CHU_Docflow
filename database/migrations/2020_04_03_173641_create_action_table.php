@@ -14,7 +14,15 @@ class CreateActionTable extends Migration
     public function up()
     {
         Schema::create('action', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('idA');
+            $table->string('nomA');
+            $table->string('titreA');
+            $table->text('directiveA');
+            $table->integer('date_limiteA');
+            $table->string('opt_limiteA');
+            $table->integer('date_rappelA');
+            $table->string('opt_rappelA');
+            $table->string('prioriteA');
             $table->timestamps();
         });
     }
