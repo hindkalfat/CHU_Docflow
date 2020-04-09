@@ -66,3 +66,5 @@ Route::get('/pdf', function () {
 
 Route::get('/admin/users','UserController@index');
 Route::post('/admin/users','UserController@store');
+Route::post('/admin/edit/user','UserController@update');
+Route::post('/admin/delete/user','UserController@destroy');

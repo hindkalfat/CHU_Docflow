@@ -39,10 +39,11 @@
                                                         <form id="addContactModalTitle">
                                                                 {{ csrf_field() }}
                                                             <div class="row">
+                                                                <input name="IDU" type="hidden" id="c-ID" value="">
                                                                 <div class="col-md-6">
                                                                     <div class="contact-name">
                                                                         <i class="flaticon-user-11"></i>
-                                                                        <input name="nomU" type="text" id="c-name" class="form-control" placeholder="Name">
+                                                                        <input name="nomU" type="text" id="c-nom" class="form-control" placeholder="(*) Nom">
                                                                         <span class="validation-text"></span>
                                                                     </div>
                                                                 </div>
@@ -59,16 +60,16 @@
                                                                     <div class="col-md-6">
                                                                         <div class="contact-name">
                                                                             <i class="flaticon-user-11"></i>
-                                                                            <input name="villeU" type="text" id="ville" class="form-control" placeholder="Ville">
-        {{--                                                                     <span class="validation-text"></span>
-         --}}                                                                </div>
+                                                                            <input name="villeU" type="text" id="c-ville" class="form-control" placeholder="(*) Ville (Travail)">
+                                                                                 <span class="validation-text"></span>
+                                                                        </div>
                                                                     </div>
                                                                     <div class="col-md-6">
                                                                         <div class="contact-name">
                                                                             <i class="flaticon-user-11"></i>
-                                                                            <input name="adresseU" type="text" id="adresse" class="form-control" placeholder="Adresse">
-        {{--                                                                     <span class="validation-text"></span>
-         --}}                                                                </div>
+                                                                            <input name="adresseU" type="text" id="c-adresse" class="form-control" placeholder="Adresse">
+                                                                            <span class="validation-text"></span>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
         
@@ -93,7 +94,7 @@
                                                                     <div class="col-md-12">
                                                                         <div class="contact-location">
                                                                             <i class="flaticon-location-1"></i>
-                                                                            <input name="professionU" type="text" id="profession" class="form-control" placeholder="Profession">
+                                                                            <input name="professionU" type="text" id="c-profession" class="form-control" placeholder="Profession">
         {{--                                                                     <span class="validation-text"></span>
          --}}                                                                </div>
                                                                     </div>
@@ -103,14 +104,14 @@
                                                                     <div class="col-md-6">
                                                                         <div class="contact-name">
                                                                             <i class="flaticon-user-11"></i>
-                                                                            <input name="centreU" type="text" id="centre" class="form-control" placeholder="Centre">
+                                                                            <input name="centreU" type="text" id="c-centre" class="form-control" placeholder="Centre">
         {{--                                                                     <span class="validation-text"></span>
          --}}                                                                </div>
                                                                     </div>
                                                                     <div class="col-md-6">
                                                                         <div class="contact-name">
                                                                             <i class="flaticon-mail-26"></i>
-                                                                            <input name="serviceU" type="text" id="service" class="form-control" placeholder="Service">
+                                                                            <input name="serviceU" type="text" id="c-service" class="form-control" placeholder="Service">
         {{--                                                                     <span class="validation-text"></span>
          --}}                                                                </div>
                                                                     </div>
@@ -145,6 +146,9 @@
                                         </div>
                                         <h4>Name</h4>
                                     </div>
+                                    <div class="user-ville">
+                                        <h4>Ville</h4>
+                                    </div>
                                     <div class="user-email">
                                         <h4>Email</h4>
                                     </div>
@@ -171,9 +175,15 @@
                                             </div>
                                             <img src="assets/img/profile-5.jpg" alt="avatar">
                                             <div class="user-meta-info">
+                                                <p class="user-ID" data-ID="{{$user->id}}"></p>
                                                 <p class="user-name" data-name="{{$user->nomU}}">{{$user->nomU}}</p>
-                                                <p class="user-work" data-occupation="Web Developer">Web Developer</p>
+                                                <p class="user-prenom" data-prenom="{{$user->prenomU}}">{{$user->prenomU}}</p>
+                                                <p class="user-work" data-profession="{{$user->professionU}}">{{$user->professionU}}</p>
                                             </div>
+                                        </div>
+                                        <div class="user-ville">
+                                            <p class="info-title">Ville: </p>
+                                            <p class="usr-ville" data-ville="{{$user->villeU}}">{{$user->villeU}}</p>
                                         </div>
                                         <div class="user-email">
                                             <p class="info-title">Email: </p>
@@ -181,7 +191,7 @@
                                         </div>
                                         <div class="user-location">
                                             <p class="info-title">Location: </p>
-                                            <p class="usr-location" data-location="Boston, USA">Boston, USA</p>
+                                            <p class="usr-location" data-location="{{$user->adresseU}}">{{$user->adresseU}}</p>
                                         </div>
                                         <div class="user-phone">
                                             <p class="info-title">Phone: </p>
@@ -189,12 +199,29 @@
                                         </div>
                                         <div class="action-btn">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 edit"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
-
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-minus delete"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-toggle="modal" data-target="#exampleModal" data-id="{{$user->id}}" data-nom="{{$user->nomU}}" class="feather feather-user-minus delete"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="23" y1="11" x2="17" y2="11"></line></svg>
                                         </div>
                                     </div>
                                 </div>
                             @endforeach
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            <p class="modal-text">Voulez vous vraiment supprimer l'utilisateur <b id="nomU"></b> </p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> Annuler</button>
+                                            <form id="deleteF">
+                                                {{ csrf_field() }}
+                                                <input name="idU" type="text" id="idU">
+                                                <button type="button" class="btn btn-primary dlt">Confirmer</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                     </div>

@@ -282,6 +282,15 @@
 .searchable-container .searchable-items.list .items .user-email .info-title {
   display: none;
 }
+.searchable-container .searchable-items.list .items .user-ville p {
+  margin-bottom: 0;
+  color: #888ea8;
+  font-weight: 600;
+  font-size: 13px;
+}
+.searchable-container .searchable-items.list .items .user-ville .info-title {
+display: none;
+}
 .searchable-container .searchable-items.list .items .user-location p {
       font-size: 13px;
     font-weight: 600;
@@ -403,6 +412,22 @@
   margin-bottom: 11px;
 }
 .searchable-container .searchable-items.grid .items .user-email p {
+  color: #888ea8;
+  font-size: 13px;
+  margin-bottom: 11px;
+}
+.searchable-container .searchable-items.grid .items .user-ville .info-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #3b3f5c;
+  margin-bottom: 11px;
+  margin-right: 10px;
+}
+.searchable-container .searchable-items.grid .items .user-ville {
+  display: flex;
+  justify-content: space-between;
+}
+.searchable-container .searchable-items.grid .items .user-ville p {
   color: #888ea8;
   font-size: 13px;
   margin-bottom: 11px;

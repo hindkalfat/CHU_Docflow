@@ -50,10 +50,11 @@ class UserController extends Controller
         $user->professionU = $request->input('professionU');
         $user->centreU = $request->input('centreU');
         $z=0;
-        $user->email = 'h@h33.com';
+        $user->email = 'h@h35.com';
         $user->password = "h123";
 
         $user->save();
+        return response()->json(['success' => "updated" , 'id' => $user->id]);;
     }
 
     /**
@@ -85,9 +86,23 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $id = $request->IDU;
+        $user = User::find($id);
+
+        $user->nomU = $request->nomU;
+        $user->prenomU = $request->prenomU;
+        $user->villeU = $request->villeU;
+        $user->adresseU = $request->adresseU;
+        $user->numTelU = $request->numTelU;
+        $user->emailPersoU = $request->emailPersoU;
+        $user->professionU = $request->professionU;
+        $user->centreU = $request->centreU;
+        $user->serviceU = $request->serviceU;
+
+        $user->save();
+        return response()->json(['success' => "updated"]);;
     }
 
     /**
@@ -96,8 +111,11 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $id = $request->idU;
+        $user = User::find($id);
+        $user->delete();
+        return response()->json(['success' => "deleted"]);;
     }
 }
