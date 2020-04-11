@@ -20,10 +20,6 @@ Route::get('/admin', function () {
 });
 
 
-Route::get('/admin/documents', function () {
-    return view('admin/documents');
-});
-
 Route::get('/admin/archives', function () {
     return view('admin/archives');
 });
@@ -63,8 +59,12 @@ Route::get('/pdf', function () {
     return view('admin/pdf');
 });
 
-
+//user
 Route::get('/admin/users','UserController@index');
 Route::post('/admin/users','UserController@store');
 Route::post('/admin/edit/user','UserController@update');
 Route::post('/admin/delete/user','UserController@destroy');
+
+//document
+Route::get('/admin/documents','TdocController@index');
+Route::post('/admin/documents','TdocController@store');

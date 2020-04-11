@@ -1,10 +1,10 @@
-<?php
+s<?php
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTacheTable extends Migration
+class CreateTachesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,17 @@ class CreateTacheTable extends Migration
      */
     public function up()
     {
-        Schema::create('tache', function (Blueprint $table) {
+        Schema::create('taches', function (Blueprint $table) {
             $table->increments('idT');
             $table->string('Etat_avcT');
             $table->date('date_echeanceT');
             $table->date('date_rappelT');
+            $table->unsignedInteger('t_idA');
             $table->timestamps();
+            
+            //FK
+            $table->foreign('t_idA')->references('idA')->on('actions')->onDelete('cascade');;
+
         });
     }
 

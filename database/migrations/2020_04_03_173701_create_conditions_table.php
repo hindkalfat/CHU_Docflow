@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateConditionTable extends Migration
+class CreateConditionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,15 @@ class CreateConditionTable extends Migration
      */
     public function up()
     {
-        Schema::create('condition', function (Blueprint $table) {
+        Schema::create('conditions', function (Blueprint $table) {
             $table->increments('idC');
             $table->string('formuleC');
+            $table->unsignedInteger('c_idW');
             $table->timestamps();
+
+            //FK
+            $table->foreign('c_idW')->references('idWf')->on('workflows')->onDelete('cascade');;
+
         });
     }
 

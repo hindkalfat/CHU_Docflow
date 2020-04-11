@@ -17,7 +17,11 @@ class CreateMetadonneesTable extends Migration
             $table->increments('idM');
             $table->string('libelleM');
             $table->string('typeM');
+            $table->unsignedInteger('m_idTd');
             $table->timestamps();
+
+            //Fk
+            $table->foreign('m_idTd')->references('idTd')->on('types_doc')->onDelete('cascade');;
         });
     }
 

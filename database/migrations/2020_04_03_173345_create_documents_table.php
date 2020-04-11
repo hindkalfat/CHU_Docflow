@@ -18,7 +18,14 @@ class CreateDocumentsTable extends Migration
             $table->string('nomD');
             $table->string('titreD');
             $table->string('etatD');
+            $table->unsignedInteger('d_idU');
+            $table->unsignedInteger('d_idTd');
             $table->timestamps();
+
+            //FK
+            $table->foreign('d_idU')->references('id')->on('users')->onDelete('cascade');;
+            $table->foreign('d_idTd')->references('idTd')->on('types_doc')->onDelete('cascade');;
+            
         });
     }
 

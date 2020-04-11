@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateActionTable extends Migration
+class CreateActionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateActionTable extends Migration
      */
     public function up()
     {
-        Schema::create('action', function (Blueprint $table) {
+        Schema::create('actions', function (Blueprint $table) {
             $table->increments('idA');
             $table->string('nomA');
             $table->string('titreA');
@@ -23,7 +23,16 @@ class CreateActionTable extends Migration
             $table->integer('date_rappelA');
             $table->string('opt_rappelA');
             $table->string('prioriteA');
+            $table->unsignedInteger('a_idW');
+            $table->unsignedInteger('a_idG');
+            $table->unsignedInteger('a_idU');
             $table->timestamps();
+
+            //FK
+            $table->foreign('a_idW')->references('idWf')->on('workflows')->onDelete('cascade');;
+            $table->foreign('a_idG')->references('idG')->on('groupes')->onDelete('cascade');;
+            $table->foreign('a_idU')->references('id')->on('users')->onDelete('cascade');;
+            
         });
     }
 

@@ -22,6 +22,49 @@
             $('#fadeupModal').on('hidden.bs.modal',function(){
                 $('.addmeta').remove();
             });
+
+            $("#addType").submit(function(e){
+                e.preventDefault();
+                var data = $('#addType').serialize(); 
+                $.ajax({
+                    type:'POST',
+                    data:data,
+                    url:'/admin/documents',
+                    success:function(data){
+                        var intitule=data.type.intituleTd;
+                        var desc = data.type.descriptionTd;
+                        $('#fadeupModal').modal('hide');
+                        $('#toggleAccordion').append(
+                            '<div class="card">'+
+                                '<div class="card-header" id="headingOne1">'+
+                                    '<section class="mb-0 mt-0">'+
+                                    '<div role="menu" class="collapsed" data-toggle="collapse" data-target="#defaultAccordionOne" aria-expanded="true" aria-controls="defaultAccordionOne">'
+                                        +intitule+'<div class="icons"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg></div>'+
+                                    '</div>'+
+                                    '</section>'+
+                                '</div>'+
+
+                                '<div id="defaultAccordionOne" class="collapse show" aria-labelledby="headingOne1" data-parent="#toggleAccordion">'+
+                                    '<div class="card-body">'+
+                                        '<p class="">'+
+                                            desc+
+                                        '</p>'+
+                                        /* <div class="widget-content ">
+                                            <span class="badge outline-badge-primary">Primary</span>
+                                            <span class="badge outline-badge-info">Info</span>
+                                            <span class="badge outline-badge-success">Success</span>
+                                            <span class="badge outline-badge-secondary">Secondary</span>
+                                            <span class="badge outline-badge-warning">Warning</span>
+                                            <span class="badge outline-badge-danger">Danger</span>
+                                            <span class="badge outline-badge-dark">Dark</span>
+                                        </div>  */
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'
+                        )
+                    }
+                }); 
+            });
         });
 </script>
 
@@ -149,95 +192,66 @@
                                                         <!-- Modal content-->
                                                         <div class="modal-content">
                                                             <div class="modal-header">
-                                                                <h5 class="modal-title">Modal Header</h5>
+                                                                <h5 class="modal-title">Nouveau type</h5>
                                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                     <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                                                                 </button>
                                                             </div>
-                                                            <div class="modal-body">
-                                    
-                                                                    <div class="form-group">
-                                                                        <label for="exampleFormControlInput1">Intitulé</label>
-                                                                        <input type="text" class="form-control" id="exampleFormControlInput1" value="">
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label for="exampleFormControlInput1">Description</label>
-                                                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                                                                    </div>
-                                                                    <a href="#" class="addinput">
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
-                                                                    </a>
-                                                            </div>
-                                                            <div class="modal-footer md-button">
-                                                                <button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
-                                                                <button type="button" class="btn btn-primary">Save</button>
-                                                            </div>
+                                                            <form id="addType" enctype="multipart/form-data">
+                                                            {{ csrf_field() }}
+                                                                <div class="modal-body">
+                                        
+                                                                        <div class="form-group">
+                                                                            <input name="intituleT" id="intituléT" type="text" class="form-control" id="exampleFormControlInput1" value="" placeholder="(*) Intitulé">
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <textarea name="description" id="description" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Description"></textarea>
+                                                                        </div>
+                                                                        <a href="#" class="addinput">
+                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                                                                        </a>
+                                                                </div>
+                                                                <div class="modal-footer md-button">
+                                                                    <button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> Annuler</button>
+                                                                    <button id="valider" type="submit" class="btn btn-primary">Valider</button>
+                                                                </div>
+                                                            </form>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="widget-content widget-content-area">
                                                     <div id="toggleAccordion">
+                                                        <?php $var=1; ?>
+                                                        @foreach ($typesDoc as $typeDoc)
                                                         <div class="card">
-                                                        <div class="card-header" id="headingOne1">
-                                                            <section class="mb-0 mt-0">
-                                                            <div role="menu" class="collapsed" data-toggle="collapse" data-target="#defaultAccordionOne" aria-expanded="true" aria-controls="defaultAccordionOne">
-                                                                Collapsible Group Item #1  <div class="icons"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+                                                            <div class="card-header" id="headingTwo1">
+                                                                <section class="mb-0 mt-0">
+                                                                <div role="menu" class="" data-toggle="collapse" data-target="#defaultAccordionOne{{$var}}" aria-expanded="true" aria-controls="defaultAccordionOne">
+                                                                        {{$typeDoc->intituleTd}}  <div class="icons"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+                                                                </div>
+                                                                </section>
                                                             </div>
-                                                            </section>
-                                                        </div>
-                
-                                                        <div id="defaultAccordionOne" class="collapse show" aria-labelledby="headingOne1" data-parent="#toggleAccordion">
-                                                            <div class="card-body">
-                                                                <p class="">
-                                                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.                                                
-                                                                </p>
-                                                                <div class="widget-content ">
-                                                                    <span class="badge outline-badge-primary">Primary</span>
-                                                                    <span class="badge outline-badge-info">Info</span>
-                                                                    <span class="badge outline-badge-success">Success</span>
-                                                                    <span class="badge outline-badge-secondary">Secondary</span>
-                                                                    <span class="badge outline-badge-warning">Warning</span>
-                                                                    <span class="badge outline-badge-danger">Danger</span>
-                                                                    <span class="badge outline-badge-dark">Dark</span>
-                                                                </div> 
-                                                            </div>
-                                                        </div>
-                                                        </div>
-                                                        <div class="card">
-                                                        <div class="card-header" id="headingTwo1">
-                                                            <section class="mb-0 mt-0">
-                                                            <div role="menu" class="" data-toggle="collapse" data-target="#defaultAccordionTwo" aria-expanded="false" aria-controls="defaultAccordionTwo">
-                                                                Collapsible Group Item #2  <div class="icons"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
-                                                            </div>
-                                                            </section>
-                                                        </div>
-                                                        <div id="defaultAccordionTwo" class="collapse" aria-labelledby="headingTwo1" data-parent="#toggleAccordion">
-                                                            <div class="card-body">
-                                                                <ul class="list-unstyled">
-                                                                    <li><a href="javascript:void(0);" class="">Apple</a></li>
-                                                                    <li><a href="javascript:void(0);" class="">Orange</a></li>
-                                                                    <li><a href="javascript:void(0);" class="">Banana</a></li>
-                                                                    <li><a href="javascript:void(0);" class="">list</a></li>
-                                                                </ul>
+                    
+                                                            <div id="defaultAccordionOne{{$var}}" class="collapse" aria-labelledby="headingTwo1" data-parent="#toggleAccordion">
+                                                                <div class="card-body">
+                                                                    <p class="">
+                                                                        {{$typeDoc->descriptionTd}}
+                                                                    </p>
+                                                                    <div class="widget-content ">
+                                                                        <span class="badge outline-badge-primary">Primary</span>
+                                                                        <span class="badge outline-badge-info">Info</span>
+                                                                        <span class="badge outline-badge-success">Success</span>
+                                                                        <span class="badge outline-badge-secondary">Secondary</span>
+                                                                        <span class="badge outline-badge-warning">Warning</span>
+                                                                        <span class="badge outline-badge-danger">Danger</span>
+                                                                        <span class="badge outline-badge-dark">Dark</span>
+                                                                    </div> 
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                        </div>
-                                                        <div class="card">
-                                                        <div class="card-header" id="headingThree1">
-                                                            <section class="mb-0 mt-0">
-                                                            <div role="menu" class="collapsed" data-toggle="collapse" data-target="#defaultAccordionThree" aria-expanded="false" aria-controls="defaultAccordionThree">
-                                                                Collapsible Group Item #3 <div class="icons"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
-                                                            </div>
-                                                            </section>
-                                                        </div>
-                                                        <div id="defaultAccordionThree" class="collapse" aria-labelledby="headingThree1" data-parent="#toggleAccordion">
-                                                            <div class="card-body">
-                                                            <p> Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.</p>
-                
-                                                            <button class="btn btn-primary mt-4">Accept</button>
-                                                            </div>
-                                                        </div>
-                                                        </div>
+                                                        <?php $var++; ?>
+                                                        @endforeach
+                                                        
                                                     </div>
                 
                                                 </div>

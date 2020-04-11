@@ -57,7 +57,6 @@ function deleteContact() {
   $(".dlt").on('click', function(event) {
     event.preventDefault();
      var data = $('#deleteF').serialize(); 
-    console.log(data)
       $.ajax({
           type:'POST',
           data:data,
