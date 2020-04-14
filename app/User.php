@@ -44,11 +44,11 @@ class User extends Authenticatable
 
     public function actions()
     {
-        return $this->hasMany(Action::class);
+        return $this->hasMany(Action::class, 'a_idU');
     }
 
     public function documents()
     {
-        return $this->hasMany(Document::class);
+        return $this->hasMany(Document::class, 'd_idU');
     }
 }

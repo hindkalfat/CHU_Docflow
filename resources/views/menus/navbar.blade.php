@@ -202,8 +202,8 @@
                         <div class="media mx-auto">
                             <img src="assets/img/profile-7.jpg" class="img-fluid mr-2" alt="avatar">
                             <div class="media-body">
-                                <h5>Alan Green</h5>
-                                <p>Web Developer</p>
+                                <h5>{{ Auth::user()->nomU }}</h5>
+                                <p>{{ Auth::user()->professionU }}</p>
                             </div>
                         </div>
                     </div>
@@ -240,7 +240,7 @@
                         </a>
                     </div>
                     <div class="dropdown-item">
-                        <a href="auth_login.html">
+                        <a href="{{ route('logout') }}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round" class="feather feather-log-out">
@@ -249,6 +249,9 @@
                                 <line x1="21" y1="12" x2="9" y2="12"></line>
                             </svg> <span>Log Out</span>
                         </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
                     </div>
                 </div>
             </li>

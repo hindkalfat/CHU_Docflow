@@ -15,12 +15,12 @@ class TypeDoc extends Model
 
     public function metadonnees()
     {
-        return $this->hasMany(Metadonnee::class);
+        return $this->hasMany(Metadonnee::class, 'm_idTd');
     }
 
     public function documents()
     {
-        return $this->hasMany(Document::class);
+        return $this->hasMany(Document::class, 'd_idTd');
     }
 
     public function workflow()

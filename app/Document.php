@@ -18,13 +18,13 @@ class Document extends Model
         return $this->belongsTo(TypeDoc::class);
     }
 
-    public function versions()
+    /* public function versions()
     {
         return $this->hasMany(Version::class);
-    }
+    } */
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class,'d_idU');
     }
 }

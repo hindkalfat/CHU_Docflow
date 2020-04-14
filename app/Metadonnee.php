@@ -10,11 +10,11 @@ class Metadonnee extends Model
     protected $primaryKey = 'idM';
 
     protected $fillable = [
-        'libelleM', 'typeM'
+        'libelleM', 'typeM' , 'm_idTd'
     ];
 
     public function type_doc()
     {
-        return $this->belongsTo(TypeDoc::class);
+        return $this->belongsTo(TypeDoc::class,'m_idTd');
     }
 }

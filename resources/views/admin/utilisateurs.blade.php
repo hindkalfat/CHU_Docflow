@@ -1,5 +1,9 @@
 @extends('layout.app')
 
+@section('script')
+    <script src="{{asset('assets/js/apps/contact.js')}}"></script>
+@endsection
+
 @section('content')
 
 <div id="content" class="main-content">
@@ -57,21 +61,21 @@
                                                             </div>
 
                                                             <div class="row">
-                                                                    <div class="col-md-6">
-                                                                        <div class="contact-name">
-                                                                            <i class="flaticon-user-11"></i>
-                                                                            <input name="villeU" type="text" id="c-ville" class="form-control" placeholder="(*) Ville (Travail)">
-                                                                                 <span class="validation-text"></span>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md-6">
-                                                                        <div class="contact-name">
-                                                                            <i class="flaticon-user-11"></i>
-                                                                            <input name="adresseU" type="text" id="c-adresse" class="form-control" placeholder="Adresse">
-                                                                            <span class="validation-text"></span>
-                                                                        </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="contact-name">
+                                                                        <i class="flaticon-user-11"></i>
+                                                                        <input name="villeU" type="text" id="c-ville" class="form-control" placeholder="(*) Ville (Travail)">
+                                                                                <span class="validation-text"></span>
                                                                     </div>
                                                                 </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="contact-name">
+                                                                        <i class="flaticon-user-11"></i>
+                                                                        <input name="adresseU" type="text" id="c-adresse" class="form-control" placeholder="Adresse">
+                                                                        <span class="validation-text"></span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
         
                                                                 <div class="row">
                                                                     <div class="col-md-6">
@@ -112,8 +116,25 @@
                                                                         <div class="contact-name">
                                                                             <i class="flaticon-mail-26"></i>
                                                                             <input name="serviceU" type="text" id="c-service" class="form-control" placeholder="Service">
+                                                                             <span class="validation-text"></span>
+                                                                         </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <div class="contact-name">
+                                                                            <i class="flaticon-user-11"></i>
+                                                                            <input name="email" type="email" class="form-control" placeholder="Email">
         {{--                                                                     <span class="validation-text"></span>
-         --}}                                                                </div>
+            --}}                                                                </div>
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <div class="contact-name">
+                                                                            <i class="flaticon-mail-26"></i>
+                                                                                <input name="password" type="password" class="form-control" placeholder="Mot de passe">
+                                                                                <span class="validation-text"></span>
+                                                                            </div>
                                                                     </div>
                                                                 </div>
 
@@ -173,7 +194,7 @@
                                                 <span class="new-control-indicator"></span>
                                                 </label>
                                             </div>
-                                            <img src="assets/img/profile-5.jpg" alt="avatar">
+                                            <img src="{{asset('assets/img/profile-15.jpg')}}" alt="avatar">
                                             <div class="user-meta-info">
                                                 <p class="user-ID" data-ID="{{$user->id}}"></p>
                                                 <p class="user-name" data-name="{{$user->nomU}}">{{$user->nomU}}</p>

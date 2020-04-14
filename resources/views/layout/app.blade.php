@@ -6,7 +6,11 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
-    <title>CHU Docflow </title>
+	
+	<!-- CSRF Token -->
+	<meta name="csrf-token" content="{{ csrf_token() }}">
+	
+	<title>CHU Docflow </title>
     <link rel="icon" type="image/x-icon" href="{{asset('assets/img/favicon.ico')}}"/>
     <link href="{{asset('assets/css/loader.css')}}" rel="stylesheet" type="text/css" />
     <script src="{{asset('assets/js/loader.js')}}"></script>
@@ -17,7 +21,8 @@
     <link href="{{asset('assets/css/plugins.css')}}" rel="stylesheet" type="text/css" />
     <!-- END GLOBAL MANDATORY STYLES -->
 
-    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM STYLES -->
+	<!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM STYLES -->
+	<link rel="stylesheet" href="{{asset('https://use.fontawesome.com/releases/v5.13.0/css/all.css')}}" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">
     <link href="{{asset('plugins/apex/apexcharts.css')}}" rel="stylesheet" type="text/css">
     <link href="{{asset('assets/css/dashboard/dash_1.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('plugins/fullcalendar/fullcalendar.css')}}" rel="stylesheet" type="text/css" />
@@ -41,8 +46,7 @@
     <link href="{{asset('plugins/noUiSlider/nouislider.min.css')}}" rel="stylesheet" type="text/css">
     <link href="{{asset('plugins/noUiSlider/custom-nouiSlider.css')}}" rel="stylesheet" type="text/css">
     <link href="{{asset('plugins/bootstrap-range-Slider/bootstrap-slider.css')}}" rel="stylesheet" type="text/css">
-{{-- 	<link rel="stylesheet" type="text/css" href="{{asset('assets/css/forms/switches.css')}}">
- --}}	
+	
  	<link rel="stylesheet" type="text/css" href="{{asset('plugins/bootstrap-select/bootstrap-select.min.css')}}">
 	 @yield('link')
 
@@ -90,9 +94,9 @@
     <!-- END MAIN CONTAINER -->
 
 	<!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
-	@yield('script')
-{{--     <script src="{{asset('assets/js/libs/jquery-3.1.1.min.js')}}"></script>
- --}}    <script src="{{asset('bootstrap/js/popper.min.js')}}"></script>
+	@yield('script')    
+	
+	<script src="{{asset('bootstrap/js/popper.min.js')}}"></script>
     <script src="{{asset('bootstrap/js/bootstrap.min.js')}}"></script>
     <script src="{{asset('plugins/perfect-scrollbar/perfect-scrollbar.min.js')}}"></script>
     <script src="{{asset('assets/js/app.js')}}"></script>
@@ -120,14 +124,15 @@
     <script src="{{asset('plugins/editors/quill/quill.js')}}"></script>
     <script src="{{asset('assets/js/apps/todoList.js')}}"></script>
     <script src="{{asset('plugins/jquery-ui/jquery-ui.min.js')}}"></script>
-    <script src="{{asset('assets/js/apps/contact.js')}}"></script>
     <script src="{{asset('plugins/table/datatable/datatables.js')}}"></script>
     <script src="{{asset('assets/js/components/ui-accordions.js')}}"></script>
     <script src="{{asset('plugins/noUiSlider/nouislider.min.js')}}"></script>
     <script src="{{asset('plugins/flatpickr/custom-flatpickr.js')}}"></script>
     <script src="{{asset('plugins/noUiSlider/custom-nouiSlider.js')}}"></script>
     <script src="{{asset('plugins/bootstrap-range-Slider/bootstrap-rangeSlider.js')}}"></script>
-    <script src="{{asset('plugins/bootstrap-select/bootstrap-select.min.js')}}"></script>
+	<script src="{{asset('plugins/bootstrap-select/bootstrap-select.min.js')}}"></script>
+	<script src="{{asset('assets/js/authentication/form-2.js')}}"></script>
+
 
 
     <script>

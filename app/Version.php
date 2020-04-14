@@ -13,8 +13,8 @@ class Version extends Model
         'numV', 'doc',
     ];
 
-    public function document()
+    /* public function document()
     {
         return $this->belongsTo(Document::class);
-    }
+    } */
 }

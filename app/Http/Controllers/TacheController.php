@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\support\Facades\DB;
-use App\TypeDoc;
-use App\Metadonnee;
-use App\Document;
 use App\User;
+use App\Tache;
+use App\Action;
+use Auth;
 
-class TDocController extends Controller
+class TacheController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,13 +21,15 @@ class TDocController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     public function index()
     {
-        $types = TypeDoc::all();
-        $docs = Document::all();
-
-        return view('admin.documents',['typesDoc' => $types], ['docs' => $docs]);
+        $id = Auth::user()->id;
+        $user = User::find($id);
+        $actions = $user->actions->pluck('idA'); 
+        $taches = Tache::whereIn('t_idA',$actions)->get();
+    
+        return view('user.taches1',['taches' => $taches]);
     }
 
     /**
@@ -48,31 +50,7 @@ class TDocController extends Controller
      */
     public function store(Request $request)
     {
-        $type = new TypeDoc();
-
-        $type->intituleTd = $request->input('intituleT');
-        $type->descriptionTd = $request->input('description');
-
-        $str_arr_l = explode (",", $request->input('libelleM'));
-        $str_arr_t = explode (",", $request->input('typeM'));
-        $metas = array_combine($str_arr_l, $str_arr_t);
-        
-         $type->save();
-        $i=0;
-         foreach ( array_keys($metas) as $meta) {
-             if($meta != '')
-             {
-                 $metadonnee = new Metadonnee();
-
-                $metadonnee->libelleM = $meta;
-                $metadonnee->typeM= array_values($metas)[$i];
-                $metadonnee->m_idTd = $type->idTd;
-                $i++;
-                $metadonnee->save();
-             }
-                
-        } 
-        return response()->json(['success' => "created" , 'type' => $type , 'metas' => $type->metadonnees]); 
+        //
     }
 
     /**

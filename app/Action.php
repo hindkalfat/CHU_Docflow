@@ -20,7 +20,7 @@ class Action extends Model
 
     public function taches()
     {
-        return $this->hasMany(Tache::class);
+        return $this->hasMany(Tache::class, 't_idA');
     }
 
     public function groupe()
@@ -30,6 +30,6 @@ class Action extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'a_idU');
     }
 }

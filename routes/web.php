@@ -11,8 +11,8 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/first', function () {
+    return view('first');
 });
 
 Route::get('/admin', function () {
@@ -20,8 +20,8 @@ Route::get('/admin', function () {
 });
 
 
-Route::get('/admin/archives', function () {
-    return view('admin/archives');
+Route::get('/admin/groupes', function () {
+    return view('admin/groupes');
 });
 
 Route::get('/admin/nouveauWf', function () {
@@ -42,14 +42,6 @@ Route::get('/user/calendar', function () {
     return view('user/calendar');
 });
 
-Route::get('/user/taches', function () {
-    return view('user/taches1');
-});
-
-Route::get('/user/documents', function () {
-    return view('user/documents');
-});
-
 Route::get('/user/document', function () {
     return view('user/document');
 });
@@ -65,6 +57,23 @@ Route::post('/admin/users','UserController@store');
 Route::post('/admin/edit/user','UserController@update');
 Route::post('/admin/delete/user','UserController@destroy');
 
+//groupes
+Route::get('/admin/groupes','GroupController@index');
+Route::post('/admin/groupes','GroupController@store');
+Route::post('/admin/delete/groupe','GroupController@destroy');
+
 //document
 Route::get('/admin/documents','TdocController@index');
 Route::post('/admin/documents','TdocController@store');
+
+/*******USER****** */
+
+//doc
+Route::get('/user/documents','DocController@index');
+Route::get('/user/taches','TacheController@index');
+
+
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

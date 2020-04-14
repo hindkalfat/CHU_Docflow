@@ -5,9 +5,10 @@
 <div id="content" class="main-content">
     <div class="layout-px-spacing">
 
-        <div class="row" id="cancel-row">
+        <div class="row layout-top-spacing" id="cancel-row">
             <div class="col-lg-6">
                 <!-- Fade in up modal -->
+                <br>
                 <button type="button" class="btn btn-success mb-2 mr-2" data-toggle="modal" data-target="#fadeupModal">Nouveau</button>
             </div>
             <div id="fadeupModal" class="modal animated fadeInUp custo-fadeInUp" role="dialog">
@@ -22,9 +23,10 @@
                         </div>
                         <div class="modal-body">
                                 <select class="selectpicker  mb-4" data-live-search="true" data-width="100%">
-                                    <option>Fries</option>
-                                    <option>Burger, Shake and a Smile</option>
-                                    <option>Sugar, Spice and all things nice</option>
+                                    <option>choisissez</option>
+                                    @foreach ($typesDoc as $typeDoc)
+                                        <option> {{$typeDoc->intituleTd}} </option>
+                                    @endforeach
                                 </select>
 
                                 <div class="row">
@@ -65,52 +67,41 @@
                             <thead>
                                 <tr>
                                     <th>Nom document</th>
-                                    <th>Ajouté par</th>
                                     <th>Date création</th>
+                                    <th>Date modification</th>
+                                    <th>Action courante</th>
                                     <th>Nb versions</th>
-                                    <th>Date création</th>
                                     <th>Droit d'accés</th>
                                     <th class="no-content"></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Tiger Nixon</td>
-                                    <td>System Architect</td>
-                                    <td>Edinburgh</td>
-                                    <td>61</td>
-                                    <td>2011/04/25</td>
-                                    <td>$320,800</td>
-                                    <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle table-cancel"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg></td>
-                                </tr>
-                                <tr>
-                                    <td>Garrett Winters</td>
-                                    <td>Accountant</td>
-                                    <td>Tokyo</td>
-                                    <td>63</td>
-                                    <td>2011/07/25</td>
-                                    <td>$170,750</td>
-                                    <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle table-cancel"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg></td>
-                                </tr>
-                                <tr>
-                                    <td>Ashton Cox</td>
-                                    <td>Junior Technical Author</td>
-                                    <td>San Francisco</td>
-                                    <td>66</td>
-                                    <td>2009/01/12</td>
-                                    <td>$86,000</td>
-                                    <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle table-cancel"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg></td>
-                                </tr>
+                                @foreach ($docs as $doc)
+                                   <tr>
+                                        <td> {{$doc->nomD}} </td>
+                                        <td> {{$doc->created_at->format('d/m/Y')}} </td>
+                                        <td> {{$doc->updated_at->format('d/m/Y')}} </td>
+                                        <td>  </td>
+                                        <td>  </td>
+                                        <td>  </td>
+                                        <td>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" title="supprimer" class="feather feather-x-circle table-cancel"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                                        </td>
+                                    </tr> 
+                                @endforeach
+                                
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Position</th>
-                                    <th>Office</th>
-                                    <th>Age</th>
-                                    <th>Start date</th>
-                                    <th>Salary</th>
-                                    <th></th>
+                                        <th>Nom document</th>
+                                        <th>Date création</th>
+                                        <th>Date modification</th>
+                                        <th>Action courante</th>
+                                        <th>Nb versions</th>
+                                        <th>Droit d'accés</th>
+                                        <th></th>
                                 </tr>
                             </tfoot>
                         </table>

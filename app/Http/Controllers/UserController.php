@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Foundation\Auth\RegistersUsers;
 
 use App\User;
 
@@ -13,6 +16,12 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function index()
     {
         $users = User::all();
@@ -49,9 +58,8 @@ class UserController extends Controller
         $user->adresseU = $request->input('adresseU');
         $user->professionU = $request->input('professionU');
         $user->centreU = $request->input('centreU');
-        $z=0;
-        $user->email = 'h@h35.com';
-        $user->password = "h123";
+        $user->email = $request->input('email');
+        $user->password = Hash::make($request->input('password'));
 
         $user->save();
         return response()->json(['success' => "updated" , 'id' => $user->id]);;

@@ -15,6 +15,6 @@ class Tache extends Model
 
     public function action()
     {
-        return $this->belongsTo(Action::class);
+        return $this->belongsTo(Action::class,'t_idA');
     }
 }
