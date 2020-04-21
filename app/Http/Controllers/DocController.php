@@ -16,11 +16,6 @@ class DocController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
     
     public function index()
     {
@@ -32,6 +27,7 @@ class DocController extends Controller
 
         return view('user.documents',['docs' => $docs], ['typesDoc' => $typesDoc]);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -97,5 +93,14 @@ class DocController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    public function metas()
+    {
+        $id = $_POST['id'];
+        $typeD = TypeDoc::find($id);
+        $metas = $typeD->metadonnees;
+        return response()->json($metas);
     }
 }

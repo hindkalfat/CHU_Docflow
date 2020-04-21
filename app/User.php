@@ -51,4 +51,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Document::class, 'd_idU');
     }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'roles_users' , '_idU', '_idR');
+    }
 }

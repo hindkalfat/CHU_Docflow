@@ -4,7 +4,7 @@
 @section('content')
 <div style="top:100px;left:100px; " class="modal-body" id="modalbody">
     <div id="liensPDF" class="pdf-viewer-area pdf-single-pro">
-        <a class="media" href="{{asset('comptes-univ-tlemcen.docx')}}"></a>
+        <a class="media" href="{{asset('mamunur.pdf')}}"></a>
     </div>
 </div>
 @endsection

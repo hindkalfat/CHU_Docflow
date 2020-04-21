@@ -39,6 +39,10 @@ $(document).ready(function() {
   });
 
   $('#btn-add-contact').on('click', function(event) {
+    var $_email = document.getElementById('c-emailPerso');
+    var $_setEmailValueEmpty = $_email.value = '';
+    var $_password = document.getElementById('c-password');
+    var $_setPasswordValueEmpty = $_password.value = '';
     $('#addContactModal #btn-add').show();
     $('#addContactModal #btn-edit').hide();
     $('#addContactModal').modal('show');
@@ -46,7 +50,7 @@ $(document).ready(function() {
 
 function deleteContact() {
 
-  $("#exampleModal").on('show.bs.modal', function(event) {
+  $("#exampleModalCenter").on('show.bs.modal', function(event) {
     var a = $(event.relatedTarget).data('nom');
     var b = $(event.relatedTarget).data('id');
     var m = $(this);
@@ -62,8 +66,8 @@ function deleteContact() {
           data:data,
           url:'/admin/delete/user',
           success:function(data){
-            $(".delete").parents('.items').remove();
-            $('#exampleModal').modal('hide');
+            $(".delete").parents('#items'+data.id).remove();
+            $('#exampleModalCenter').modal('hide');
           }
         }); 
     
@@ -80,10 +84,13 @@ function addContact() {
     var $_prenom = getParent.find('#c-prenom');
     var $_ville = getParent.find('#c-ville');
 
-    var $_email = getParent.find('#c-email');
+    var $_email = getParent.find('#c-emailPerso');
     var $_profession = getParent.find('#c-profession');
     var $_phone = getParent.find('#c-phone');
     var $_location = getParent.find('#c-adresse');
+
+    var $_emailapp = getParent.find('#c-email');
+    var $_password = getParent.find('#c-password');
 
     var $_getValidationField = document.getElementsByClassName('validation-text');
     var reg = /^.+@[^\.].*\.[a-z]{2,}$/;
@@ -98,47 +105,45 @@ function addContact() {
     var $_locationValue = $_location.val();
 
     if ($_nameValue == "") {
-      $_getValidationField[0].innerHTML = 'vueillez renseigner votre nom';
+      $_getValidationField[0].innerHTML = 'veuillez renseigner votre nom';
       $_getValidationField[0].style.display = 'block';
     } else {
       $_getValidationField[0].style.display = 'none';
     }
 
     if ($_prenomValue == "") {
-      $_getValidationField[1].innerHTML = 'vueillez renseigner votre prenom';
+      $_getValidationField[1].innerHTML = 'veuillez renseigner votre prenom';
       $_getValidationField[1].style.display = 'block';
     } else {
       $_getValidationField[1].style.display = 'none';
     }
 
     if ($_villeValue == "") {
-      $_getValidationField[2].innerHTML = 'vueillez renseigner votre ville';
+      $_getValidationField[2].innerHTML = 'veuillez renseigner votre ville';
       $_getValidationField[2].style.display = 'block';
     } else {
       $_getValidationField[2].style.display = 'none';
-    }
-/*
-    if ($_emailValue == "") {
-      $_getValidationField[1].innerHTML = 'Email Id must be filled out';
-      $_getValidationField[1].style.display = 'block';
-    } else if((reg.test($_emailValue) == false)) {
-      $_getValidationField[1].innerHTML = 'Invalid Email';
-      $_getValidationField[1].style.display = 'block';
-    } else {
-      $_getValidationField[1].style.display = 'none';
     }
 
-    if ($_phoneValue == "") {
-      $_getValidationField[2].innerHTML = 'Invalid (Enter 10 Digits)';
-      $_getValidationField[2].style.display = 'block';
-    } else if((phoneReg.test($_phoneValue) == false)) {
-      $_getValidationField[2].innerHTML = 'Please Enter A numeric value';
-      $_getValidationField[2].style.display = 'block';
+    if ($_emailValue == "") {
+      $_getValidationField[5].innerHTML = 'veuillez renseigner votre email';
+      $_getValidationField[5].style.display = 'block';
+    } else if((reg.test($_emailValue) == false)) {
+      $_getValidationField[5].innerHTML = 'Email invalide';
+      $_getValidationField[5].style.display = 'block';
     } else {
-      $_getValidationField[2].style.display = 'none';
+      $_getValidationField[5].style.display = 'none';
     }
-*/
-    if ($_nameValue == "" || $_prenomValue == "" ||  $_villeValue == "" || $_emailValue == "" || (reg.test($_emailValue) == false) || $_phoneValue == "" || (phoneReg.test($_phoneValue) == false)) {
+
+    if((phoneReg.test($_phoneValue) == false)) {
+      $_getValidationField[4].innerHTML = 'veuillez saisir une valeur numérique';
+      $_getValidationField[4].style.display = 'block';
+    } 
+    else {
+      $_getValidationField[4].style.display = 'none';
+    }
+
+    if ($_nameValue == "" || $_prenomValue == "" ||  $_villeValue == "" || $_emailValue == "" || (reg.test($_emailValue) == false)) {
       return false;
     } 
 
@@ -160,7 +165,7 @@ function addContact() {
                                 '</label>' +
                             '</div>' +
 
-                            '<img src="assets/img/90x90.jpg">' +
+                            '<img src="{!! asset("assets/img/90x90.jpg") !!}">' +
                             '<div class="user-meta-info">' +
                                 '<p class="user-name" data-name='+ $_nameValue +'>'+ $_nameValue +'</p>' +
                                 '<p class="user-prenom" data-prenom='+ $_prenomValue +'>'+ $_prenomValue +'</p>' +
@@ -185,7 +190,7 @@ function addContact() {
                         '</div>' +
                         '<div class="action-btn">' +
                             '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 edit"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>'+
-                            '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-toggle="modal" data-target="#exampleModal" data-id="'+data.id+'" data-nom="'+$_nameValue+'" class="feather feather-user-minus delete"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="23" y1="11" x2="17" y2="11"></line></svg>'
+                            '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-toggle="modal" data-target="#exampleModalCenter" data-id="'+data.id+'" data-nom="'+$_nameValue+'" class="feather feather-user-minus delete"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="23" y1="11" x2="17" y2="11"></line></svg>'
                         '</div>' +
                     '</div>' +
                 '</div>';
@@ -217,7 +222,7 @@ $('#addContactModal').on('hidden.bs.modal', function (e) {
     var $_name = document.getElementById('c-nom');
     var $_prenom = document.getElementById('c-prenom');
     var $_ville = document.getElementById('c-ville');
-    var $_email = document.getElementById('c-email');
+    var $_email = document.getElementById('c-emailPerso');
     var $_profession = document.getElementById('c-profession');
     var $_phone = document.getElementById('c-phone');
     var $_location = document.getElementById('c-adresse');
@@ -273,7 +278,7 @@ function editContact() {
     var $_getModalNameInput = getModal.find('#c-nom');
     var $_getModalPrenomInput = getModal.find('#c-prenom');
     var $_getModalVilleInput = getModal.find('#c-ville');
-    var $_getModalEmailInput = getModal.find('#c-email');
+    var $_getModalEmailInput = getModal.find('#c-emailPerso');
     var $_getModalProfessionInput = getModal.find('#c-profession');
     var $_getModalPhoneInput = getModal.find('#c-phone');
     var $_getModalLocationInput = getModal.find('#c-adresse');
@@ -297,7 +302,7 @@ function editContact() {
       var $_getInputName = getParent.find('#c-nom');
       var $_getInputPrenom = getParent.find('#c-prenom');
       var $_getInputVille = getParent.find('#c-ville');
-      var $_getInputNmail = getParent.find('#c-email');
+      var $_getInputNmail = getParent.find('#c-emailPerso');
       var $_getInputNccupation = getParent.find('#c-profession');
       var $_getInputNhone = getParent.find('#c-phone');
       var $_getInputNocation = getParent.find('#c-adresse');
@@ -311,7 +316,7 @@ function editContact() {
       var $_phoneValue = $_getInputNhone.val();
       var $_locationValue = $_getInputNocation.val();
 
-       var data = $('#addContactModalTitle').serialize(); 
+      var data = $('#addContactModalTitle').serialize(); 
 
       $.ajax({
           type:'POST',
@@ -367,7 +372,7 @@ getNameInput.addEventListener('input', function() {
   getNameInputValue = this.value;
 
   if (getNameInputValue == "") {
-    $_getValidationField[0].innerHTML = 'Name Required';
+    $_getValidationField[0].innerHTML = 'veuillez renseigner votre nom';
     $_getValidationField[0].style.display = 'block';
   } else {
     $_getValidationField[0].style.display = 'none';
@@ -383,7 +388,7 @@ getPrenomInput.addEventListener('input', function() {
   getPrenomInputValue = this.value;
 
   if (getPrenomInputValue == "") {
-    $_getValidationField[1].innerHTML = 'Prenom Required';
+    $_getValidationField[1].innerHTML = 'veuillez renseigner votre prenom';
     $_getValidationField[1].style.display = 'block';
   } else {
     $_getValidationField[1].style.display = 'none';
@@ -398,7 +403,7 @@ getVilleInput.addEventListener('input', function() {
   getVilleInputValue = this.value;
 
   if (getVilleInputValue == "") {
-    $_getValidationField[2].innerHTML = 'Ville Required';
+    $_getValidationField[2].innerHTML = 'veuillez renseigner votre ville';
     $_getValidationField[2].style.display = 'block';
   } else {
     $_getValidationField[2].style.display = 'none';
@@ -407,20 +412,20 @@ getVilleInput.addEventListener('input', function() {
 })
 
 
-getEmailInput = document.getElementById('c-email');
+getEmailInput = document.getElementById('c-emailPerso');
 
 getEmailInput.addEventListener('input', function() {
 
     getEmailInputValue = this.value;
 
     if (getEmailInputValue == "") {
-      $_getValidationField[1].innerHTML = 'Email Required';
-      $_getValidationField[1].style.display = 'block';
+      $_getValidationField[5].innerHTML = 'veuillez renseigner votre email';
+      $_getValidationField[5].style.display = 'block';
     } else if((reg.test(getEmailInputValue) == false)) {
-      $_getValidationField[1].innerHTML = 'Invalid Email';
-      $_getValidationField[1].style.display = 'block';
+      $_getValidationField[5].innerHTML = 'Invalid Email';
+      $_getValidationField[5].style.display = 'block';
     } else {
-      $_getValidationField[1].style.display = 'none';
+      $_getValidationField[5].style.display = 'none';
     }
 
 })
@@ -431,14 +436,11 @@ getPhoneInput.addEventListener('input', function() {
 
   getPhoneInputValue = this.value;
 
-  if (getPhoneInputValue == "") {
-    $_getValidationField[2].innerHTML = 'Phone Number Required';
-    $_getValidationField[2].style.display = 'block';
-  } else if((phoneReg.test(getPhoneInputValue) == false)) {
-    $_getValidationField[2].innerHTML = 'Invalid (Enter 10 Digits)';
-    $_getValidationField[2].style.display = 'block';
+  if( (getPhoneInputValue != "") && (phoneReg.test(getPhoneInputValue) == false) ) {
+    $_getValidationField[4].innerHTML = 'Invalid (Enter 10 Digits)';
+    $_getValidationField[4].style.display = 'block';
   } else {
-    $_getValidationField[2].style.display = 'none';
+    $_getValidationField[4].style.display = 'none';
   }
 
 })

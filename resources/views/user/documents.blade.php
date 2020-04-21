@@ -1,5 +1,77 @@
 @extends('layout.app1')
 
+@section('link')
+    <link rel="stylesheet" type="text/css" href="{{asset('plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css')}}">
+
+    <script>
+        $(document).ready(function () {
+            
+            $('#typeDoc').change(function(){
+                var id = $('#typeDoc').val();
+                var data = {
+                    'id': $('#typeDoc').val(), _token: '{{csrf_token()}}' 
+                };
+                $.ajax({
+                    type:'POST',
+                    data:data,
+                    url:'/metas',
+                    success:function(data){
+                        $.each(data, function () {
+                            console.log(this)
+                            if(this.typeM == 'Date'){
+                                $('#metashow').append(
+                                    '<div class=" mt-1">'+
+                                        '<span class="badge outline-badge-dark">sp'+
+                                        '</span>'+
+                                    '</div>'+
+                                    '<div class="form-group col-md-6">'+
+                                        '<input id="basicFlatpickr" value="2019-09-04" class="macl form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">'+
+                                    '</div>'
+                                );
+                            }else if(this.typeM == 'Heure'){
+                                $('#metashow').append(
+                                    '<div class=" mt-1">'+
+                                        '<span class="badge outline-badge-dark">fg'+
+                                        '</span>'+
+                                    '</div>'+
+                                    '<div class="form-group col-md-6">'+
+                                       '<input id="timeFlatpickr" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">'+
+                                    '</div>'
+                                );
+                            }else if(this.typeM == 'Numérique'){
+                                $('#metashow').append(
+                                    '<div class=" mt-1">'+
+                                        '<span class="badge outline-badge-dark">wfg'+
+                                        '</span>'+
+                                    '</div>'+
+                                    '<div class="form-group col-md-6">'+
+                                        '<input id="demo2" type="text" value="0" name="demo2" class="form-control">'+
+                                    '</div>'
+                                );
+                            }else{
+                                $('#metashow').append(
+                                    '<div class=" mt-1">'+
+                                        '<span class="badge outline-badge-dark">fs'+
+                                        '</span>'+
+                                    '</div>'+
+                                    '<div class="form-group col-md-6">'+
+                                        '<input type="text" class="form-control" placeholder="">'+
+                                    '</div>'
+                                );
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+@endsection
+
+@section('script')
+    <script src="{{asset('plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js')}}"></script>
+    <script src="{{asset('plugins/bootstrap-touchspin/custom-bootstrap-touchspin.js')}}"></script>
+@endsection
+
 @section('content')
 
 <div id="content" class="main-content">
@@ -22,28 +94,14 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                                <select class="selectpicker  mb-4" data-live-search="true" data-width="100%">
+                                <select id="typeDoc" name="typeDoc" class="selectpicker  mb-4" data-live-search="true" data-width="100%">
                                     <option>choisissez</option>
                                     @foreach ($typesDoc as $typeDoc)
-                                        <option> {{$typeDoc->intituleTd}} </option>
+                                        <option value="{{$typeDoc->idTd}}"> {{$typeDoc->intituleTd}} </option>
                                     @endforeach
                                 </select>
 
-                                <div class="row">
-                                    <div class="form-group col-md-6">
-                                        <input type="text" class="form-control" placeholder="">
-                                        <div class=" mt-1">
-                                            <span class="badge outline-badge-dark">date Livraison
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <input type="text" class="form-control" placeholder="">
-                                        <div class=" mt-1">
-                                            <span class="badge outline-badge-dark">signé par
-                                            </span>
-                                        </div>
-                                    </div>
+                                <div class="row" id="metashow">
                                 </div>
                                 
 

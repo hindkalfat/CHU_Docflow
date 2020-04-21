@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
 use App\User;
+use App\RoleUser;
 
 class UserController extends Controller
 {
@@ -16,11 +17,7 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    
     
     public function index()
     {
@@ -62,6 +59,13 @@ class UserController extends Controller
         $user->password = Hash::make($request->input('password'));
 
         $user->save();
+
+        $user_role = new RoleUser();
+        $user_role->_idU= $user->id;
+        $user_role->_idR=2;
+
+        $user_role->save();
+
         return response()->json(['success' => "updated" , 'id' => $user->id]);;
     }
 
@@ -124,6 +128,6 @@ class UserController extends Controller
         $id = $request->idU;
         $user = User::find($id);
         $user->delete();
-        return response()->json(['success' => "deleted"]);;
+        return response()->json(['success' => "deleted", 'id' => $id]);;
     }
 }

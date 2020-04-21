@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Groupe;
+use App\User;
 
 class GroupController extends Controller
 {
@@ -12,17 +13,13 @@ class GroupController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
     
     public function index()
     {
         $groupes = Groupe::all();
+        $users = User::all();
 
-        return view('admin.groupes',['groupes' => $groupes]);
+        return view('admin.groupes',['groupes' => $groupes] ,['users' => $users]);
     }
 
     /**

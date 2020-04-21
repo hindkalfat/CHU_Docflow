@@ -51,29 +51,43 @@ Route::get('/pdf', function () {
     return view('admin/pdf');
 });
 
-//user
-Route::get('/admin/users','UserController@index');
-Route::post('/admin/users','UserController@store');
-Route::post('/admin/edit/user','UserController@update');
-Route::post('/admin/delete/user','UserController@destroy');
-
-//groupes
-Route::get('/admin/groupes','GroupController@index');
-Route::post('/admin/groupes','GroupController@store');
-Route::post('/admin/delete/groupe','GroupController@destroy');
-
-//document
-Route::get('/admin/documents','TdocController@index');
-Route::post('/admin/documents','TdocController@store');
-
-/*******USER****** */
-
-//doc
-Route::get('/user/documents','DocController@index');
-Route::get('/user/taches','TacheController@index');
-
-
-
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::group(['middleware' => ['auth']], function () {
+    
+    /*******ADMIN****** */
+    Route::group(['middleware' => ['admin']], function () {
+        
+        //user
+        Route::get('/admin/users','UserController@index');
+        Route::post('/admin/users','UserController@store');
+        Route::post('/admin/edit/user','UserController@update');
+        Route::post('/admin/delete/user','UserController@destroy');
+
+        //groupes
+        Route::get('/admin/groupes','GroupController@index');
+        Route::post('/admin/groupes','GroupController@store');
+        Route::post('/admin/delete/groupe','GroupController@destroy');
+
+        //document
+        Route::get('/admin/documents','TdocController@index');
+        Route::post('/admin/documents','TdocController@store');
+
+    });
+
+    /*******USER****** */
+    Route::group(['middleware' => ['user']], function () {
+        //doc
+        Route::get('/user/documents','DocController@index');
+        Route::get('/user/taches','TacheController@index');
+        Route::post('/metas','DocController@metas');
+    
+    });
+
+    Route::get('/accesrefuse', function () {
+        return view('auth/403');
+    });
+
+});

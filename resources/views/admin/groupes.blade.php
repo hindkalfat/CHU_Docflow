@@ -41,7 +41,7 @@
                                                         <form id="addContactModalTitle">
                                                                 {{ csrf_field() }}
                                                             <div class="row">
-                                                                <div class="col-md-12">
+                                                                <div class="form-group col-md-12">
                                                                     <div class="contact-name">
                                                                         <i class="flaticon-user-11"></i>
                                                                         <input name="nomG" type="text" id="c-nom" class="form-control" placeholder="(*) Nom">
@@ -50,14 +50,13 @@
                                                                 </div>
                                                             </div>
                                                             <div class="row">
-                                                                <div class="col-md-12">
-                                                                    <select class="selectpicker" data-selected-text-format="count" multiple data-live-search="true" data-actions-box="true">
-                                                                        <option>Fries</option>
-                                                                        <option>Burger</option>
-                                                                        <option>Sugar</option>
-                                                                        <option>Fries</option>
-                                                                        <option>Burger</option>
-                                                                        <option>Sugar</option>
+                                                                <div class="form-group col-md-12">
+                                                                    <select class="selectpicker col-md-12" data-selected-text-format="count" multiple data-live-search="true" data-actions-box="true">
+                                                                        <option>users</option>
+                                                                        @foreach ($users as $user)
+                                                                            <option> {{$user->nomU}} </option>
+                                                                        @endforeach
+                                                                        
                                                                     </select>
                                                                 </div>
                                                             </div>

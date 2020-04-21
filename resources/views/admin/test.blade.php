@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
     <title>CHU Docflow</title>
-    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico"/>
+    <link rel="icon" type="image/x-icon" href="{{asset('assets/img/favicon.ico')}}"/>
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
     <link href="{{asset('https://fonts.googleapis.com/css?family=Nunito:400,600,700')}}" rel="stylesheet">
     <link href="{{asset('bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
@@ -84,7 +84,13 @@
 	</style>
 </head>
 
-<body>
+<body class="alt-menu sidebar-noneoverflow">
+	<!-- BEGIN LOADER -->
+    <div id="load_screen"> <div class="loader"> <div class="loader-content">
+		<div class="spinner-grow align-self-center"></div>
+	</div></div></div>
+	<!--  END LOADER -->
+
     <!--  BEGIN NAVBAR  -->
     @include('menus.navbar')
     <!--  END NAVBAR  -->
