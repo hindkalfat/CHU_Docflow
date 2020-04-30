@@ -188,7 +188,7 @@
         } );
     </script>
 
-    <!-- Flowchart JS -->
+    {{-- <!-- Flowchart JS -->
     <script type="text/javascript">
 		/* global $ */
 		$(document).ready(function() {
@@ -468,7 +468,7 @@
 			}
 		};
 		if (false) console.log('remove lint unused warning', defaultFlowchartData);
-	</script>
+	</script> --}}
         
 
     <!-- END PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->

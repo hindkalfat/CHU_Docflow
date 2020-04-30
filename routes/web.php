@@ -20,17 +20,10 @@ Route::get('/admin', function () {
 });
 
 
-Route::get('/admin/groupes', function () {
-    return view('admin/groupes');
-});
-
 Route::get('/admin/nouveauWf', function () {
     return view('admin/nouveauWf');
 });
 
-Route::get('/admin/test', function () {
-    return view('admin/test');
-});
 
 /******USER******* */
 
@@ -75,12 +68,18 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/admin/documents','TdocController@index');
         Route::post('/admin/documents','TdocController@store');
 
+        //WF
+        Route::get('/admin/test','WfController@index');
+        Route::post('/admin/addWf','WfController@store');
+        Route::post('/admin/test','WfController@addAction');
+
     });
 
     /*******USER****** */
     Route::group(['middleware' => ['user']], function () {
         //doc
         Route::get('/user/documents','DocController@index');
+        Route::post('/user/documents','DocController@store');
         Route::get('/user/taches','TacheController@index');
         Route::post('/metas','DocController@metas');
     

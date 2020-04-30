@@ -57,6 +57,8 @@
     top: -30px;
 }
 
+
+
 #opemail .flowchart-operator-connector-arrow {
     width: 0px;
     height: 0px;
@@ -77,6 +79,16 @@
     position: absolute;
     top: -23px;
     visibility : visible;
+
+    /* width: 0px;
+    height: 0px;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 11px solid #86BC34;
+    position: absolute;
+    transform: rotate(89deg);
+    left:-5px;
+    visibility : visible; */
 }
 
 #opend .flowchart-operator-connector-arrow {

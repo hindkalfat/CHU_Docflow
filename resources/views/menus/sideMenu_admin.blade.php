@@ -75,7 +75,7 @@
                 </a>
                 <ul class="collapse submenu list-unstyled" id="users" data-parent="#accordionExample">
                     <li>
-                        <a href="#"> Groupes </a>
+                        <a href="{{url('admin/groupes')}}"> Groupes </a>
                     </li>
                     <li>
                         <a href="{{url('admin/users')}}"> Utilisateur </a>

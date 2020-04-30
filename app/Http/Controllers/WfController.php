@@ -3,24 +3,24 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Groupe;
+use App\TypeDoc;
 use App\User;
-use App\GroupeUser;
+use App\Workflow;
+use App\Action;
 
-class GroupController extends Controller
+class WfController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    
     public function index()
     {
-        $groupes = Groupe::all();
+        $typesDoc = TypeDoc::all();
         $users = User::all();
 
-        return view('admin.groupes',['groupes' => $groupes] ,['users' => $users]);
+        return view('admin.test', ['typesDoc' => $typesDoc, 'users' => $users]);   
     }
 
     /**
@@ -41,20 +41,14 @@ class GroupController extends Controller
      */
     public function store(Request $request)
     {
-        $groupe= new Groupe();
-        $users = $request->input('userG');
- 
-        $groupe->nomG = $request->input('nomG');
-        $groupe->save();
+        $workflow = new Workflow;
 
-        foreach ($users as $user) {
-            $user_grp = new GroupeUser();
-            $user_grp->_idU = $user;
-            $user_grp->_idG = $groupe->idG;
-            $user_grp->save();
-        }
+        $workflow->w_idTd = $request->input('typeDoc');
+        $workflow->nomWf = $request->input('nomWf');
+        $workflow->descriptionWf = $request->input('descWf');
+        $workflow->save();
 
-        return response()->json(['success' => "updated" , 'id' => $groupe->idG]);;
+        return response()->json(['success' => "created", 'workflow' => $workflow ]);
     }
 
     /**
@@ -97,11 +91,27 @@ class GroupController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy($id)
     {
-        $id = $request->idG; 
-        $groupe = Groupe::find($id);
-        $groupe->delete();
-        return response()->json(['success' => "deleted", 'idG' => $id]);;
+        //
+    }
+
+    public function addAction(Request $request)
+    { 
+        $action = new Action;
+
+        $action->nomA = $request->input('nomA');
+        $action->titreA = $request->input('titreA');
+        $action->directiveA = $request->input('directiveA');
+        $action->date_limiteA = $request->input('date_limiteA');
+        $action->opt_limiteA = $request->input('opt_limiteA');
+        $action->date_rappelA = $request->input('date_rappelA');
+        $action->opt_rappelA = $request->input('opt_rappelA');
+        $action->prioriteA = "haute";// $request->input('prioriteA');
+        $action->a_idW = $request->input('a_idW');
+        $action->a_idG = 1;// $request->input('a_idG');
+        $action->a_idU = $request->input('a_idU');
+
+        $action->save();
     }
 }

@@ -322,6 +322,15 @@ display: none;
 .searchable-container .searchable-items.list .items .action-btn .delete-multiple:hover {
     color: #1b55e2;
 }
+
+.searchable-container .searchable-items.list .items .action-btn .view {
+  margin-right: 5px;
+  cursor: pointer;
+  color: #515365;
+  width: 20px;
+  fill: rgba(27, 85, 226, 0.23921568627450981);
+}
+
 .searchable-container .searchable-items.list .items .action-btn .edit {
     margin-right: 5px;
     cursor: pointer;
@@ -336,6 +345,7 @@ display: none;
     width: 20px;
     fill: rgba(27, 85, 226, 0.23921568627450981);
 }
+.searchable-container .searchable-items.list .items .action-btn .view:hover,
 .searchable-container .searchable-items.list .items .action-btn .edit:hover,
 .searchable-container .searchable-items.list .items .action-btn .delete:hover {
     color: #1b55e2;
@@ -470,6 +480,14 @@ display: none;
   text-align: center;
   margin: 20px 0;
 }
+.searchable-container .searchable-items.grid .items .action-btn .view {
+  margin-right: 5px;
+  cursor: pointer;
+  color: #515365;
+  width: 20px;
+  fill: rgba(27, 85, 226, 0.23921568627450981);
+
+}
 .searchable-container .searchable-items.grid .items .action-btn .edit {
   margin-right: 5px;
   cursor: pointer;
@@ -485,6 +503,7 @@ display: none;
   width: 20px;
   fill: rgba(27, 85, 226, 0.23921568627450981);
 }
+.searchable-container .searchable-items.grid .items .action-btn .view:hover,
 .searchable-container .searchable-items.grid .items .action-btn .edit:hover,
 .searchable-container .searchable-items.grid .items .action-btn .delete:hover {
   color: #1b55e2;

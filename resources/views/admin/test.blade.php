@@ -16,7 +16,6 @@
     <link rel="stylesheet" type="text/css" href="{{asset('assets/css/forms/theme-checkbox-radio.css')}}">
     <link href="{{asset('assets/css/apps/contacts.css')}}" rel="stylesheet" type="text/css" />
 	<link rel="stylesheet" href="{{asset('https://use.fontawesome.com/releases/v5.13.0/css/all.css')}}" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">
-	<title>Home</title>
 
 	<!-- jQuery & jQuery UI are required -->
 	<script src="{{asset('https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')}}"></script>
@@ -26,12 +25,14 @@
 	<link rel="stylesheet" href="{{asset('css/jquery.flowchart.css')}}">
 	<script src="{{asset('js/jquery.flowchart.js')}}"></script>
 	<link href="{{asset('assets/css/apps/invoice.css')}}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="{{asset('plugins/bootstrap-select/bootstrap-select.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('assets/css/forms/theme-checkbox-radio.css')}}">
 
 
 	<script>
 		function showmodal() {
-			console.log(document.getElementById("addContactModal"))
-			document.getElementById("addContactModal").showModal();
+			console.log(document.getElementById("addAction"))
+			document.getElementById("addAction").showModal();
 		}
 	</script>
 
@@ -42,11 +43,6 @@
 			background: white;
 			margin-bottom: 10px;
 		}
-
-		.nav-item{
-			margin-left: 20px;
-		}
-
 		
 		#opstart{
 			height: 50px;
@@ -85,11 +81,6 @@
 </head>
 
 <body class="alt-menu sidebar-noneoverflow">
-	<!-- BEGIN LOADER -->
-    <div id="load_screen"> <div class="loader"> <div class="loader-content">
-		<div class="spinner-grow align-self-center"></div>
-	</div></div></div>
-	<!--  END LOADER -->
 
     <!--  BEGIN NAVBAR  -->
     @include('menus.navbar')
@@ -108,138 +99,292 @@
 		
 		<!--  BEGIN CONTENT AREA  -->
 
-		<div id="content" class="main-content">
-				<div class="layout-px-spacing">
-					<div class="row invoice layout-top-spacing">
-						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-							<div class="app-hamburger-container">
-								<div class="hamburger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu chat-menu d-xl-none"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
-							</div>
-							<div class="doc-container">
-								<div class="tab-title">
-									<div class="row">
-										<div class="col-md-12 col-sm-12 col-12">
-											<div class="search container layout-top-spacing">
-												<h6>
-													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-move"><polyline points="5 9 2 12 5 15"></polyline><polyline points="9 5 12 2 15 5"></polyline><polyline points="15 19 12 22 9 19"></polyline><polyline points="19 9 22 12 19 15"></polyline><line x1="2" y1="12" x2="22" y2="12"></line><line x1="12" y1="2" x2="12" y2="22"></line></svg>
-													Glisser-déposer
-												</h6>
-											</div>
-											<ul class="nav nav-pills inv-list-container d-block" id="pills-tab" role="tablist">
-												<li class=" container nav-item layout-top-spacing">
-													<div id="start" class="draggable_operator" data-nb-inputs="0" data-nb-outputs="1">
-														<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#8dbf42" stroke="#8dbf42" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-circle"><circle cx="12" cy="12" r="10"></circle></svg>
-														Début
-													</div>
-												</li>
-
-												<li class=" container nav-item ">
-													<div id="end" class="draggable_operator" data-nb-inputs="1" data-nb-outputs="0">
-														<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#e7515a" stroke="#e7515a" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-circle"><circle cx="12" cy="12" r="10"></circle></svg>
-														Fin
-													</div>
-												</li>
-	
-												<li class=" container nav-item ">
-													<div id="action" class="draggable_operator" data-nb-inputs="2" data-nb-outputs="1">
-														<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1b55e2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
-														Tâche
-													</div>
-												</li>
-
-												<li class=" container nav-item ">
-													<div id="email" class=" container row 	draggable_operator" data-nb-inputs="2" data-nb-outputs="1">
-															<h4><i class="far fa-envelope" style="color:#e2a03f"></i></h4>
-															&nbsp; Email
-													</div>
-												</li>
-	
-												<li class=" container nav-item ">
-													<div id="condition" class=" container row draggable_operator" data-nb-inputs="1" data-nb-outputs="2">
-														<h4><i style="transform:rotate(90deg);" class="fas fa-code-branch"></i></h4>
-														&nbsp; Condition
-													</div>
-												</li>
-											</ul>
+		<div id="content">
+			<div class="layout-px-spacing">
+				<div class="row invoice layout-top-spacing">
+					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+						<div class="app-hamburger-container">
+							<div class="hamburger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu chat-menu d-xl-none"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+						</div>
+						<div class="doc-container">
+							<div class="tab-title">
+								<div class="row">
+									<div class="col-md-12 col-sm-12 col-12">
+										<div class="search container layout-top-spacing">
+												<div class="container layout-top-spacing col-md-12 col-sm-12 col-12">
+														<svg id="supp" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2 delete_selected_button"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+														<svg data-toggle="modal" data-target="#saveWF" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+												</div>
+												<hr>											
+											<h6>
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-move"><polyline points="5 9 2 12 5 15"></polyline><polyline points="9 5 12 2 15 5"></polyline><polyline points="15 19 12 22 9 19"></polyline><polyline points="19 9 22 12 19 15"></polyline><line x1="2" y1="12" x2="22" y2="12"></line><line x1="12" y1="2" x2="12" y2="22"></line></svg>
+												Glisser-déposer
+											</h6>
 										</div>
+										<ul class="nav nav-pills inv-list-container d-block" id="pills-tab" role="tablist">
+											<li class=" container nav-item layout-top-spacing">
+												<div id="start" disabled="false" class="draggable_operator" data-nb-inputs="0" data-nb-outputs="1">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#8dbf42" stroke="#8dbf42" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-circle"><circle cx="12" cy="12" r="10"></circle></svg>
+													Début
+												</div>
+											</li>
+
+											<li class=" container nav-item ">
+												<div id="end" class="draggable_operator" data-nb-inputs="1" data-nb-outputs="0">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#e7515a" stroke="#e7515a" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-circle"><circle cx="12" cy="12" r="10"></circle></svg>
+													Fin
+												</div>
+											</li>
+
+											<li class=" container nav-item ">
+												<div id="action" class="draggable_operator" data-nb-inputs="2" data-nb-outputs="1">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1b55e2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+													Tâche
+												</div>
+											</li>
+
+											<li class=" container nav-item ">
+												<div id="email" class=" container row 	draggable_operator" data-nb-inputs="2" data-nb-outputs="1">
+														<h4><i class="far fa-envelope" style="color:#e2a03f"></i></h4>
+														&nbsp; Email
+												</div>
+											</li>
+
+											<li class=" container nav-item ">
+												<div id="condition" class=" container row draggable_operator" data-nb-inputs="1" data-nb-outputs="2">
+													<h4><i style="transform:rotate(90deg);" class="fas fa-code-branch"></i></h4>
+													&nbsp; Condition
+												</div>
+											</li>
+										</ul>
 									</div>
 								</div>
+							</div>
 
-								<!-- Modal -->
-								<div class="modal fade" id="addContactModal" tabindex="-1" role="dialog" aria-labelledby="addContactModalTitle" aria-hidden="true">
-									<div class="modal-dialog modal-dialog-centered" role="document">
-										<div class="modal-content">
-											<div class="modal-body">
-												<i class="flaticon-cancel-12 close" data-dismiss="modal"></i>
-												<div class="add-contact-box">
-													<div class="add-contact-content">
-														<form id="addContactModalTitle">
-															<div class="custom-file mb-4">
-																<input id="operator_title" type="text" id="c-name" class="form-control" placeholder="Nom">
-																<span class="validation-text"></span>
+							<!-- Modal addAction-->
+							<div class="modal fade" id="addAction" tabindex="-1" role="dialog" aria-labelledby="addContactModalTitle" aria-hidden="true">
+								<div class="modal-dialog modal-dialog-centered" role="document">
+									<div class="modal-content">
+										<div class="modal-body">
+											<i class="flaticon-cancel-12 close" data-dismiss="modal"></i>
+											<div class="add-contact-box">
+												<div class="add-contact-content">
+													<form id="addContactModalTitle">
+														<div class="custom-file mb-4">
+															<input id="nomAct" type="text" class="form-control" placeholder="Nom action">
+														</div>
+														<div class="custom-file mb-4">
+															<input id="titreAct" type="text" class="form-control" placeholder="Intitulé action">
+														</div>
+														<div class="row">
+															<div class="form-group col-md-6">
+																<input id="date_limiteAct" type="text" class="form-control" placeholder="Délais">
 															</div>
-															
-															<div class="row">
-																<div class="form-group col-md-6">
-																	<input id="délaisT" type="text" id="c-name" class="form-control" placeholder="Délais">
-																	<span class="validation-text"></span>
-																</div>
-																<div class="form-group col-md-6">
-																	<input id="optT" type="text" id="c-email" class="form-control" placeholder="opt">
-																	<span class="validation-text"></span>
-																</div>
+															<div class="form-group col-md-6">
+																<select id="opt_limiteAct" name="optRA" class="selectpicker" >
+																	<option value="" disabled selected>Option délais</option>
+																	<option value="j" >jour(s)</option>
+																	<option value="h" >heure(s)</option>
+																	<option value="m" >minute(s)</option>
+																</select>
 															</div>
-															<div class="custom-file mb-4">
-																<input type="text" id="c-occupation" class="form-control" placeholder="Responsable">
+														</div>
+														<div class="row">
+															<div class="form-group col-md-6">
+																<input id="date_rappelAct" type="text" class="form-control" placeholder="Délais rappel">
 															</div>
-															<div class="custom-file mb-4">
-																<textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Description"></textarea>
+															<div class="form-group col-md-6">
+																<select id="opt_rappelAct" name="optRA" class="selectpicker" >
+																	<option value="" disabled selected>Option délais</option>
+																	<option value="j" >jour(s)</option>
+																	<option value="h" >heure(s)</option>
+																	<option value="m" >minute(s)</option>
+																</select>
 															</div>
-														</form>
-													</div>
+														</div>
+														<div class="custom-file mb-4">
+															<select id="act_idU" name="responsableA" class="selectpicker" data-live-search="true" data-width="100%">
+																<option value="" disabled selected >Responsable</option>
+																@foreach ($users as $user)
+																	<option value="{{$user->id}}"> {{$user->nomU}} {{$user->prenomU}} </option>
+																@endforeach
+															</select>
+														</div>
+														<div class="custom-file mb-4">
+															<div class="n-chk">
+																<label>Priorité:</label>
+																<label class="new-control new-radio new-radio-text radio-classic-default">
+																	<input type="radio" class="new-control-input" name="custom-radio-5">
+																	<span class="new-control-indicator"></span><span class="new-radio-content">Faible</span>
+																</label>
+																<label class="new-control new-radio new-radio-text radio-classic-primary">
+																	<input type="radio" class="new-control-input" name="custom-radio-5" checked>
+																	<span class="new-control-indicator"></span><span class="new-radio-content">Moyenne</span>
+																</label>
+																<label class="new-control new-radio new-radio-text radio-classic-secondary">
+																	<input type="radio" class="new-control-input" name="custom-radio-5">
+																	<span class="new-control-indicator"></span><span class="new-radio-content">Haute</span>
+																</label>
+															</div>
+														</div>
+														<div class="custom-file mb-4">
+															<textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Directives"></textarea>
+														</div>
+													</form>
 												</div>
 											</div>
-											<div class="modal-footer">
-												<button class="btn" data-dismiss="modal"> <i class="flaticon-delete-1"></i> Annuler</button>
-												<button id="btn-add" class="btn">Valider</button>
-											</div>
+										</div>
+										<div class="modal-footer">
+											<button class="btn" data-dismiss="modal"> <i class="flaticon-delete-1"></i> Annuler</button>
+											<button id="btn-add" class="btn btn-success">Valider</button>
 										</div>
 									</div>
 								</div>
-	
-								<div class="invoice-container">
-									<div class="invoice-inbox">
-										<nav class="container layout-top-spacing">
-											<button class="btn btn-outline-primary btn-rounded mb-2 create_operator">Nouvelle action</button>
-											<button hidden="true" id="supp" class="btn btn-outline-primary btn-rounded mb-2 delete_selected_button">
-													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></button>
-										</nav>
-	
-										<div class="">
-											<div id="chart_container">
-												<div class="flowchart-example-container" id="flowchartworkspace"></div>
-											</div>
-										</div>
-	
-	
-									</div>
-	
-								</div>
-								
 							</div>
-	
+
+							<!-- Modal SendEmail-->
+							<div class="modal fade" id="senEmail" tabindex="-1" role="dialog" aria-labelledby="addContactModalTitle" aria-hidden="true">
+								<div class="modal-dialog modal-dialog-centered" role="document">
+									<div class="modal-content">
+										<div class="modal-body">
+											<i class="flaticon-cancel-12 close" data-dismiss="modal"></i>
+											<div class="add-contact-box">
+												<div class="add-contact-content">
+													<form id="addContactModalTitle">
+														<div class="custom-file mb-4">
+															<input id="destinataire" type="text" class="form-control" placeholder="Destinataire">
+														</div>
+														<div class="custom-file mb-4">
+															<input id="objet" type="text" class="form-control" placeholder="Objet">
+														</div>
+														<div class="row">
+															<div class="form-group col-md-6">
+																<input id="date_limiteAct" type="text" class="form-control" placeholder="Délais">
+															</div>
+															<div class="form-group col-md-6">
+																<select id="opt_limiteAct" name="optRA" class="selectpicker" >
+																	<option value="" disabled selected>Option délais</option>
+																	<option value="j" >jour(s)</option>
+																	<option value="h" >heure(s)</option>
+																	<option value="m" >minute(s)</option>
+																</select>
+															</div>
+														</div>
+														<div class="row">
+															<div class="form-group col-md-6">
+																<input id="date_rappelAct" type="text" class="form-control" placeholder="Délais rappel">
+															</div>
+															<div class="form-group col-md-6">
+																<select id="opt_rappelAct" name="optRA" class="selectpicker" >
+																	<option value="" disabled selected>Option délais</option>
+																	<option value="j" >jour(s)</option>
+																	<option value="h" >heure(s)</option>
+																	<option value="m" >minute(s)</option>
+																</select>
+															</div>
+														</div>
+														<div class="custom-file mb-4">
+															<select id="act_idU" name="responsableA" class="selectpicker" data-live-search="true" data-width="100%">
+																<option value="" disabled selected >Responsable</option>
+																@foreach ($users as $user)
+																	<option value="{{$user->id}}"> {{$user->nomU}} {{$user->prenomU}} </option>
+																@endforeach
+															</select>
+														</div>
+														<div class="custom-file mb-4">
+															<div class="n-chk">
+																<label>Priorité:</label>
+																<label class="new-control new-radio new-radio-text radio-classic-default">
+																	<input type="radio" class="new-control-input" name="custom-radio-5">
+																	<span class="new-control-indicator"></span><span class="new-radio-content">Faible</span>
+																</label>
+																<label class="new-control new-radio new-radio-text radio-classic-primary">
+																	<input type="radio" class="new-control-input" name="custom-radio-5" checked>
+																	<span class="new-control-indicator"></span><span class="new-radio-content">Moyenne</span>
+																</label>
+																<label class="new-control new-radio new-radio-text radio-classic-secondary">
+																	<input type="radio" class="new-control-input" name="custom-radio-5">
+																	<span class="new-control-indicator"></span><span class="new-radio-content">Haute</span>
+																</label>
+															</div>
+														</div>
+														<div class="custom-file mb-4">
+															<textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Directives"></textarea>
+														</div>
+													</form>
+												</div>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button class="btn" data-dismiss="modal"> <i class="flaticon-delete-1"></i> Annuler</button>
+											<button id="btn-add" class="btn btn-success">Valider</button>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="invoice-container">
+								<div class="invoice-inbox">
+
+									<div class="">
+										<div id="chart_container">
+											<div class="flowchart-example-container" id="flowchartworkspace"></div>
+										</div>
+									</div>
+
+
+								</div>
+
+							</div>
+
+							<!-- Modal saveWF -->
+							<div class="modal fade" id="saveWF" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+								<div class="modal-dialog modal-dialog-centered" role="document">
+									<div class="modal-content">
+
+									<div class="modal-header" id="loginModalLabel">
+										<h5 class="modal-title">Enregistrer le workflow</h5>
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+									</div>
+									<div class="modal-body">
+										<form class="mt-0" id="addWf">
+											{{ csrf_field() }}
+											<div class="form-group">
+												<select id="typeDoc" name="typeDoc" class="selectpicker" data-live-search="true" data-width="100%">
+													<option value="" disabled selected>Type document</option>
+													@foreach ($typesDoc as $typeDoc)
+														<option value="{{$typeDoc->idTd}}"> {{$typeDoc->intituleTd}} </option>
+													@endforeach
+												</select>										
+											</div>
+											<div class="form-group">
+												<input type="text" name="nomWf" class="form-control mb-4" id="nomWf" placeholder="Nom du workflow">
+											</div>
+											<div class="form-group">
+												<textarea class="form-control" name="descWf" id="exampleFormControlTextarea1" rows="3" placeholder="Description"></textarea>
+											</div>
+											<button id="btn-addWF" type="submit" class="btn btn-success  mt-2 mb-2 btn-block">Enregistrer</button>
+										</form>
+									</div>
+									</div>
+								</div>
+								</div>
+							
 						</div>
+
 					</div>
 				</div>
 			</div>
+		</div>
 		<!--  END CONTENT AREA  -->
-
 
 	<script type="text/javascript">
 		/* global $ */
 		$(document).ready(function() {
+			
 			var $flowchart = $('#flowchartworkspace');
 			var $container = $flowchart.parent();
+			var x=0;
 
 			// Apply the plugin on a standard, empty div...
 			$flowchart.flowchart({
@@ -288,22 +433,37 @@
 			var $operatorTitle = $('#operator_title');
 			var $linkColor = $('#link_color');
 			var i=0;
+			var opId;
+			var called = 0;
+
  
 			$flowchart.flowchart({
 				onOperatorSelect: function(operatorId) {
+					console.log($flowchart.flowchart('getData'));
+					opId = operatorId;
+					console.log($flowchart.flowchart('getOperatorBody', operatorId));
+					$('#btn-add').click(function(){
+						var nomA=$('#nomA').val();
+						$('#test'+opId).val(nomA);
+						$("#addAction").modal("hide");
+					});
 					i++;
 					if(i==2){
-						$("#addContactModal").modal("show");
+						$('#nomAct').val('');
+						$('#titreAct').val('');
+						$('#exampleFormControlTextarea1').val('');
+						$('#date_limiteAct').val('');
+						$('#date_rappelAct').val('');	
+						$("#addAction").modal("show");
 						i=0;
 					}
 					$operatorProperties.show();
-					$('#supp').attr("hidden",false);
 					$operatorTitle.val($flowchart.flowchart('getOperatorTitle', operatorId));
 					return true;
 				},
 				onOperatorUnselect: function() {
+					i--;
 					$operatorProperties.hide();
-					$('#supp').attr("hidden",true);
 					return true;
 				},
 				onLinkSelect: function(linkId) {
@@ -339,6 +499,12 @@
 			//--- delete operator / link button
 			//--- start
 			$('.delete_selected_button').click(function() {
+				console.log($flowchart.flowchart('getOperatorTitle', opId))
+				
+				if($flowchart.flowchart('getOperatorTitle', opId).includes("Début"))
+				{
+					x--;
+				}
 				$flowchart.flowchart('deleteSelected');
 			});
 			//--- end
@@ -348,12 +514,76 @@
 			 /* $('#WFtitle').dblclick(function(){
 				 alert("bjr1")
 				 console.log($('.flowchart-operator'))
-				$("#addContactModal").modal("show");
+				$("#addAction").modal("show");
 			}); */
 
-			$('#supp').click(function() {
-				$('#supp').attr("hidden",true);
+
+			$('#btn-add').click(function() {
+				$('#nomA'+opId).val($('#nomAct').val());
+				$('#titreA'+opId).val($('#titreAct').val());
+				$('#directiveA'+opId).val($('#exampleFormControlTextarea1').val());
+				$('#responsableA'+opId).val($('#responsableAct').val());
+				$('#prioriteA'+opId).val($('#prioriteAct').val());
+				$('#date_limiteA'+opId).val($('#date_limiteAct').val());
+				$('#opt_limiteA'+opId).val($('#opt_limiteAct').val());
+				$('#date_rappelA'+opId).val($('#date_rappelAct').val());
+				$('#opt_rappelA'+opId).val($('#opt_rappelAct').val());
+				$('#a_idG'+opId).val($('#act_idG').val());
+				$('#a_idU'+opId).val($('#act_idU').val());				
 			});
+
+			ajax_recaller = function(forms){
+				var id = forms[called].attr("id").substring(10);
+				alert("id "+id)
+				$.ajax({
+					type: "POST",
+					data: forms[called].serialize(),                             // to submit fields at once
+					success: function(data) {
+						called++;                                                                 // this will serve as a key
+						
+						if(called < forms.length) {
+							ajax_recaller(forms);                                            // call the ajax function again
+						} 
+						else {
+							called=0;
+							$("#saveWF").modal("hide");
+							window.location = "/admin/documents";
+						}
+					
+					}
+				
+				});
+				
+			}
+
+			//add WF
+            $("#addWf").submit(function(e){
+				e.preventDefault();
+				var data = $('#addWf').serialize(); 
+				var i=0;
+				var forms = new Array();
+				$(".monform").each(function(){
+					forms[i] = $(this);
+					alert($(this).attr("class"));
+					i++;
+				});
+                $.ajax({
+                    type:'POST',
+                    data:data,
+                    url:'/admin/addWf',
+                    success:function(data){
+						var text ='{!! csrf_field() !!}';
+						$(text).insertBefore( $( ".inpt" ) );
+						$("#formAction").attr('action','/admin/test');
+						
+						$('.inptwf').val(data.workflow.idWf);
+						/* $('.monform').each(function(){
+							$(this).submit();
+						}); */
+						ajax_recaller(forms);
+                    }
+                });   
+            });
 
 			//-----------------------------------------
 			//--- create operator button
@@ -388,17 +618,13 @@
 			//--- create operator button
 			//-----------------------------------------
 
-			$('#btn-add').click(function(){
-				$("#addContactModal").modal("hide");
-			});
-
-
 			//-----------------------------------------
 			//--- draggable operators
 			//--- start
 			//var operatorId = 0;
 			var $draggableOperators = $('.draggable_operator');
 			var option;//
+			var cpt=0;
 
 			$draggableOperators.draggable({
 				cursor: "move",
@@ -413,7 +639,7 @@
 					var data = getOperatorData($this);
 					console.log(data)
 					option=$this[0].id;//
-					return $flowchart.flowchart('getOperatorElement', data, option);
+					return $flowchart.flowchart('getOperatorElement', data, option, cpt);
 				},
 				stop: function(e, ui) {
 					var $this = $(this);
@@ -436,9 +662,19 @@
 						var data = getOperatorData($this);
 						data.left = relativeLeft;
 						data.top = relativeTop;
-
-						$flowchart.flowchart('addOperator', data, option);
+						if(option == "start")
+						{
+							if(x==0)
+							{
+								x++;
+								$flowchart.flowchart('addOperator', data, option, cpt);
+							}
+						}
+						else
+							$flowchart.flowchart('addOperator', data, option, cpt);
+						cpt++;
 					}
+					
 				}
 			});
 			//--- end
@@ -552,6 +788,8 @@
     <script src="{{asset('assets/js/custom.js')}}"></script>
 	<!-- END GLOBAL MANDATORY SCRIPTS -->
 	<script src="{{asset('assets/js/apps/invoice.js')}}"></script>
+    <script src="{{asset('plugins/bootstrap-select/bootstrap-select.min.js')}}"></script>
+
 </body>
 
 </html>

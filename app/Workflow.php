@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Workflow extends Model
 {
     protected $table = 'workflows';
-    protected $primaryKey = 'idW';
+    protected $primaryKey = 'idWf';
 
     protected $fillable = [
         'nomWf', 'descriptionWf'

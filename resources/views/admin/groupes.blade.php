@@ -51,10 +51,9 @@
                                                             </div>
                                                             <div class="row">
                                                                 <div class="form-group col-md-12">
-                                                                    <select class="selectpicker col-md-12" data-selected-text-format="count" multiple data-live-search="true" data-actions-box="true">
-                                                                        <option>users</option>
+                                                                    <select name="userG[]" class="selectpicker form-control" multiple data-live-search="true" data-actions-box="true">
                                                                         @foreach ($users as $user)
-                                                                            <option> {{$user->nomU}} </option>
+                                                                            <option value="{{$user->id}}"> {{$user->nomU}} </option>
                                                                         @endforeach
                                                                         
                                                                     </select>
@@ -68,9 +67,9 @@
                                             <div class="modal-footer">
                                                 <button id="btn-edit" class="float-left btn">Save</button>
 
-                                                <button class="btn" data-dismiss="modal"> <i class="flaticon-delete-1"></i> Discard</button>
+                                                <button class="btn" data-dismiss="modal"> <i class="flaticon-delete-1"></i> Annuler</button>
 
-                                                <button id="btn-add" class="btn">Add</button>
+                                                <button id="btn-add" class="btn">Ajouter</button>
                                             </div>
                                         </div>
                                     </div>
@@ -108,7 +107,7 @@
                                 </div>
                             </div>
                             @foreach ($groupes as $groupe)
-                                <div class="items">
+                                <div class="items" id="items{{$groupe->idG}}">
                                     <div class="item-content">
                                         <div class="user-profile">
                                             <div class="n-chk align-self-center text-center">
@@ -118,12 +117,13 @@
                                                 </label>
                                             </div>
                                             <div class="user-meta-info">
-                                                <h3 class="user-name" data-name=""> {{ucfirst($groupe->nomG)}} </h3>
+                                                <p class="user-name" data-name=""> {{ucfirst($groupe->nomG)}} </p>
                                             </div>
                                         </div>
                                         <div class="action-btn">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye view"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 edit"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-toggle="modal" data-target="#exampleModal" data-id="{{$groupe->idG}}" data-nom="{{$groupe->nomG}}" class="feather feather-user-minus delete"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-toggle="modal" data-target="#exampleModal" data-id="{{$groupe->idG}}" data-nom="{{$groupe->nomG}}" class="feather feather-user-minus delete"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                                         </div>
                                     </div>
                                 </div>
@@ -140,7 +140,7 @@
                                             <button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> Annuler</button>
                                             <form id="deleteF">
                                                 {{ csrf_field() }}
-                                                <input name="idG" type="text" id="idG">
+                                                <input name="idG" type="hidden" id="idG">
                                                 <button type="button" class="btn btn-primary dlt">Confirmer</button>
                                             </form>
                                         </div>

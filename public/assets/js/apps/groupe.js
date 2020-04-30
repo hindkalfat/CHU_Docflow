@@ -61,7 +61,8 @@ function deleteContact() {
           data:data,
           url:'/admin/delete/groupe',
           success:function(data){
-            $(".delete").parents('.items').remove();
+
+            $(".delete").parents('#items'+data.idG).remove();
             $('#exampleModal').modal('hide');
           }
         }); 
@@ -99,32 +100,34 @@ function addContact() {
         data:data,
         url:'/admin/groupes',
         success:function(data){
+            $html = '<div class="items">' +
+            '<div class="item-content">' +
+                '<div class="user-profile">' +
 
-          $html = '<div class="items">' +
-                    '<div class="item-content">' +
-                        '<div class="user-profile">' +
-
-                            '<div class="n-chk align-self-center text-center">' +
-                                '<label class="new-control new-checkbox checkbox-primary">' +
-                                  '<input type="checkbox" class="new-control-input contact-chkbox">' +
-                                  '<span class="new-control-indicator"></span>' +
-                                '</label>' +
-                            '</div>' +
-                            '<div class="user-meta-info">' +
-                                '<h3 class="user-nom" data-nom='+ $_nomValue +'>'+ $_nomValue +'</h3>' +
-                            '</div>' +
-                        '</div>' +
+                    '<div class="n-chk align-self-center text-center">' +
+                        '<label class="new-control new-checkbox checkbox-primary">' +
+                          '<input type="checkbox" class="new-control-input contact-chkbox">' +
+                          '<span class="new-control-indicator"></span>' +
+                        '</label>' +
                     '</div>' +
-                '</div>';
+                    '<div class="user-meta-info">' +
+                        '<p class="user-name" data-name="'+ $_nomValue +'">'+ $_nomValue +'</p>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="action-btn">' +
+                    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 edit"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>'+
+                    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-minus delete"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="23" y1="11" x2="17" y2="11"></line></svg>'
+                '</div>' +
+            '</div>' +
+        '</div>';
 
             $(".searchable-items > .items-header-section").after($html);
             $('#addContactModal').modal('hide');
 
             var $_setNomValueEmpty = $_nom.val('');
-            var $_setDescriptionValueEmpty = $_description.val('');
 
           deleteContact();
-          editContact();
+          //editContact();
           checkall('contact-check-all', 'contact-chkbox');
         }
     });
@@ -134,11 +137,9 @@ function addContact() {
 
 $('#addContactModal').on('hidden.bs.modal', function (e) {
     var $_nom = document.getElementById('c-nom');
-    var $_description = document.getElementById('c-description');
     var $_getValidationField = document.getElementsByClassName('validation-text');
 
-    var $_setNomValueEmpty = $_name.value = '';
-    var $_setDescValueEmpty = $_description.value = '';
+    var $_setNomValueEmpty = $_nom.value = '';
 
     for (var i = 0; i < $_getValidationField.length; i++) {
       e.preventDefault();
@@ -146,7 +147,7 @@ $('#addContactModal').on('hidden.bs.modal', function (e) {
     }
 })
 
-function editContact() {
+/* function editContact() {
   $('.edit').on('click', function(event) {
 
     $('#addContactModal #btn-add').hide();
@@ -217,7 +218,7 @@ function editContact() {
       $('#addContactModal').modal('hide');
     });
   })
-}
+} */
 
 $(".delete-multiple").on("click", function() {
     var inboxCheckboxParents = $(".contact-chkbox:checked").parents('.items');   
@@ -226,7 +227,7 @@ $(".delete-multiple").on("click", function() {
 
 deleteContact();
 addContact();
-editContact();
+//editContact();
 
 })
 
@@ -237,7 +238,7 @@ var $_getValidationField = document.getElementsByClassName('validation-text');
 var reg = /^.+@[^\.].*\.[a-z]{2,}$/;
 var phoneReg = /^\d{10}$/;
 
-getNameInput = document.getElementById('c-name');
+getNameInput = document.getElementById('c-nom');
 
 getNameInput.addEventListener('input', function() {
 
@@ -253,7 +254,7 @@ getNameInput.addEventListener('input', function() {
 })
 
 
-getDescriptionInput = document.getElementById('c-description');
+/* getDescriptionInput = document.getElementById('c-description');
 
 getDescriptionInput.addEventListener('input', function() {
 
@@ -269,8 +270,8 @@ getDescriptionInput.addEventListener('input', function() {
       $_getValidationField[1].style.display = 'none';
     }
 
-})
-
+}) */
+/* 
 getPhoneInput = document.getElementById('c-phone');
 
 getPhoneInput.addEventListener('input', function() {
@@ -287,4 +288,4 @@ getPhoneInput.addEventListener('input', function() {
     $_getValidationField[2].style.display = 'none';
   }
 
-})
+}) */

@@ -22,7 +22,6 @@
     <link href="{{asset('plugins/fullcalendar/fullcalendar.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('plugins/fullcalendar/custom-fullcalendar.advance.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('plugins/flatpickr/flatpickr.css')}}" rel="stylesheet" type="text/css">
-    <link href="{{asset('plugins/flatpickr/custom-flatpickr.css')}}" rel="stylesheet" type="text/css">
     <link href="{{asset('assets/css/forms/theme-checkbox-radio.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/css/scrollspyNav.css')}}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="{{asset('plugins/bootstrap-select/bootstrap-select.min.css')}}">
@@ -47,9 +46,6 @@
     <link href="{{asset('plugins/bootstrap-range-Slider/bootstrap-slider.css')}}" rel="stylesheet" type="text/css">
 
 
-    <!-- Flowchart CSS and JS -->
-	<link rel="stylesheet" href="{{asset('css/jquery.flowchart.css')}}">
-    <script src="{{asset('js/jquery.flowchart.js')}}"></script>
     <!-- jQuery & jQuery UI are required -->
 	<script src="{{asset('https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')}}"></script>
 	<script src="{{asset('https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js')}}"></script>
@@ -125,7 +121,6 @@
     <script src="{{asset('assets/js/ie11fix/fn.fix-padStart.js')}}"></script>
     <script src="{{asset('plugins/editors/quill/quill.js')}}"></script>
 	<script src="{{asset('assets/js/apps/todoList.js')}}"></script>
-	<script src="{{asset('plugins/flatpickr/custom-flatpickr.js')}}"></script>
 	<script src="{{asset('assets/js/elements/popovers.js')}}"></script>
 	<script src="{{asset('plugins/noUiSlider/custom-nouiSlider.js')}}"></script>
     <script src="{{asset('plugins/bootstrap-range-Slider/bootstrap-rangeSlider.js')}}"></script>

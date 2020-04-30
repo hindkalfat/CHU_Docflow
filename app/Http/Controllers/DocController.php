@@ -7,6 +7,8 @@ use App\Document;
 use App\User;
 use App\Metadonnee;
 use App\TypeDoc;
+use App\Version;
+use File;
 use Auth;
 
 class DocController extends Controller
@@ -47,7 +49,26 @@ class DocController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $document = new Document;
+
+        $document->d_idTd = $request->input('typeDoc');
+        $document->nomD = $request->input('nomD');
+        $document->titreD = $request->input('titreD');
+        $document->etatD = "actif";
+        $document->d_idU = Auth::user()->id;
+
+        $document->save(); 
+        $version = new Version;
+
+        $version->numV = 01;
+
+        $File = $request->file('file'); 
+        $fileName = $File->getClientOriginalName();
+        $File->move(public_path('pdf'), $fileName);
+        $version->doc = $fileName;
+        $version->save();
+
+        return response()->json(['success' => "created", 'document' => $document, 'version' => $version]);
     }
 
     /**

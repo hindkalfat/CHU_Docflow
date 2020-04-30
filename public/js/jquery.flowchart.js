@@ -512,20 +512,36 @@ jQuery(function ($) {
             return infos;
         },
 
-        _getOperatorFullElement: function (operatorData, indice) {
+        _getOperatorFullElement: function (operatorData, indice, cpt) {
             var infos = this.getOperatorCompleteData(operatorData);
 
-            var $operator = $('<div  id="op'+indice+'" class="flowchart-operator"></div>');
+            var $operator = $('<div  id="op'+indice+'" class="flowchart-operator op'+indice+cpt+'"></div>');
             $operator.addClass(infos.class);
 
             var $operator_title = $('<div class="flowchart-operator-title" id="WFtitle"></div>');
+            var $form = $(' <form class="monform" id="formAction'+cpt+'" method="post">'+
+                                '<input type="hidden" name="nomA" class="inpt" value="" id="nomA'+cpt+'"/>'+
+                                '<input type="hidden" name="titreA" class="inpt" value="" id="titreA'+cpt+'"/>'+
+                                '<input type="hidden" name="directiveA" class="inpt" value="" id="directiveA'+cpt+'"/>'+
+                                '<input type="hidden" name="date_limiteA" class="inpt" value="" id="date_limiteA'+cpt+'"/>'+
+                                '<input type="hidden" name="opt_limiteA" class="inpt" value="" id="opt_limiteA'+cpt+'"/>'+
+                                '<input type="hidden" name="date_rappelA" class="inpt" value="" id="date_rappelA'+cpt+'"/>'+
+                                '<input type="hidden" name="opt_rappelA" class="inpt" value="" id="opt_rappelA'+cpt+'"/>'+
+                                '<input type="hidden" name="prioriteA" class="inpt" value="" id="prioriteA'+cpt+'"/>'+
+                                '<input type="hidden" name="a_idG" class="inpt" value="" id="a_idG'+cpt+'"/>'+
+                                '<input type="hidden" name="a_idU" class="inpt" value="" id="a_idU'+cpt+'"/>'+
+                                '<input type="hidden" name="a_idW" class="inptwf" value="" id="a_idW'+cpt+'"/>'+
+                            '</form>');
+                            
             if(indice=="email")
                 $operator_title.html('<i class="far fa-envelope" style="color:white"></i>'+infos.title);
             else if(indice=="condition")
                 $operator_title.html('Si');
             else
                 $operator_title.html(infos.title);
+
             $operator_title.appendTo($operator);
+            $operator.append($form);
 
             var $operator_body = $('<div class="flowchart-operator-body"></div>');
             $operator_body.html(infos.body);
@@ -625,25 +641,25 @@ jQuery(function ($) {
             fullElement.connectorSmallArrows[connectorKey].push($operator_connector_small_arrow);
         },
 
-        getOperatorElement: function (operatorData,indice) {
-            var fullElement = this._getOperatorFullElement(operatorData,indice);
+        getOperatorElement: function (operatorData,indice,cpt) {
+            var fullElement = this._getOperatorFullElement(operatorData,indice,cpt);
             return fullElement.operator;
         },
 
-        addOperator: function (operatorData,indice) {
+        addOperator: function (operatorData,indice, cpt) {
             while (typeof this.data.operators[this.operatorNum] != 'undefined') {
                 this.operatorNum++;
             }
 
-            this.createOperator(this.operatorNum, operatorData, indice);
+            this.createOperator(this.operatorNum, operatorData, indice, cpt);
             return this.operatorNum;
         },
 
-        createOperator: function (operatorId, operatorData, indice) {
+        createOperator: function (operatorId, operatorData, indice, cpt) {
             operatorData.internal = {};
             this._refreshInternalProperties(operatorData);
 
-            var fullElement = this._getOperatorFullElement(operatorData,indice);
+            var fullElement = this._getOperatorFullElement(operatorData,indice,cpt);
             if (!this.callbackEvent('operatorCreate', [operatorId, operatorData, fullElement])) {
                 return false;
             }
@@ -716,6 +732,14 @@ jQuery(function ($) {
                             ui.offset.top = Math.round(ui.position.top + elementOffset.top);
                             fullElement.operator.css({left: ui.position.left, top: ui.position.top});
                         }
+                        var heightDiv = $('.flowchart-example-container').height();
+                        var heightDivAdd = heightDiv+3;
+                        $('.flowchart-example-container').css("height",heightDivAdd);
+
+                        /* var widthtDiv = $('.flowchart-example-container').width();
+                        var widthtDivAdd = widthtDiv+3;
+                        $('.flowchart-example-container').css("width",widthtDivAdd); */
+
                         operatorChangedPosition($(this).data('operator_id'), ui.position);
                     },
                     stop: function (e, ui) {
