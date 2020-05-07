@@ -15,13 +15,13 @@ class Document extends Model
 
     public function type_doc()
     {
-        return $this->belongsTo(TypeDoc::class);
+        return $this->belongsTo(TypeDoc::class,'d_idTd');
     }
 
-    /* public function versions()
+    public function versions()
     {
-        return $this->hasMany(Version::class);
-    } */
+        return $this->hasMany(Version::class, 'v_idD');
+    }
 
     public function user()
     {

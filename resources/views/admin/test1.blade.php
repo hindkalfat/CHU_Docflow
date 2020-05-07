@@ -29,7 +29,7 @@
 	<link rel="stylesheet" type="text/css" href="{{asset('assets/css/forms/theme-checkbox-radio.css')}}">
 	<link rel="stylesheet" type="text/css" href="{{asset('assets/css/forms/switches.css')}}">
 	<link rel="stylesheet" type="text/css" href="{{asset('plugins/editors/quill/quill.snow.css')}}">
-    <link href="{{asset('plugins/notification/snackbar/snackbar.min.css')}}" rel="stylesheet" type="text/css" />
+
 
 
 	<script>
@@ -42,14 +42,13 @@
 			var cont = quill.root.innerHTML;
 			alert(cont)
 		}
-		
 	</script>
 
 	<style>
 		.flowchart-example-container {
 			
 			height: 521px;
-			width: 1070px;
+			width: 100%;
 			background: white;
 			margin-bottom: 10px;
 		}
@@ -96,8 +95,7 @@
     @include('menus.navbar')
     <!--  END NAVBAR  -->
 
-	<!--  BEGIN MAIN CONTAINER  -->
-	<button hidden id="notif" class="btn btn-dark bottom-right">Bottom right</button>
+    <!--  BEGIN MAIN CONTAINER  -->
     <div class="main-container sidebar-closed sbar-open" id="container">
 
         <div class="overlay"></div>
@@ -109,110 +107,6 @@
         <!--  END SIDEBAR  -->
 		
 		<!--  BEGIN CONTENT AREA  -->
-		<div id="content" class="main-content">
-			<div class="layout-px-spacing">
-				<div class="row invoice layout-top-spacing">
-					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-						<div class="app-hamburger-container">
-							<div class="hamburger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu chat-menu d-xl-none"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
-						</div>
-						<div class="doc-container">
-							<div class="tab-title">
-								<div class="row">
-									<div class="col-md-12 col-sm-12 col-12">
-										<div class="search container layout-top-spacing">
-												<svg id="supp" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2 delete_selected_button"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-												<svg data-toggle="modal" data-target="#saveWF" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-										</div>
-										<ul class="nav nav-pills inv-list-container d-block" id="pills-tab" role="tablist">
-											<li class=" container nav-item layout-top-spacing">
-												<div id="start" disabled="false" class="draggable_operator" data-nb-inputs="0" data-nb-outputs="1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#8dbf42" stroke="#8dbf42" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-circle"><circle cx="12" cy="12" r="10"></circle></svg>Début</div>
-											</li>
-
-											<li class=" container nav-item ">
-												<div id="end" class="draggable_operator" data-nb-inputs="1" data-nb-outputs="0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#e7515a" stroke="#e7515a" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-circle"><circle cx="12" cy="12" r="10"></circle></svg>Fin</div>
-											</li>
-
-											<li class=" container nav-item ">
-												<div id="action" class="draggable_operator" data-nb-inputs="1" data-nb-outputs="1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1b55e2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>Tâche</div>
-											</li>
-
-											<li class=" container nav-item ">
-												<div id="email" class=" container row 	draggable_operator" data-nb-inputs="1" data-nb-outputs="1"><h4><i class="far fa-envelope" style="color:#e2a03f"></i></h4>&nbsp; Email</div>
-											</li>
-
-											<li class=" container nav-item ">
-												<div id="condition" class=" container row draggable_operator" data-nb-inputs="1" data-nb-outputs="1"><h4><i style="transform:rotate(90deg);" class="fas fa-code-branch"></i></h4>&nbsp; Condition</div>
-											</li>
-										</ul>
-									</div>
-								</div>
-							</div>
-
-							<div class="invoice-container">
-								<div class="invoice-inbox" >
-									
-									<div id="chart_container">
-										<div class="flowchart-example-container" id="flowchartworkspace"></div>
-									</div>
-									<form id="formData" action="{{url('admin/successeurs')}}" method="post">
-										{{ csrf_field() }}
-										<input type="text" id="getData" name="getData" value="">
-										<input type="text" id="idWf" name="idWf" value="">
-									</form>
-									<button  id="clickB">Get </button>
-									<button class="get_data" id="get_data">Get data</button>
-	<button class="set_data" id="set_data">Set data</button>
-	<button id="save_local">Save to local storage</button>
-	<button id="load_local">Load from local storage</button>
-	<div>
-		<textarea id="flowchart_data"></textarea>
-	</div>
-
-
-								</div>
-
-							</div>
-							
-						</div>
-
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- Modal saveWF -->
-		<div class="modal fade" id="saveWF" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered" role="document">
-				<div class="modal-content">
-
-				<div class="modal-header" id="loginModalLabel">
-					<h5 class="modal-title">Enregistrer le workflow</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
-				</div>
-				<div class="modal-body">
-					<form class="mt-0" id="addWf">
-						{{ csrf_field() }}
-						<div class="form-group">
-							<select id="typeDoc" name="typeDoc" class="selectpicker" data-live-search="true" data-width="100%">
-								<option value="" disabled selected>Type document</option>
-								@foreach ($typesDoc as $typeDoc)
-									<option value="{{$typeDoc->idTd}}"> {{$typeDoc->intituleTd}} </option>
-								@endforeach
-							</select>										
-						</div>
-						<div class="form-group">
-							<input type="text" name="nomWf" class="form-control mb-4" id="nomWf" placeholder="Nom du workflow">
-						</div>
-						<div class="form-group">
-							<textarea class="form-control" name="descWf" id="exampleFormControlTextarea" rows="3" placeholder="Description"></textarea>
-						</div>
-						<button id="btn-addWF" type="submit" class="btn btn-success  mt-2 mb-2 btn-block">Enregistrer</button>
-					</form>
-				</div>
-				</div>
-			</div>
-		</div>
 
 		<!-- Modal addAction-->
 		<div class="modal fade" id="addAction" tabindex="-1" role="dialog" aria-labelledby="addContactModalTitle" aria-hidden="true">
@@ -295,18 +189,18 @@
 											</div>
 											<div class="n-chk">
 												<label class="new-control new-radio radio-primary">
-													<input type="radio" class="new-control-input" name="custom-radio-2" checked="">
+													<input type="radio" class="new-control-input" name="custom-radio-1" checked="">
 													<span class="new-control-indicator"></span>Approbation
 												</label>
 												<label class="new-control new-radio radio-primary">
-													<input type="radio" class="new-control-input" name="custom-radio-2" checked="">
+													<input type="radio" class="new-control-input" name="custom-radio-1" checked="">
 													<span class="new-control-indicator"></span>Validation
 												</label>
 											</div>
 										</div>
 									</div>
 									<div class="custom-file mb-4">
-										<textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Description"></textarea>
+										<textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Directives"></textarea>
 									</div>
 								</form>
 							</div>
@@ -380,7 +274,211 @@
 				</div>
 			</div>
 		</div>
+
+		<!-- Modal saveWF -->
+		<div class="modal fade" id="saveWF" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+
+				<div class="modal-header" id="loginModalLabel">
+					<h5 class="modal-title">Enregistrer le workflow</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+				</div>
+				<div class="modal-body">
+					<form class="mt-0" id="addWf">
+						{{ csrf_field() }}
+						<div class="form-group">
+							<select id="typeDoc" name="typeDoc" class="selectpicker" data-live-search="true" data-width="100%">
+								<option value="" disabled selected>Type document</option>
+								@foreach ($typesDoc as $typeDoc)
+									<option value="{{$typeDoc->idTd}}"> {{$typeDoc->intituleTd}} </option>
+								@endforeach
+							</select>										
+						</div>
+						<div class="form-group">
+							<input type="text" name="nomWf" class="form-control mb-4" id="nomWf" placeholder="Nom du workflow">
+						</div>
+						<div class="form-group">
+							<textarea class="form-control" name="descWf" id="exampleFormControlTextarea1" rows="3" placeholder="Description"></textarea>
+						</div>
+						<button id="btn-addWF" type="submit" class="btn btn-success  mt-2 mb-2 btn-block">Enregistrer</button>
+					</form>
+				</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- <div id="content">
+			<div class="layout-px-spacing">
+				<div class="row invoice layout-top-spacing">
+					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+						<div class="app-hamburger-container">
+							<div class="hamburger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu chat-menu d-xl-none"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+						</div>
+						<div class="doc-container">
+							<div class="tab-title">
+								<div class="row">
+									<div class="col-md-12 col-sm-12 col-12">
+										<div class="search container layout-top-spacing">
+												<div class="container layout-top-spacing col-md-12 col-sm-12 col-12">
+														<svg id="supp" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2 delete_selected_button"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+														<svg data-toggle="modal" data-target="#saveWF" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+												</div>
+												<hr>											
+											<h6>
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-move"><polyline points="5 9 2 12 5 15"></polyline><polyline points="9 5 12 2 15 5"></polyline><polyline points="15 19 12 22 9 19"></polyline><polyline points="19 9 22 12 19 15"></polyline><line x1="2" y1="12" x2="22" y2="12"></line><line x1="12" y1="2" x2="12" y2="22"></line></svg>
+												Glisser-déposer
+											</h6>
+										</div>
+										<ul class="nav nav-pills inv-list-container d-block" id="pills-tab" role="tablist">
+											<li class=" container nav-item layout-top-spacing">
+												<div id="start" disabled="false" class="draggable_operator" data-nb-inputs="0" data-nb-outputs="1">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#8dbf42" stroke="#8dbf42" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-circle"><circle cx="12" cy="12" r="10"></circle></svg>
+													Début
+												</div>
+											</li>
+
+											<li class=" container nav-item ">
+												<div id="end" class="draggable_operator" data-nb-inputs="1" data-nb-outputs="0">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#e7515a" stroke="#e7515a" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-circle"><circle cx="12" cy="12" r="10"></circle></svg>
+													Fin
+												</div>
+											</li>
+
+											<li class=" container nav-item ">
+												<div id="action" class="draggable_operator" data-nb-inputs="2" data-nb-outputs="1">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1b55e2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+													Tâche
+												</div>
+											</li>
+
+											<li class=" container nav-item ">
+												<div id="email" class=" container row 	draggable_operator" data-nb-inputs="2" data-nb-outputs="1">
+														<h4><i class="far fa-envelope" style="color:#e2a03f"></i></h4>
+														&nbsp; Email
+												</div>
+											</li>
+
+											<li class=" container nav-item ">
+												<div id="condition" class=" container row draggable_operator" data-nb-inputs="1" data-nb-outputs="2">
+													<h4><i style="transform:rotate(90deg);" class="fas fa-code-branch"></i></h4>
+													&nbsp; Condition
+												</div>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+
+							<div class="invoice-container">
+								<div class="invoice-inbox">
+
+									<div class="">
+										<div id="chart_container">
+											<div class="flowchart-example-container" id="flowchartworkspace"></div>
+										</div>
+									</div>
+
+
+								</div>
+								<div class="inv--thankYou">
+										<div class="row">
+											<div class="col-sm-12 col-12">
+												<p class="">Thank you for doing Business with us.</p>
+											</div>
+										</div>
+									</div>
+	
+
+							</div>
+							
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div> -->
 		<!--  END CONTENT AREA  -->
+		<div id="content" class="main-content">
+            <div class="layout-px-spacing">
+                <div class="row invoice layout-top-spacing">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="app-hamburger-container">
+                            <div class="hamburger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu chat-menu d-xl-none"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+                        </div>
+                        <div class="doc-container">
+                            <div class="tab-title">
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 col-12">
+                                        <div class="search">
+                                            <input type="text" class="form-control" placeholder="Search">
+                                        </div>
+										<ul class="nav nav-pills inv-list-container d-block" id="pills-tab" role="tablist">
+											<li class=" container nav-item layout-top-spacing">
+												<div id="start" disabled="false" class="draggable_operator" data-nb-inputs="0" data-nb-outputs="1">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#8dbf42" stroke="#8dbf42" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-circle"><circle cx="12" cy="12" r="10"></circle></svg>
+													Début
+												</div>
+											</li>
+
+											<li class=" container nav-item ">
+												<div id="end" class="draggable_operator" data-nb-inputs="1" data-nb-outputs="0">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#e7515a" stroke="#e7515a" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-circle"><circle cx="12" cy="12" r="10"></circle></svg>
+													Fin
+												</div>
+											</li>
+
+											<li class=" container nav-item ">
+												<div id="action" class="draggable_operator" data-nb-inputs="2" data-nb-outputs="1">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1b55e2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-square"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+													Tâche
+												</div>
+											</li>
+
+											<li class=" container nav-item ">
+												<div id="email" class=" container row 	draggable_operator" data-nb-inputs="2" data-nb-outputs="1">
+														<h4><i class="far fa-envelope" style="color:#e2a03f"></i></h4>
+														&nbsp; Email
+												</div>
+											</li>
+
+											<li class=" container nav-item ">
+												<div id="condition" class=" container row draggable_operator" data-nb-inputs="1" data-nb-outputs="2">
+													<h4><i style="transform:rotate(90deg);" class="fas fa-code-branch"></i></h4>
+													&nbsp; Condition
+												</div>
+											</li>
+										</ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="invoice-container">
+                                <div class="invoice-inbox">
+									
+											<div id="chart_container">
+												<div class="flowchart-example-container" id="flowchartworkspace"></div>
+											</div>
+
+
+                                </div>
+
+                                <div class="inv--thankYou">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-12">
+                                            <p class="">Thank you for doing Business with us.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
 
 	<script type="text/javascript">
 		/* global $ */
@@ -494,7 +592,6 @@
 					return true;
 				},
 				onLinkSelect: function(linkId) {
-					console.log($flowchart.flowchart('getOperatorData', linkId))
 					$linkProperties.show();
 					$linkColor.val($flowchart.flowchart('getLinkMainColor', linkId));
 					return true;
@@ -527,9 +624,9 @@
 			//--- delete operator / link button
 			//--- start
 			$('.delete_selected_button').click(function() {
-				var idDelete = $flowchart.flowchart('getSelectedOperatorId')
+				console.log($flowchart.flowchart('getOperatorTitle', opId))
 				
-				if( idDelete != null && $flowchart.flowchart('getOperatorTitle', idDelete).includes("Début"))
+				if($flowchart.flowchart('getOperatorTitle', opId).includes("Début"))
 				{
 					x--;
 				}
@@ -560,13 +657,6 @@
 				$('#a_idU'+opId).val($('#act_idU').val());				
 			});
 
-			$('#clickB').click(function(){
-				var data = $flowchart.flowchart('getData');
-				var data1 = JSON.stringify(data, null, 2);
-				$('#getData').val(data1);
-				$('#formData').submit();
-			});
-
 			ajax_recaller = function(forms){
 				var id = forms[called].attr("id").substring(10);
 				alert("id "+id)
@@ -582,10 +672,7 @@
 						else {
 							called=0;
 							$("#saveWF").modal("hide");
-							var data = $flowchart.flowchart('getData');
-							var data1 = JSON.stringify(data, null, 2);
-							$('#getData').val(data1);
-							$('#formData').submit();
+							window.location = "/admin/documents";
 						}
 					
 					}
@@ -602,6 +689,7 @@
 				var forms = new Array();
 				$(".monform").each(function(){
 					forms[i] = $(this);
+					alert($(this).attr("class"));
 					i++;
 				});
                 $.ajax({
@@ -614,7 +702,9 @@
 						$("#formAction").attr('action','/admin/test');
 						
 						$('.inptwf').val(data.workflow.idWf);
-						$('#idWf').val(data.workflow.idWf);
+						/* $('.monform').each(function(){
+							$(this).submit();
+						}); */
 						ajax_recaller(forms);
                     }
                 });   
@@ -674,7 +764,7 @@
 					var data = getOperatorData($this);
 					console.log(data)
 					option=$this[0].id;//
-					return $flowchart.flowchart('getOperatorElement', data, option, 0);
+					return $flowchart.flowchart('getOperatorElement', data, option, cpt);
 				},
 				stop: function(e, ui) {
 					var $this = $(this);
@@ -702,14 +792,11 @@
 							if(x==0)
 							{
 								x++;
-								$flowchart.flowchart('addOperator', data, option);
-							}
-							else{
-								$('#notif').click();
+								$flowchart.flowchart('addOperator', data, option, cpt);
 							}
 						}
 						else
-							$flowchart.flowchart('addOperator', data, option);
+							$flowchart.flowchart('addOperator', data, option, cpt);
 						cpt++;
 					}
 					
@@ -830,15 +917,6 @@
 	
 	<script src="{{asset('plugins/editors/quill/quill.js')}}"></script>
     <script src="{{asset('plugins/editors/quill/custom-quill.js')}}"></script>
-	<script src="{{asset('plugins/notification/snackbar/snackbar.min.js')}}"></script>
-	<script>
-		$('.bottom-right').click(function() {
-            Snackbar.show({
-                text: 'Il existe déja un état initial.',
-                pos: 'bottom-right'
-            });
-        });
-	</script>
 
 
 </body>

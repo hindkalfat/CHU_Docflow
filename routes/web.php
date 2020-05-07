@@ -35,12 +35,8 @@ Route::get('/user/calendar', function () {
     return view('user/calendar');
 });
 
-Route::get('/user/document', function () {
-    return view('user/document');
-});
 
-
-Route::get('/pdf', function () {
+Route::get('admin/pdf', function () {
     return view('admin/pdf');
 });
 
@@ -72,6 +68,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/admin/test','WfController@index');
         Route::post('/admin/addWf','WfController@store');
         Route::post('/admin/test','WfController@addAction');
+        Route::post('/admin/successeurs','WfController@successeurs');
 
     });
 
@@ -80,8 +77,11 @@ Route::group(['middleware' => ['auth']], function () {
         //doc
         Route::get('/user/documents','DocController@index');
         Route::post('/user/documents','DocController@store');
-        Route::get('/user/taches','TacheController@index');
+        Route::get('/user/document/{id}','DocController@details');
         Route::post('/metas','DocController@metas');
+
+        //tache
+        Route::get('/user/taches','TacheController@index');
     
     });
 

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGroupesTable extends Migration
+class CreateListesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,15 @@ class CreateGroupesTable extends Migration
      */
     public function up()
     {
-        Schema::create('groupes', function (Blueprint $table) {
-            $table->increments('idG');
-            $table->string('nomG');
-            $table->text('descriptionG')->nullable();
+        Schema::create('listes', function (Blueprint $table) {
+            $table->increments('idL');
+            $table->string('libelleL');
+            $table->unsignedInteger('l_idM');
             $table->timestamps();
+
+            //Fk
+            $table->foreign('l_idM')->references('idM')->on('metadonnees')->onDelete('cascade');;
+
         });
     }
 
@@ -28,6 +32,6 @@ class CreateGroupesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('groupes');
+        Schema::dropIfExists('listes');
     }
 }

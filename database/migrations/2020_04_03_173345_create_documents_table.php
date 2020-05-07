@@ -16,8 +16,8 @@ class CreateDocumentsTable extends Migration
         Schema::create('documents', function (Blueprint $table) {
             $table->increments('idD');
             $table->string('nomD');
-            $table->string('titreD');
-            $table->string('etatD');
+            $table->string('titreD')->nullable();
+            $table->string('etatD')->default(1);
             $table->unsignedInteger('d_idU');
             $table->unsignedInteger('d_idTd');
             $table->timestamps();

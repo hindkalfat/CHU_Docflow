@@ -40,13 +40,14 @@ $('.action-print').on('click', function(event) {
   window.print();
 });
 
-const ps = new PerfectScrollbar('.inv-list-container', {
+/* const ps = new PerfectScrollbar('.inv-list-container', {
   suppressScrollX : true
 });
 
 
 const inv_container = new PerfectScrollbar('.invoice-inbox', {
-  suppressScrollX : true
+  suppressScrollX : true,
+  enableZoom: true,
 });
 
 if (window.innerWidth >= 768) {
@@ -55,7 +56,7 @@ if (window.innerWidth >= 768) {
   });
 } else if (window.innerWidth < 768) {
   inv_container.destroy();
-}
+} */
 
 
 $('.hamburger, .inv-not-selected p').on('click', function(event) {

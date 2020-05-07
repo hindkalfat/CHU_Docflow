@@ -145,18 +145,19 @@
     color: #3b3f5c;
 }
 .invoice-container {
-    width: 100%;
+    display: inline-block;
+    overflow-x: auto !important;
 }
 .invoice-inbox {
     position: relative;
     overflow-x: auto;
     overflow-y: auto;
-    width: 100%;
     height: calc(100vh - 104px);
 }
 .invoice-inbox .inv-not-selected {
     display: flex;
     height: 100%;
+    width: 100%;
     justify-content: center;
     background-image: url(../../img/bg.png);
     border-bottom-right-radius: 6px;
@@ -421,7 +422,7 @@
 
 @page { size: auto;  margin: 0mm; }
 @media (max-width: 1199px) {
-    .doc-container { overflow: auto; }
+    /* .doc-container { overflow: auto; } */
     .tab-title {
         position: absolute;
         z-index: 60;

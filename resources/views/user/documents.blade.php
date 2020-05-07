@@ -3,6 +3,7 @@
 @section('link')
     <link rel="stylesheet" type="text/css" href="{{asset('plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css')}}">
     <link href="{{asset('plugins/file-upload/file-upload-with-preview.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('plugins/notification/snackbar/snackbar.min.css')}}" rel="stylesheet" type="text/css" />
 
     <script>
         $(document).ready(function () {
@@ -73,6 +74,16 @@
                                     buttondown_class: "btn btn-outline-dark",
                                     buttonup_class: "btn btn-outline-dark"
                                 });
+                            }else if(this.typeM == 'Enuméré'){
+                                $('#metashow').append(
+                                    '<div class="form-group col-md-6">'+
+                                        '<div class=" mt-1">'+
+                                            '<span class="badge outline-badge-info">'+this.libelleM+
+                                            '</span>'+
+                                        '</div><br/>'+
+                                        '<input id="listeEnum" type="file" class="form-control-file" id="exampleFormControlFile1" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">'+                                   
+                                    '</div>'
+                                );
                             }else{
                                 $('#metashow').append(
                                     '<div class="form-group col-md-6">'+
@@ -92,39 +103,46 @@
             //add doc
             $("#addDoc").submit(function(e){
                 e.preventDefault();
-                var form = $(this);
-                var data = new FormData(form[0]); 
-                $.ajax({
-                    type:'POST',
-                    data:data,
-                    url:'/user/documents',
-                    cache: false,
-                    processData: false,
-                    contentType : false,
-                    success:function(data){
-                        var dateC = new Date(data.document.created_at);
-                        var dateU = new Date(data.document.updated_at);
-                        var datecreated_at = dateC.getDate() + "/" +(dateC.getMonth() + 1) + "/" + dateC.getFullYear();
-                        var dateupdated_at = dateU.getDate() + "/" +(dateU.getMonth() + 1) + "/" + dateU.getFullYear();
-                        
-                        $('#bodyDoc').append(
-                            '<tr>'+
-                                '<td>'+ data.document.nomD+'</td>'+
-                                '<td>'+ datecreated_at +'</td>'+
-                                '<td>'+ dateupdated_at +'</td>'+
-                                '<td>  </td>'+
-                                '<td>  </td>'+
-                                '<td>  </td>'+
-                                '<td>'+
-                                    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'+
-                                    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>'+
-                                    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" title="supprimer" class="feather feather-x-circle table-cancel"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>'+
-                                '</td>'+
-                            '</tr>'
-                        );
-                        $('#fadeupModal').modal('hide');
-                    }
-                });   
+                var path=$('#listeEnum').val();
+                if( path.search(".xlsx") > 0 || path.search(".xls") > 0)
+                {
+                    var form = $(this);
+                    var data = new FormData(form[0]); 
+                    $.ajax({
+                        type:'POST',
+                        data:data,
+                        url:'/user/documents',
+                        cache: false,
+                        processData: false,
+                        contentType : false,
+                        success:function(data){
+                            var dateC = new Date(data.document.created_at);
+                            var dateU = new Date(data.document.updated_at);
+                            var datecreated_at = dateC.getDate() + "/" +(dateC.getMonth() + 1) + "/" + dateC.getFullYear();
+                            var dateupdated_at = dateU.getDate() + "/" +(dateU.getMonth() + 1) + "/" + dateU.getFullYear();
+                            
+                            $('#bodyDoc').append(
+                                '<tr>'+
+                                    '<td>'+ data.document.nomD+'</td>'+
+                                    '<td>'+ datecreated_at +'</td>'+
+                                    '<td>'+ dateupdated_at +'</td>'+
+                                    '<td>  </td>'+
+                                    '<td>  </td>'+
+                                    '<td>  </td>'+
+                                    '<td>'+
+                                        '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'+
+                                        '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>'+
+                                        '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" title="supprimer" class="feather feather-x-circle table-cancel"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>'+
+                                    '</td>'+
+                                '</tr>'
+                            );
+                            $('#fadeupModal').modal('hide');
+                        }
+                    });  
+                }
+                else{
+                    $('#notif').click();
+                } 
             });
         });
     </script>
@@ -136,12 +154,20 @@
     <script>
         //First upload
         var firstUpload = new FileUploadWithPreview('myFirstImage')
+        $('.bottom-right').click(function() {
+            Snackbar.show({
+                text: 'veuillez importer un fichier excel.',
+                pos: 'bottom-right'
+            });
+        });
     </script>
+    <script src="{{asset('plugins/notification/snackbar/snackbar.min.js')}}"></script>
+
     
 @endsection
 
 @section('content')
-
+<button hidden id="notif" class="btn btn-dark bottom-right">Bottom right</button>
 <div id="content" class="main-content">
     <div class="layout-px-spacing">
 
@@ -230,7 +256,9 @@
                                         <td>  </td>
                                         <td>  </td>
                                         <td>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                            <a href=" {{url('user/document/'.$doc->idD)}} ">                                            
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                            </a>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" title="supprimer" class="feather feather-x-circle table-cancel"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
                                         </td>

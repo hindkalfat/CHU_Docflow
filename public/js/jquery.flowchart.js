@@ -74,6 +74,7 @@ jQuery(function ($) {
         selectedLinkId: null,
         positionRatio: 1,
         globalId: null,
+        condlink:0,
 
         // the constructor
         _create: function () {
@@ -221,8 +222,16 @@ jQuery(function ($) {
             while (typeof this.data.links[this.linkNum] != 'undefined') {
                 this.linkNum++;
             }
+            
+            var nbl = $('#nblink'+linkData.fromOperator).val() * 1;
 
-            this.createLink(this.linkNum, linkData);
+            var titre=  this.data.operators[linkData.fromOperator].internal.properties.title;
+
+            if(titre.includes("Condition") && nbl<2){
+                this.createLink(this.linkNum, linkData);
+            }
+            else if(!titre.includes("Condition"))
+                this.createLink(this.linkNum, linkData);
             return this.linkNum;
         },
 
@@ -260,6 +269,9 @@ jQuery(function ($) {
 
             this._autoCreateSubConnector(linkData.fromOperator, linkData.fromConnector, 'outputs', fromSubConnector);
             this._autoCreateSubConnector(linkData.toOperator, linkData.toConnector, 'inputs', toSubConnector);
+
+            var nbl = $('#nblink'+linkData.fromOperator).val() * 1;
+            $('#nblink'+linkData.fromOperator).val(nbl+1)
 
             this.data.links[linkId] = linkData;
             this._drawLink(linkId);
@@ -531,7 +543,12 @@ jQuery(function ($) {
                                 '<input type="hidden" name="a_idG" class="inpt" value="" id="a_idG'+cpt+'"/>'+
                                 '<input type="hidden" name="a_idU" class="inpt" value="" id="a_idU'+cpt+'"/>'+
                                 '<input type="hidden" name="a_idW" class="inptwf" value="" id="a_idW'+cpt+'"/>'+
+                                '<input type="text" name="idoperator" value="'+cpt+'" id="idoperator'+cpt+'"/>'+
                             '</form>');
+
+            var $form1 = $('<input type="hidden" name="nblink" value="0" id="nblink'+cpt+'"/>'+
+                            '<input type="text" name="idop" value="'+cpt+'" id="idop'+cpt+'"/>');
+
                             
             if(indice=="email")
                 $operator_title.html('<i class="far fa-envelope" style="color:white"></i>'+infos.title);
@@ -541,7 +558,10 @@ jQuery(function ($) {
                 $operator_title.html(infos.title);
 
             $operator_title.appendTo($operator);
-            $operator.append($form);
+            $operator.append($form1);
+
+            if(indice=="action")
+                $operator.append($form);
 
             var $operator_body = $('<div class="flowchart-operator-body"></div>');
             $operator_body.html(infos.body);
@@ -646,12 +666,12 @@ jQuery(function ($) {
             return fullElement.operator;
         },
 
-        addOperator: function (operatorData,indice, cpt) {
+        addOperator: function (operatorData,indice) {
             while (typeof this.data.operators[this.operatorNum] != 'undefined') {
                 this.operatorNum++;
             }
 
-            this.createOperator(this.operatorNum, operatorData, indice, cpt);
+            this.createOperator(this.operatorNum, operatorData, indice, this.operatorNum);
             return this.operatorNum;
         },
 
@@ -733,12 +753,11 @@ jQuery(function ($) {
                             fullElement.operator.css({left: ui.position.left, top: ui.position.top});
                         }
                         var heightDiv = $('.flowchart-example-container').height();
-                        var heightDivAdd = heightDiv+3;
+                        var widthDiv = $('.flowchart-example-container').width();
+                        var heightDivAdd = heightDiv+1;
+                        var widthDivAdd = widthDiv+1;
                         $('.flowchart-example-container').css("height",heightDivAdd);
-
-                        /* var widthtDiv = $('.flowchart-example-container').width();
-                        var widthtDivAdd = widthtDiv+3;
-                        $('.flowchart-example-container').css("width",widthtDivAdd); */
+                        $('.flowchart-example-container').css("width",widthDivAdd);
 
                         operatorChangedPosition($(this).data('operator_id'), ui.position);
                     },
@@ -779,6 +798,7 @@ jQuery(function ($) {
             if (connectorCategory == 'inputs' && this.lastOutputConnectorClicked != null) {
                 var linkData = {
                     fromOperator: this.lastOutputConnectorClicked.operator,
+                    fromOperatorType: this.data.operators[this.lastOutputConnectorClicked.operator].internal.properties.title,
                     fromConnector: this.lastOutputConnectorClicked.connector,
                     fromSubConnector: this.lastOutputConnectorClicked.subConnector,
                     toOperator: operator,

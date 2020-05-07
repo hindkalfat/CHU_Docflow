@@ -16,7 +16,7 @@ class CreateWorkflowsTable extends Migration
         Schema::create('workflows', function (Blueprint $table) {
             $table->increments('idWf');
             $table->string('nomWf');
-            $table->text('descriptionWf');
+            $table->text('descriptionWf')->nullable();
             $table->unsignedInteger('w_idTd')->index();
             $table->timestamps();
 

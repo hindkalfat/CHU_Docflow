@@ -7,6 +7,7 @@ use App\TypeDoc;
 use App\User;
 use App\Workflow;
 use App\Action;
+use App\Successeur;
 
 class WfController extends Controller
 {
@@ -101,7 +102,7 @@ class WfController extends Controller
         $action = new Action;
 
         $action->nomA = $request->input('nomA');
-        $action->titreA = $request->input('titreA');
+        $action->typeA = $request->input('titreA');
         $action->directiveA = $request->input('directiveA');
         $action->date_limiteA = $request->input('date_limiteA');
         $action->opt_limiteA = $request->input('opt_limiteA');
@@ -111,7 +112,42 @@ class WfController extends Controller
         $action->a_idW = $request->input('a_idW');
         $action->a_idG = 1;// $request->input('a_idG');
         $action->a_idU = $request->input('a_idU');
+        $action->idop = $request->input('idoperator');
 
         $action->save();
+    }
+
+    public function successeurs(Request $request)
+    { 
+        $dataWf = $request->input('getData'); 
+        $json = json_decode($dataWf, true);
+
+        $idWf = $request->input('idWf');
+        
+        foreach ($json['links'] as $data ) {
+
+            $actionF= Action::where('idop',$data['fromOperator'])
+                            ->where('a_idW',$request->input('idWf'))
+                            ->take(1)
+                            ->get();  
+                        
+            $actionT= Action::where('idop',$data['toOperator'])
+                            ->where('a_idW',$request->input('idWf'))
+                            ->take(1)
+                            ->get();
+
+            $successeur = new Successeur;
+
+            if($data['fromOperator'] == 'Début')
+            {
+                $successeur->_idFrom = null;
+                $successeur->_idTo = $actionT[0]->idA;
+            }else{
+                $successeur->_idFrom = $actionF[0]->idA;
+                $successeur->_idTo = $actionT[0]->idA;
+            }
+            
+            $successeur->save();
+        }
     }
 }

@@ -17,7 +17,7 @@ class CreateUsersTachesTable extends Migration
             $table->increments('idUT');
             $table->unsignedInteger('_idT');
             $table->unsignedInteger('_idU');
-            $table->unsignedInteger('_idV');
+            $table->unsignedInteger('_idV')->nullable();
             $table->timestamps();
             
             //FK

@@ -82,7 +82,7 @@ $('.click-callback').click(function() {
             //Set opacity of element to 0 to close Snackbar 
             $(element).css('opacity', 0);
             Snackbar.show({
-                text: 'Thanks for clicking the  <strong>Dismiss</strong>  button!',
+                text: 'Thanks for clicking the  <strong>Annuler</strong>  button!',
                 showActionButton: false
             });
         }

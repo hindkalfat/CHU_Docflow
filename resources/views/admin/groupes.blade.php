@@ -119,6 +119,22 @@
                                             <div class="user-meta-info">
                                                 <p class="user-name" data-name=""> {{ucfirst($groupe->nomG)}} </p>
                                             </div>
+                                            <div class="layout-top-spacing">
+                                                <ul class="list-inline badge-collapsed-img mb-0 mb-3">
+                                                    <li class="list-inline-item chat-online-usr">
+                                                        <img alt="avatar" src="{{asset('assets/img/profile-2.jpg')}}" class="ml-0">
+                                                    </li>
+                                                    <li class="list-inline-item chat-online-usr">
+                                                        <img alt="avatar" src="{{asset('assets/img/profile-3.jpg')}}">
+                                                    </li>
+                                                    <li class="list-inline-item badge-notify mr-0">
+                                                        <div class="notification">
+                                                            <span class="badge badge-info badge-pill">+5 more</span>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+
+                                            </div>
                                         </div>
                                         <div class="action-btn">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye view"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>

@@ -15,7 +15,7 @@ class CreateTachesTable extends Migration
     {
         Schema::create('taches', function (Blueprint $table) {
             $table->increments('idT');
-            $table->string('Etat_avcT');
+            $table->string('Etat_avcT')->nullable();
             $table->date('date_echeanceT');
             $table->date('date_rappelT');
             $table->unsignedInteger('t_idA');

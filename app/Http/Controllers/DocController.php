@@ -63,9 +63,10 @@ class DocController extends Controller
         $version->numV = 01;
 
         $File = $request->file('file'); 
-        $fileName = $File->getClientOriginalName();
+        $fileName = uniqid().$File->getClientOriginalName();
         $File->move(public_path('pdf'), $fileName);
         $version->doc = $fileName;
+        $version->v_idD = $document->idD;
         $version->save();
 
         return response()->json(['success' => "created", 'document' => $document, 'version' => $version]);
@@ -123,5 +124,12 @@ class DocController extends Controller
         $typeD = TypeDoc::find($id);
         $metas = $typeD->metadonnees;
         return response()->json($metas);
+    }
+
+    public function details($id)
+    {
+        $document = Document::find($id); 
+        $versions = $document->versions;
+        return view('user.document',['doc' => $document],['versions' => $versions]);
     }
 }
