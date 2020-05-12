@@ -22,7 +22,7 @@ class TacheController extends Controller
     {
         $id = Auth::user()->id;
         $user = User::find($id);
-        $actions = $user->actions->pluck('idA'); 
+        $actions = $user->actions->where('couranteA',1)->pluck('idA'); 
         $taches = Tache::whereIn('t_idA',$actions)->get();
     
         return view('user.taches1',['taches' => $taches]);

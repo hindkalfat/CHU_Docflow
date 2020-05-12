@@ -103,9 +103,49 @@
             //add doc
             $("#addDoc").submit(function(e){
                 e.preventDefault();
-                var path=$('#listeEnum').val();
-                if( path.search(".xlsx") > 0 || path.search(".xls") > 0)
+                var path=$('#listeEnum').val(); 
+                if( path )
                 {
+                    if(path.search(".xlsx") > 0 || path.search(".xls") > 0)
+                    {
+                        var form = $(this);
+                        var data = new FormData(form[0]); 
+                        $.ajax({
+                            type:'POST',
+                            data:data,
+                            url:'/user/documents',
+                            cache: false,
+                            processData: false,
+                            contentType : false,
+                            success:function(data){
+                                var dateC = new Date(data.document.created_at);
+                                var dateU = new Date(data.document.updated_at);
+                                var datecreated_at = dateC.getDate() + "/" +(dateC.getMonth() + 1) + "/" + dateC.getFullYear();
+                                var dateupdated_at = dateU.getDate() + "/" +(dateU.getMonth() + 1) + "/" + dateU.getFullYear();
+                                
+                                $('#bodyDoc').after(
+                                    '<tr role="row">'+
+                                        '<td>'+ data.document.nomD+'</td>'+
+                                        '<td>'+ datecreated_at +'</td>'+
+                                        '<td>'+ dateupdated_at +'</td>'+
+                                        '<td>  </td>'+
+                                        '<td>  </td>'+
+                                        '<td>  </td>'+
+                                        '<td style="width:114px;">'+
+                                            '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'+
+                                            '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>'+
+                                            '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" title="supprimer" class="feather feather-x-circle table-cancel"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>'+
+                                        '</td>'+
+                                    '</tr>'
+                                );
+                                $('#fadeupModal').modal('hide');
+                            }
+                        });  
+                    }
+                    else{
+                        $('#notif').click();
+                    } 
+                }else{
                     var form = $(this);
                     var data = new FormData(form[0]); 
                     $.ajax({
@@ -121,28 +161,26 @@
                             var datecreated_at = dateC.getDate() + "/" +(dateC.getMonth() + 1) + "/" + dateC.getFullYear();
                             var dateupdated_at = dateU.getDate() + "/" +(dateU.getMonth() + 1) + "/" + dateU.getFullYear();
                             
-                            $('#bodyDoc').append(
-                                '<tr>'+
+                            $(
+                                '<tr role="row" style="width:114px;">'+
                                     '<td>'+ data.document.nomD+'</td>'+
                                     '<td>'+ datecreated_at +'</td>'+
                                     '<td>'+ dateupdated_at +'</td>'+
                                     '<td>  </td>'+
                                     '<td>  </td>'+
                                     '<td>  </td>'+
-                                    '<td>'+
+                                    '<td class="row">'+
                                         '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'+
                                         '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>'+
                                         '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" title="supprimer" class="feather feather-x-circle table-cancel"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>'+
                                     '</td>'+
                                 '</tr>'
-                            );
+                            ).appendTo($('#bodyDoc'));
+                            $('.dataTables_empty').remove();
                             $('#fadeupModal').modal('hide');
                         }
-                    });  
+                    });
                 }
-                else{
-                    $('#notif').click();
-                } 
             });
         });
     </script>
@@ -207,7 +245,7 @@
 
                                 <div class="form-group">
                                     <p>Titre document <code>Optionnel</code></p>
-                                    <input name="titreD" type="text" name="txt" placeholder="Titre..." class="form-control" required>
+                                    <input name="titreD" type="text" name="txt" placeholder="Titre..." class="form-control">
                                 </div>
 
                                 <div class="row" id="metashow">

@@ -31,20 +31,6 @@
 	<link rel="stylesheet" type="text/css" href="{{asset('plugins/editors/quill/quill.snow.css')}}">
     <link href="{{asset('plugins/notification/snackbar/snackbar.min.css')}}" rel="stylesheet" type="text/css" />
 
-
-	<script>
-		function showmodal() {
-			console.log(document.getElementById("addAction"))
-			document.getElementById("addAction").showModal();
-		}
-
-		function quillfunct() {
-			var cont = quill.root.innerHTML;
-			alert(cont)
-		}
-		
-	</script>
-
 	<style>
 		.flowchart-example-container {
 			
@@ -98,6 +84,7 @@
 
 	<!--  BEGIN MAIN CONTAINER  -->
 	<button hidden id="notif" class="btn btn-dark bottom-right">Bottom right</button>
+	<button hidden id="notifUnique" class="btn btn-dark bottom-right-unique">Bottom right</button>
     <div class="main-container sidebar-closed sbar-open" id="container">
 
         <div class="overlay"></div>
@@ -122,7 +109,7 @@
 									<div class="col-md-12 col-sm-12 col-12">
 										<div class="search container layout-top-spacing">
 												<svg id="supp" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2 delete_selected_button"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-												<svg data-toggle="modal" data-target="#saveWF" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+												<svg data-toggle="modal" data-target="#exampleModalCenter" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
 										</div>
 										<ul class="nav nav-pills inv-list-container d-block" id="pills-tab" role="tablist">
 											<li class=" container nav-item layout-top-spacing">
@@ -157,18 +144,16 @@
 									</div>
 									<form id="formData" action="{{url('admin/successeurs')}}" method="post">
 										{{ csrf_field() }}
-										<input type="text" id="getData" name="getData" value="">
-										<input type="text" id="idWf" name="idWf" value="">
+										<input type="hidden" id="getData" name="getData" value="">
+										<input type="hidden" id="idWf" name="idWf" value="">
 									</form>
-									<button  id="clickB">Get </button>
-									<button class="get_data" id="get_data">Get data</button>
-	<button class="set_data" id="set_data">Set data</button>
-	<button id="save_local">Save to local storage</button>
-	<button id="load_local">Load from local storage</button>
-	<div>
-		<textarea id="flowchart_data"></textarea>
-	</div>
-
+									
+									<form class="mt-0" id="addWf">
+										{{ csrf_field() }}
+										<input type="hidden" name="typeDoc" class="form-control mb-4" id="typeDocform" >
+										<input type="hidden" name="nomWf" class="form-control mb-4" id="nomWfform" >
+										<textarea hidden class="form-control" name="descWf" id="messageform" rows="3"></textarea>
+									</form>
 
 								</div>
 
@@ -181,20 +166,40 @@
 			</div>
 		</div>
 
+		<!-- Confirmation Modal saveWF-->
+		<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalCenterTitle">Enregistrer le workflow</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+						</button>
+					</div>
+					<div class="modal-body">
+						<p class="modal-text">Voulez vous vraiment enregistrer ce workflow </p>
+					</div>
+					<div class="modal-footer">
+						<button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> Annuler</button>
+						<button id="saveWorkflow" type="button" class="btn btn-primary dlt">Confirmer</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<!-- Modal saveWF -->
-		<div class="modal fade" id="saveWF" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+		<div data-keyboard="false" data-backdrop="static" class="modal fade" id="saveWF" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered" role="document">
 				<div class="modal-content">
 
 				<div class="modal-header" id="loginModalLabel">
-					<h5 class="modal-title">Enregistrer le workflow</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+					<h5 class="modal-title">Créer nouveau workflow</h5>
 				</div>
 				<div class="modal-body">
-					<form class="mt-0" id="addWf">
-						{{ csrf_field() }}
+					<form id="form-addWF" method="POST">
+							{{ csrf_field() }}
 						<div class="form-group">
-							<select id="typeDoc" name="typeDoc" class="selectpicker" data-live-search="true" data-width="100%">
+							<select id="typeDoc" name="typeDocUnique" class="selectpicker" data-live-search="true" data-width="100%">
 								<option value="" disabled selected>Type document</option>
 								@foreach ($typesDoc as $typeDoc)
 									<option value="{{$typeDoc->idTd}}"> {{$typeDoc->intituleTd}} </option>
@@ -225,9 +230,6 @@
 								<form id="addContactModalTitle">
 									<div class="custom-file mb-4">
 										<input id="nomAct" type="text" class="form-control" placeholder="Nom action">
-									</div>
-									<div class="custom-file mb-4">
-										<input id="titreAct" type="text" class="form-control" placeholder="Intitulé action">
 									</div>
 									<div class="row">
 										<div class="form-group col-md-6">
@@ -267,15 +269,15 @@
 										<div class="n-chk">
 											<label>Priorité:</label>
 											<label class="new-control new-radio new-radio-text radio-classic-default">
-												<input type="radio" class="new-control-input" name="custom-radio-5">
+												<input type="radio" class="new-control-input" value="Faible" name="custom-radio-5-priorite">
 												<span class="new-control-indicator"></span><span class="new-radio-content">Faible</span>
 											</label>
 											<label class="new-control new-radio new-radio-text radio-classic-primary">
-												<input type="radio" class="new-control-input" name="custom-radio-5" checked>
+												<input type="radio" class="new-control-input" value="Moyenne" name="custom-radio-5-priorite" checked>
 												<span class="new-control-indicator"></span><span class="new-radio-content">Moyenne</span>
 											</label>
 											<label class="new-control new-radio new-radio-text radio-classic-secondary">
-												<input type="radio" class="new-control-input" name="custom-radio-5">
+												<input type="radio" class="new-control-input" value="Haute" name="custom-radio-5-priorite">
 												<span class="new-control-indicator"></span><span class="new-radio-content">Haute</span>
 											</label>
 										</div>
@@ -285,21 +287,21 @@
 										<div class="col-sm-12 col-12 input-fields">
 											<div class="n-chk">
 												<label class="new-control new-radio radio-primary">
-													<input type="radio" class="new-control-input" name="custom-radio-1" checked="">
+													<input type="radio" class="new-control-input" value="1" name="custom-radio-1-version" checked="checked">
 													<span class="new-control-indicator"></span>Avec entrée
 												</label>
 												<label class="new-control new-radio radio-primary">
-													<input type="radio" class="new-control-input" name="custom-radio-1" checked="">
+													<input type="radio" class="new-control-input" value="0" name="custom-radio-1-version">
 													<span class="new-control-indicator"></span>Sans entrée
 												</label>
 											</div>
 											<div class="n-chk">
 												<label class="new-control new-radio radio-primary">
-													<input type="radio" class="new-control-input" name="custom-radio-2" checked="">
+													<input type="radio" class="new-control-input" value="Approbation" name="custom-radio-1-typeA">
 													<span class="new-control-indicator"></span>Approbation
 												</label>
 												<label class="new-control new-radio radio-primary">
-													<input type="radio" class="new-control-input" name="custom-radio-2" checked="">
+													<input type="radio" class="new-control-input" value="Validation" name="custom-radio-1-typeA" checked="checked">
 													<span class="new-control-indicator"></span>Validation
 												</label>
 											</div>
@@ -333,17 +335,17 @@
 										<div class="col-sm-12 col-12 input-fields">
 											<div class="n-chk">
 												<label class="new-control new-radio radio-primary">
-													<input type="radio" class="new-control-input" name="custom-radio-1" checked="">
+													<input type="radio" class="new-control-input radio" name="custom-radio-1-email" value="Interne" checked="checked">
 													<span class="new-control-indicator"></span>Interne
 												</label>
 												<label class="new-control new-radio radio-primary">
-													<input type="radio" class="new-control-input" name="custom-radio-1" checked="">
+													<input type="radio" class="new-control-input radio" name="custom-radio-1-email" value="Externe">
 													<span class="new-control-indicator"></span>Externe
 												</label>
 											</div>
 										</div>
 									</div>
-									<div class="custom-file mb-4">
+									<div class="custom-file mb-4 dest">
 										<select id="destI" name="responsableA" class="selectpicker" data-live-search="true" data-width="100%">
 											<option value="" disabled selected >Destinataire</option>
 											@foreach ($users as $user)
@@ -351,11 +353,11 @@
 											@endforeach
 										</select>
 									</div>
-									<div id="destE" class="custom-file mb-4" hidden>
-										<input  type="text" class="form-control" placeholder="Destinataire">
+									<div class="custom-file mb-4">
+										<input id="destE" disabled type="text" class="form-control" placeholder="Email destinataire (externe)">
 									</div>
 									<div class="custom-file mb-4">
-										<input id="objet" type="text" class="form-control" placeholder="Objet">
+										<input id="objetAct" type="text" class="form-control" placeholder="Objet">
 									</div>
 									<div class="custom-file mb-4">
 										<div class="statbox box box-shadow">
@@ -375,7 +377,7 @@
 					</div>
 					<div class="modal-footer">
 						<button class="btn" data-dismiss="modal"> <i class="flaticon-delete-1"></i> Annuler</button>
-						<button id="" class="btn btn-success" onclick="quillfunct()">Valider</button>
+						<button id="btn-add-email" class="btn btn-success">Valider</button>
 					</div>
 				</div>
 			</div>
@@ -385,23 +387,8 @@
 	<script type="text/javascript">
 		/* global $ */
 		$(document).ready(function() {
+			$('#saveWF').modal('show');
 
-		var d=0;
-		$('#chk').click(function() {
-			if(d==0){
-				d++;
-				//$("#destE").attr("type", "text");
-				$("#destE").css("visibility", "visible");
-				$("#destI").hide();
-			}else{
-				d--;
-				//$("#destE").attr("type", "hidden");
-				$("#destE").css("visibility", "hidden");
-				
-				$("#destI").show();
-			}
-		});
-			
 			var $flowchart = $('#flowchartworkspace');
 			var $container = $flowchart.parent();
 			var x=0;
@@ -450,7 +437,7 @@
 			$operatorProperties.hide();
 			var $linkProperties = $('#link_properties');
 			$linkProperties.hide();
-			var $operatorTitle = $('#operator_title');
+			var $operatorTitle = $('#nomAct');
 			var $linkColor = $('#link_color');
 			var i=0;
 			var opId;
@@ -466,19 +453,21 @@
 					});
 
 					opId = operatorId;
-					$('#btn-add').click(function(){
+					/* $('#btn-add').click(function(){
 						var nomA=$('#nomA').val();
 						$('#test'+opId).val(nomA);
 						$("#addAction").modal("hide");
-					});
+					}); */
 					i++;
 					if(i==2){
 						$('#nomAct').val('');
-						$('#titreAct').val('');
 						$('#exampleFormControlTextarea1').val('');
 						$('#date_limiteAct').val('');
 						$('#date_rappelAct').val('');
-						if($flowchart.flowchart('getOperatorTitle', opId).includes("Tâche"))	
+						if(!$flowchart.flowchart('getOperatorTitle', opId).includes("Email")
+						  && !$flowchart.flowchart('getOperatorTitle', opId).includes("Fin")
+						  && !$flowchart.flowchart('getOperatorTitle', opId).includes("Début")
+						  && !$flowchart.flowchart('getOperatorTitle', opId).includes("Condition"))	
 							$("#addAction").modal("show");
 						else if($flowchart.flowchart('getOperatorTitle', opId).includes("Email"))
 							$("#sendEmail").modal("show");
@@ -539,16 +528,42 @@
 			//--- delete operator / link button
 			//-----------------------------------------
 
-			 /* $('#WFtitle').dblclick(function(){
-				 alert("bjr1")
-				 console.log($('.flowchart-operator'))
-				$("#addAction").modal("show");
-			}); */
+			//type act -version-
+			$('input[type=radio][name=custom-radio-1-version]').change(function() {
+				if (this.value == 'Avec') {
+					$('#versionA'+opId).val(this.value);
+				}
+				else if (this.value == 'Sans') {
+					$('#versionA'+opId).val(this.value);
+				}
+			});
 
+			//type act -approbation-
+			$('input[type=radio][name=custom-radio-1-typeA]').change(function() {
+				if (this.value == 'Approbation') {
+					$('#typeA'+opId).val(this.value);
+				}
+				else if (this.value == 'Validation') {
+					$('#typeA'+opId).val(this.value);
+				}
+			});
+
+			//type act -priorite-
+			$('input[type=radio][name=custom-radio-5-priorite]').change(function() {
+				if (this.value == 'Faible') {
+					$('#prioriteA'+opId).val(this.value);
+				}
+				else if (this.value == 'Moyenne') {
+					$('#prioriteA'+opId).val(this.value);
+				}
+				else if (this.value == 'Haute') {
+					$('#prioriteA'+opId).val(this.value);
+				}
+			});
 
 			$('#btn-add').click(function() {
+				$("#addAction").modal("hide");
 				$('#nomA'+opId).val($('#nomAct').val());
-				$('#titreA'+opId).val($('#titreAct').val());
 				$('#directiveA'+opId).val($('#exampleFormControlTextarea1').val());
 				$('#responsableA'+opId).val($('#responsableAct').val());
 				$('#prioriteA'+opId).val($('#prioriteAct').val());
@@ -560,11 +575,48 @@
 				$('#a_idU'+opId).val($('#act_idU').val());				
 			});
 
-			$('#clickB').click(function(){
-				var data = $flowchart.flowchart('getData');
-				var data1 = JSON.stringify(data, null, 2);
-				$('#getData').val(data1);
-				$('#formData').submit();
+			//Email
+			$('input[type=radio][name=custom-radio-1-email]').change(function() {
+				if (this.value == 'Interne') {
+					$('#destE').attr('disabled', 'disabled');
+					$('#destI').removeAttr("disabled");
+					$('.selectpicker').selectpicker('refresh');
+				}
+				else if (this.value == 'Externe') {
+					$('#destE').removeAttr("disabled");
+					$('#destI').attr('disabled', 'disabled');
+					$('.selectpicker').selectpicker('refresh');
+				}
+			});
+
+			$('#btn-add-email').click(function() {
+				$("#sendEmail").modal("hide");
+				$('#objetA'+opId).val($('#objetAct').val());
+				$('#messageA'+opId).val(quill.root.innerHTML);
+				$('#a_destinataireU'+opId).val($('#destI').val());
+				$('#destinataireIA'+opId).val($('#destE').val());				
+			});
+
+			$("#form-addWF").submit(function(e){
+				e.preventDefault();
+				var data = $('#form-addWF').serialize(); 
+                $.ajax({
+                    type:'POST',
+                    data:data,
+                    url:'/admin/unique',
+                    success:function(data){
+						if(data.success == "unique")
+						{
+							$("#saveWF").modal("hide");
+							$('#typeDocform').val($('#typeDoc').val());
+							$('#nomWfform').val($('#nomWf').val());
+							$('#messageform').val($('#exampleFormControlTextarea').val());
+						}
+						else{
+							$('#notifUnique').click();
+						}
+					}
+                }); 
 			});
 
 			ajax_recaller = function(forms){
@@ -581,7 +633,7 @@
 						} 
 						else {
 							called=0;
-							$("#saveWF").modal("hide");
+							$("#exampleModalCenter").modal("hide");
 							var data = $flowchart.flowchart('getData');
 							var data1 = JSON.stringify(data, null, 2);
 							$('#getData').val(data1);
@@ -593,6 +645,10 @@
 				});
 				
 			}
+
+			$('#saveWorkflow').click(function(){
+				$("#addWf").submit();
+			});
 
 			//add WF
             $("#addWf").submit(function(e){
@@ -611,7 +667,8 @@
                     success:function(data){
 						var text ='{!! csrf_field() !!}';
 						$(text).insertBefore( $( ".inpt" ) );
-						$("#formAction").attr('action','/admin/test');
+						$("#monform").attr('action','/admin/test');
+						//$("#formAction").attr('action','/admin/test');
 						
 						$('.inptwf').val(data.workflow.idWf);
 						$('#idWf').val(data.workflow.idWf);
@@ -835,6 +892,12 @@
 		$('.bottom-right').click(function() {
             Snackbar.show({
                 text: 'Il existe déja un état initial.',
+                pos: 'bottom-right'
+            });
+		});
+		$('.bottom-right-unique').click(function() {
+            Snackbar.show({
+                text: 'Ce type de document a déja un workflow.',
                 pos: 'bottom-right'
             });
         });

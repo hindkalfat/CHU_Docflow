@@ -22,7 +22,7 @@ class CreateActionsTable extends Migration
             $table->integer('date_rappelA')->nullable();
             $table->string('opt_rappelA')->nullable();
             $table->string('prioriteA')->nullable();
-            $table->string('typeA');
+            $table->string('typeA'); //approbation validation email
             $table->bigInteger('idop')->nullable();
             $table->integer('couranteA')->nullable();
             $table->integer('versionA')->nullable(); //accept version

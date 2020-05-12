@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use App\TypeDoc;
 use App\User;
 use App\Workflow;
@@ -101,17 +102,31 @@ class WfController extends Controller
     { 
         $action = new Action;
 
+        if($request->input('typeA')=="Email")
+        {
+            $action->objetA = $request->input('objetA');
+            $action->messageA = $request->input('messageA');
+            $action->a_destinataireU = $request->input('a_destinataireU');
+            $action->destinataireIA = $request->input('destinataireIA');
+            $action->date_limiteA = 3;
+            $action->opt_limiteA = 'jour(s)';
+        }
+        else
+        {
+            $action->directiveA = $request->input('directiveA');
+            $action->date_limiteA = $request->input('date_limiteA');
+            $action->opt_limiteA = $request->input('opt_limiteA');
+            $action->date_rappelA = $request->input('date_rappelA');
+            $action->opt_rappelA = $request->input('opt_rappelA');
+            $action->prioriteA = $request->input('prioriteA');
+            $action->versionA = $request->input('versionA');
+            //$action->a_idG = 1;// $request->input('a_idG');
+            $action->a_idU = $request->input('a_idU');
+
+        }
         $action->nomA = $request->input('nomA');
-        $action->typeA = $request->input('titreA');
-        $action->directiveA = $request->input('directiveA');
-        $action->date_limiteA = $request->input('date_limiteA');
-        $action->opt_limiteA = $request->input('opt_limiteA');
-        $action->date_rappelA = $request->input('date_rappelA');
-        $action->opt_rappelA = $request->input('opt_rappelA');
-        $action->prioriteA = "haute";// $request->input('prioriteA');
+        $action->typeA = $request->input('typeA');
         $action->a_idW = $request->input('a_idW');
-        $action->a_idG = 1;// $request->input('a_idG');
-        $action->a_idU = $request->input('a_idU');
         $action->idop = $request->input('idoperator');
 
         $action->save();
@@ -126,28 +141,42 @@ class WfController extends Controller
         
         foreach ($json['links'] as $data ) {
 
-            $actionF= Action::where('idop',$data['fromOperator'])
+            $successeur = new Successeur;
+
+            if($data['fromOperatorType'] == 'Début')
+            {
+                $actionT= Action::where('idop',$data['toOperator'])
+                            ->where('a_idW',$request->input('idWf'))
+                            ->take(1)
+                            ->get();
+                $successeur->_idFrom = null;
+                $successeur->_idTo = $actionT[0]->idA;
+            }else{
+                $actionF= Action::where('idop',$data['fromOperator'])
                             ->where('a_idW',$request->input('idWf'))
                             ->take(1)
                             ->get();  
                         
-            $actionT= Action::where('idop',$data['toOperator'])
+                $actionT= Action::where('idop',$data['toOperator'])
                             ->where('a_idW',$request->input('idWf'))
                             ->take(1)
                             ->get();
-
-            $successeur = new Successeur;
-
-            if($data['fromOperator'] == 'Début')
-            {
-                $successeur->_idFrom = null;
-                $successeur->_idTo = $actionT[0]->idA;
-            }else{
                 $successeur->_idFrom = $actionF[0]->idA;
                 $successeur->_idTo = $actionT[0]->idA;
             }
-            
+
             $successeur->save();
         }
+
+        return Redirect::to('/admin/users');
+    }
+
+    public function checkUniqueWf(Request $request)
+    {
+        $type = TypeDoc::find($request->input('typeDocUnique'));
+        if(!$type->workflow)
+            return response()->json(['success' => "unique"]);
+        else 
+            return response()->json(['success' => "duplicated"]);
     }
 }

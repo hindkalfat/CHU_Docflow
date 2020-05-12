@@ -43,6 +43,8 @@ Route::get('admin/pdf', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/action', 'DocController@actions');
+Route::get('/nextActions', 'DocController@nextActions');
 
 Route::group(['middleware' => ['auth']], function () {
     
@@ -68,6 +70,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/admin/test','WfController@index');
         Route::post('/admin/addWf','WfController@store');
         Route::post('/admin/test','WfController@addAction');
+        Route::post('/admin/unique','WfController@checkUniqueWf');
         Route::post('/admin/successeurs','WfController@successeurs');
 
     });

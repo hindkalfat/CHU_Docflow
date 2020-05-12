@@ -174,7 +174,7 @@
                                         <h4>Email</h4>
                                     </div>
                                     <div class="user-location">
-                                        <h4 style="margin-left: 0;">Location</h4>
+                                        <h4 style="margin-left : 0;">Location</h4>
                                     </div>
                                     <div class="user-phone">
                                         <h4 style="margin-left: 3px;">Phone</h4>
@@ -197,18 +197,25 @@
                                             <img src="{{asset('assets/img/profile-15.jpg')}}" alt="avatar">
                                             <div class="user-meta-info">
                                                 <p class="user-ID" data-ID="{{$user->id}}"></p>
-                                                <p class="user-name" data-name="{{$user->nomU}}">{{$user->nomU}}</p>
-                                                <p class="user-prenom" data-prenom="{{$user->prenomU}}">{{$user->prenomU}}</p>
+                                                <p class="user-name user-prenom" data-name="{{$user->nomU}}" data-prenom="{{$user->prenomU}}">{{$user->nomU}} {{$user->prenomU}}</p>
                                                 <p class="user-work" data-profession="{{$user->professionU}}">{{$user->professionU}}</p>
                                             </div>
+                                        </div>
+                                        <div class="user-centre">
+                                            <p class="info-title">Centre: </p>
+                                            <p class="usr-centre" data-centre="{{$user->centreU}}">{{$user->centreU}}</p>
+                                        </div>
+                                        <div class="user-service">
+                                            <p class="info-title">Service: </p>
+                                            <p class="usr-service" data-service="{{$user->serviceU}}">{{$user->serviceU}}</p>
                                         </div>
                                         <div class="user-ville">
                                             <p class="info-title">Ville: </p>
                                             <p class="usr-ville" data-ville="{{$user->villeU}}">{{$user->villeU}}</p>
                                         </div>
                                         <div class="user-email">
-                                            <p class="info-title">Email: </p>
-                                            <p class="usr-email-addr" data-email="alan@mail.com">alan@mail.com</p>
+                                            <p class="info-title">Email personnel: </p>
+                                            <p class="usr-email-addr" data-email="{{$user->emailPersoU}}">{{$user->emailPersoU}}</p>
                                         </div>
                                         <div class="user-location">
                                             <p class="info-title">Location: </p>
@@ -216,7 +223,11 @@
                                         </div>
                                         <div class="user-phone">
                                             <p class="info-title">Phone: </p>
-                                            <p class="usr-ph-no" data-phone="+1 (070) 123-4567">+1 (070) 123-4567</p>
+                                            <p class="usr-ph-no" data-phone="{{$user->numTelU}}">{{$user->numTelU}}</p>
+                                        </div>
+                                        <div class="user-emailchu">
+                                            <p class="info-title">Email: </p>
+                                            <p class="usr-emailchu" data-emailchu="{{$user->email}}">{{$user->email}}</p>
                                         </div>
                                         <div class="action-btn">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 edit"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>

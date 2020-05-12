@@ -257,41 +257,53 @@ function editContact() {
     var $_ID = getParentItem.find('.user-ID');
     var $_name = getParentItem.find('.user-name');
     var $_prenom = getParentItem.find('.user-prenom');
+    var $_centre = getParentItem.find('.usr-centre');
+    var $_service = getParentItem.find('.usr-service');
     var $_ville = getParentItem.find('.usr-ville');
     var $_email = getParentItem.find('.usr-email-addr');
     var $_profession = getParentItem.find('.user-work');
     var $_phone = getParentItem.find('.usr-ph-no');
     var $_location = getParentItem.find('.usr-location');
+    var $_emailchu = getParentItem.find('.usr-emailchu');
 
     // Get Attributes
     var $_IDAttrValue = $_ID.attr('data-ID');
     var $_nameAttrValue = $_name.attr('data-name');
     var $_prenomAttrValue = $_prenom.attr('data-prenom');
+    var $_centreAttrValue = $_centre.attr('data-centre');
+    var $_serviceAttrValue = $_service.attr('data-service');
     var $_villeAttrValue = $_ville.attr('data-ville');
     var $_emailAttrValue = $_email.attr('data-email');
     var $_professionAttrValue = $_profession.attr('data-profession');
     var $_phoneAttrValue = $_phone.attr('data-phone');
     var $_locationAttrValue = $_location.attr('data-location');
+    var $_emailchuAttrValue = $_emailchu.attr('data-emailchu');
 
     // Get Modal Attributes
     var $_getModalIDInput = getModal.find('#c-ID');
     var $_getModalNameInput = getModal.find('#c-nom');
     var $_getModalPrenomInput = getModal.find('#c-prenom');
+    var $_getModalCentreInput = getModal.find('#c-centre');
+    var $_getModalServiceInput = getModal.find('#c-service');
     var $_getModalVilleInput = getModal.find('#c-ville');
     var $_getModalEmailInput = getModal.find('#c-emailPerso');
     var $_getModalProfessionInput = getModal.find('#c-profession');
     var $_getModalPhoneInput = getModal.find('#c-phone');
     var $_getModalLocationInput = getModal.find('#c-adresse');
+    var $_getModalEmailchuInput = getModal.find('#c-email');
 
     // Set Modal Field's Value
     var $_setModalIDValue = $_getModalIDInput.val($_IDAttrValue);
     var $_setModalNameValue = $_getModalNameInput.val($_nameAttrValue);
     var $_setModalPrenomValue = $_getModalPrenomInput.val($_prenomAttrValue);
+    var $_setModalCentreValue = $_getModalCentreInput.val($_centreAttrValue);
+    var $_setModalServiceValue = $_getModalServiceInput.val($_serviceAttrValue);
     var $_setModalVilleValue = $_getModalVilleInput.val($_villeAttrValue);
     var $_setModalEmailValue = $_getModalEmailInput.val($_emailAttrValue);
     var $_setModalProfessionValue = $_getModalProfessionInput.val($_professionAttrValue);
     var $_setModalPhoneValue = $_getModalPhoneInput.val($_phoneAttrValue);
     var $_setModalLocationValue = $_getModalLocationInput.val($_locationAttrValue);
+    var $_setModalEmailchuValue = $_getModalEmailchuInput.val($_emailchuAttrValue);
 
     $('#addContactModal').modal('show');
 
@@ -301,20 +313,26 @@ function editContact() {
 
       var $_getInputName = getParent.find('#c-nom');
       var $_getInputPrenom = getParent.find('#c-prenom');
+      var $_getInputCentre = getParent.find('#c-centre');
+      var $_getInputService = getParent.find('#c-service');
       var $_getInputVille = getParent.find('#c-ville');
       var $_getInputNmail = getParent.find('#c-emailPerso');
       var $_getInputNccupation = getParent.find('#c-profession');
       var $_getInputNhone = getParent.find('#c-phone');
       var $_getInputNocation = getParent.find('#c-adresse');
+      var $_getInputEmailchu = getParent.find('#c-email');
 
 
       var $_nameValue = $_getInputName.val(); 
       var $_prenomValue = $_getInputPrenom.val();
+      var $_centreValue = $_getInputCentre.val();
+      var $_serviceValue = $_getInputService.val();
       var $_villeValue = $_getInputVille.val();
       var $_emailValue = $_getInputNmail.val();
       var $_professionValue = $_getInputNccupation.val();
       var $_phoneValue = $_getInputNhone.val();
       var $_locationValue = $_getInputNocation.val();
+      var $_emailchuValue = $_getInputEmailchu.val();
 
       var data = $('#addContactModalTitle').serialize(); 
 
@@ -325,19 +343,25 @@ function editContact() {
           success:function(data){
             var  setUpdatedNameValue = $_name.text($_nameValue);
             var  setUpdatedPrenomValue = $_prenom.text($_prenomValue);
+            var  setUpdatedCentreValue = $_centre.text($_centreValue);
+            var  setUpdatedServiceValue = $_service.text($_serviceValue);
             var  setUpdatedVilleValue = $_ville.text($_villeValue);
             var  setUpdatedEmailValue = $_email.text($_emailValue);
             var  setUpdatedProfessionValue = $_profession.text($_professionValue);
             var  setUpdatedPhoneValue = $_phone.text($_phoneValue);
             var  setUpdatedLocationValue = $_location.text($_locationValue);
+            var  setUpdatedEmailchuValue = $_emailchu.text($_emailchuValue);
 
             var  setUpdatedAttrNameValue = $_name.attr('data-name', $_nameValue);
             var  setUpdatedAttrPrenomValue = $_name.attr('data-prenom', $_prenomValue);
+            var  setUpdatedAttrCentreValue = $_name.attr('data-centre', $_centreValue);
+            var  setUpdatedAttrServiceValue = $_name.attr('data-service', $_serviceValue);
             var  setUpdatedAttrVilleValue = $_name.attr('data-ville', $_villeValue);
             var  setUpdatedAttrEmailValue = $_email.attr('data-email', $_emailValue);
             var  setUpdatedAttrProfessionValue = $_profession.attr('data-profession', $_professionValue);
             var  setUpdatedAttrPhoneValue = $_phone.attr('data-phone', $_phoneValue);
             var  setUpdatedAttrLocationValue = $_location.attr('data-location', $_locationValue);
+            var  setUpdatedAttrEmailchuValue = $_emailchu.attr('data-emailchu', $_emailchuValue);
             $('#addContactModal').modal('hide');
           }
       }); 

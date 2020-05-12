@@ -406,6 +406,12 @@ display: none;
   margin-bottom: 0;
   color: #2196f3;
 }
+.searchable-container .searchable-items.grid .items .user-meta-info .user-prenom {
+  font-size: 21px;
+  font-weight: 600;
+  margin-bottom: 0;
+  color: #2196f3;
+}
 .searchable-container .searchable-items.grid .items .user-meta-info .user-work {
   font-weight: 700;
   font-size: 13px;
@@ -426,11 +432,61 @@ display: none;
   font-size: 13px;
   margin-bottom: 11px;
 }
+/* */
+.searchable-container .searchable-items.grid .items .user-centre .info-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #3b3f5c;/* 
+  margin-bottom: 11px; */
+  margin-right: 10px;
+}
+.searchable-container .searchable-items.grid .items .user-centre {
+  display: flex;
+  justify-content: space-between;
+}
+.searchable-container .searchable-items.grid .items .user-centre p {
+  color: #888ea8;
+  font-size: 13px;
+  margin-bottom: 11px;
+}
+.searchable-container .searchable-items.grid .items .user-service .info-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #3b3f5c;/* 
+  margin-bottom: 11px; */
+  margin-right: 10px;
+}
+.searchable-container .searchable-items.grid .items .user-service {
+  display: flex;
+  justify-content: space-between;
+}
+.searchable-container .searchable-items.grid .items .user-service p {
+  color: #888ea8;
+  font-size: 13px;
+  margin-bottom: 11px;
+}
+.searchable-container .searchable-items.grid .items .user-emailchu .info-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #3b3f5c;/* 
+  margin-bottom: 11px; */
+  margin-right: 10px;
+}
+.searchable-container .searchable-items.grid .items .user-emailchu {
+  display: flex;
+  justify-content: space-between;
+}
+.searchable-container .searchable-items.grid .items .user-emailchu p {
+  color: #888ea8;
+  font-size: 13px;
+  margin-bottom: 11px;
+}
+/* */
 .searchable-container .searchable-items.grid .items .user-ville .info-title {
   font-size: 14px;
   font-weight: 600;
-  color: #3b3f5c;
-  margin-bottom: 11px;
+  color: #3b3f5c;/* 
+  margin-bottom: 11px; */
   margin-right: 10px;
 }
 .searchable-container .searchable-items.grid .items .user-ville {

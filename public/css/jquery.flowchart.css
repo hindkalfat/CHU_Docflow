@@ -190,6 +190,7 @@
 #opaction .flowchart-operator-title {
     width: 100%;
     margin-top: 13px;
+    margin-left: 8px;
     text-align: center;
     color:white;
     font-weight: bold;

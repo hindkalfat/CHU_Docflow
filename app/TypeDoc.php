@@ -25,6 +25,6 @@ class TypeDoc extends Model
 
     public function workflow()
     {
-        return $this->hasOne(Workflow::class);
+        return $this->hasOne(Workflow::class, 'w_idTd');
     }
 }

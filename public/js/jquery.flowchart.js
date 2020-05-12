@@ -271,7 +271,7 @@ jQuery(function ($) {
             this._autoCreateSubConnector(linkData.toOperator, linkData.toConnector, 'inputs', toSubConnector);
 
             var nbl = $('#nblink'+linkData.fromOperator).val() * 1;
-            $('#nblink'+linkData.fromOperator).val(nbl+1)
+            $('#nblink'+linkData.fromOperator).val(nbl+1);
 
             this.data.links[linkId] = linkData;
             this._drawLink(linkId);
@@ -374,7 +374,13 @@ jQuery(function ($) {
             var fromSubConnector = subConnectors[0];
             var toSubConnector = subConnectors[1];
 
-            var color = this.getLinkMainColor(linkId);
+            if(linkData.fromOperatorType.includes("Condition"))
+                if(linkId==0)
+                    var color= this.setLinkMainColor(linkId,'green');
+                else
+                    var color= this.setLinkMainColor(linkId,'red');   
+            else
+                var color = this.getLinkMainColor(linkId);
 
             var fromOperator = this.data.operators[fromOperatorId];
             var toOperator = this.data.operators[toOperatorId];
@@ -533,20 +539,32 @@ jQuery(function ($) {
             var $operator_title = $('<div class="flowchart-operator-title" id="WFtitle"></div>');
             var $form = $(' <form class="monform" id="formAction'+cpt+'" method="post">'+
                                 '<input type="hidden" name="nomA" class="inpt" value="" id="nomA'+cpt+'"/>'+
-                                '<input type="hidden" name="titreA" class="inpt" value="" id="titreA'+cpt+'"/>'+
-                                '<input type="hidden" name="directiveA" class="inpt" value="" id="directiveA'+cpt+'"/>'+
-                                '<input type="hidden" name="date_limiteA" class="inpt" value="" id="date_limiteA'+cpt+'"/>'+
-                                '<input type="hidden" name="opt_limiteA" class="inpt" value="" id="opt_limiteA'+cpt+'"/>'+
-                                '<input type="hidden" name="date_rappelA" class="inpt" value="" id="date_rappelA'+cpt+'"/>'+
-                                '<input type="hidden" name="opt_rappelA" class="inpt" value="" id="opt_rappelA'+cpt+'"/>'+
-                                '<input type="hidden" name="prioriteA" class="inpt" value="" id="prioriteA'+cpt+'"/>'+
-                                '<input type="hidden" name="a_idG" class="inpt" value="" id="a_idG'+cpt+'"/>'+
-                                '<input type="hidden" name="a_idU" class="inpt" value="" id="a_idU'+cpt+'"/>'+
+                                '<input type="hidden" name="directiveA" value="" id="directiveA'+cpt+'"/>'+
+                                '<input type="hidden" name="date_limiteA" value="" id="date_limiteA'+cpt+'"/>'+
+                                '<input type="hidden" name="opt_limiteA" value="" id="opt_limiteA'+cpt+'"/>'+
+                                '<input type="hidden" name="date_rappelA" value="" id="date_rappelA'+cpt+'"/>'+
+                                '<input type="hidden" name="opt_rappelA" value="" id="opt_rappelA'+cpt+'"/>'+
+                                '<input type="text" name="prioriteA" value="Moyenne" id="prioriteA'+cpt+'"/>'+
+                                '<input type="text" name="typeA" value="Validation" id="typeA'+cpt+'"/>'+
+                                '<input type="text" name="versionA" value="1" id="versionA'+cpt+'"/>'+
+                                '<input type="hidden" name="a_idG" value="" id="a_idG'+cpt+'"/>'+
+                                '<input type="hidden" name="a_idU" value="" id="a_idU'+cpt+'"/>'+
                                 '<input type="hidden" name="a_idW" class="inptwf" value="" id="a_idW'+cpt+'"/>'+
                                 '<input type="text" name="idoperator" value="'+cpt+'" id="idoperator'+cpt+'"/>'+
                             '</form>');
 
-            var $form1 = $('<input type="hidden" name="nblink" value="0" id="nblink'+cpt+'"/>'+
+            var $formEmail = $(' <form class="monform" id="formEmail'+cpt+'" method="post">'+
+                                    '<input type="hidden" name="nomA" class="inpt" value="envoiEmail" id="nomA'+cpt+'"/>'+
+                                    '<input type="text" name="typeA" value="Email" id="typeA'+cpt+'"/>'+
+                                    '<input type="text" name="objetA" value="" id="objetA'+cpt+'"/>'+
+                                    '<input type="text" name="messageA" value="" id="messageA'+cpt+'"/>'+
+                                    '<input type="text" name="a_destinataireU" value="" id="a_destinataireU'+cpt+'"/>'+
+                                    '<input type="text" name="destinataireIA"  value="" id="destinataireIA'+cpt+'"/>'+
+                                    '<input type="text" name="a_idW" class="inptwf" value="" id="a_idW'+cpt+'"/>'+
+                                    '<input type="text" name="idoperator" value="'+cpt+'" id="idoperator'+cpt+'"/>'+
+                                '</form>');
+
+            var $form1 = $('<input type="text" name="nblink" value="0" id="nblink'+cpt+'"/>'+
                             '<input type="text" name="idop" value="'+cpt+'" id="idop'+cpt+'"/>');
 
                             
@@ -562,6 +580,8 @@ jQuery(function ($) {
 
             if(indice=="action")
                 $operator.append($form);
+            else if(indice=="email")
+                $operator.append($formEmail);
 
             var $operator_body = $('<div class="flowchart-operator-body"></div>');
             $operator_body.html(infos.body);
@@ -1002,6 +1022,11 @@ jQuery(function ($) {
         },
 
         deleteLink: function (linkId) {
+            var nbl = $('#nblink'+this.data.links[linkId].fromOperator).val() * 1;
+
+            if(this.data.links[linkId].fromOperatorType.includes("Condition")){
+                $('#nblink'+this.data.links[linkId].fromOperator).val(nbl-1)
+            }
             this._deleteLink(linkId, false);
         },
 

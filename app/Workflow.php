@@ -20,7 +20,7 @@ class Workflow extends Model
 
     public function actions()
     {
-        return $this->hasMany(Action::class);
+        return $this->hasMany(Action::class,'a_idW');
     }
 
     public function type_doc()
