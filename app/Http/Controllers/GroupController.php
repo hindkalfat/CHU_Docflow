@@ -54,7 +54,7 @@ class GroupController extends Controller
             $user_grp->save();
         }
 
-        return response()->json(['success' => "updated" , 'id' => $groupe->idG]);;
+        return response()->json(['success' => "updated" , 'id' => $groupe->idG, 'groupe' => $groupe]);;
     }
 
     /**
@@ -86,9 +86,15 @@ class GroupController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $id = $request->IDG;
+        $groupe = Groupe::find($id);
+
+        $groupe->nomG = $request->nomG;
+
+        $groupe->save();
+        return response()->json(['success' => "updated"]);;
     }
 
     /**

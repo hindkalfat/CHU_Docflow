@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\support\Facades\DB;
+use App\Notifications\NewTask;
+use Illuminate\Notifications\DatabaseNotification;
 use App\Document;
 use App\User;
 use App\Metadonnee;
@@ -14,6 +16,7 @@ use App\Action;
 use App\Tache;
 use File;
 use Auth;
+use Notification;
 
 class DocController extends Controller
 {
@@ -73,7 +76,7 @@ class DocController extends Controller
         $version->v_idD = $document->idD;
         $version->save();
 
-        return response()->json(['success' => "created", 'document' => $document, 'version' => $version]);
+        return $this->actions($document->idD,$document,$version);
     }
 
     /**
@@ -143,9 +146,9 @@ class DocController extends Controller
         return view('user.document',['doc' => $document],['versions' => $versions]);
     }
 
-    public function actions() //$id
+    public static function actions($id,$document,$version) //$id
     {
-        $doc = Document::find(17);
+        $doc = Document::find($id);
 
         $workflow = $doc->type_doc->workflow;
         $actionWf = $workflow->actions->pluck('idA');
@@ -183,6 +186,13 @@ class DocController extends Controller
                     break;
             } 
             $tache->save();
+            if($action->a_idU)
+                $user = User::find($action->a_idU);
+            else if($action->a_idG)
+                $user = Groupe::find($action->a_idG);
+            Notification::send($user, new NewTask(Action::find($action->idA)));
+            
+            return response()->json(['success' => "created", 'document' => $document, 'version' => $version]);
         }
          
 

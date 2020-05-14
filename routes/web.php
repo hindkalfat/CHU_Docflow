@@ -12,7 +12,6 @@
 */
 
 Route::get('/first', function () {
-    return view('first');
 });
 
 Route::get('/admin', function () {
@@ -46,6 +45,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/action', 'DocController@actions');
 Route::get('/nextActions', 'DocController@nextActions');
 
+
 Route::group(['middleware' => ['auth']], function () {
     
     /*******ADMIN****** */
@@ -60,6 +60,7 @@ Route::group(['middleware' => ['auth']], function () {
         //groupes
         Route::get('/admin/groupes','GroupController@index');
         Route::post('/admin/groupes','GroupController@store');
+        Route::post('/admin/edit/groupe','GroupController@update');
         Route::post('/admin/delete/groupe','GroupController@destroy');
 
         //document

@@ -9,6 +9,7 @@ use App\User;
 use App\Workflow;
 use App\Action;
 use App\Successeur;
+use App\Groupe;
 
 class WfController extends Controller
 {
@@ -21,8 +22,9 @@ class WfController extends Controller
     {
         $typesDoc = TypeDoc::all();
         $users = User::all();
+        $groupes = Groupe::all();
 
-        return view('admin.test', ['typesDoc' => $typesDoc, 'users' => $users]);   
+        return view('admin.test', ['typesDoc' => $typesDoc, 'users' => $users, 'groupes' => $groupes]);   
     }
 
     /**
@@ -120,7 +122,7 @@ class WfController extends Controller
             $action->opt_rappelA = $request->input('opt_rappelA');
             $action->prioriteA = $request->input('prioriteA');
             $action->versionA = $request->input('versionA');
-            //$action->a_idG = 1;// $request->input('a_idG');
+            $action->a_idG = $request->input('a_idG');
             $action->a_idU = $request->input('a_idU');
 
         }

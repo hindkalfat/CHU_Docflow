@@ -84,6 +84,9 @@ function addContact() {
     var $_prenom = getParent.find('#c-prenom');
     var $_ville = getParent.find('#c-ville');
 
+    var $_centre = getParent.find('#c-centre');
+    var $_service = getParent.find('#c-service');
+
     var $_email = getParent.find('#c-emailPerso');
     var $_profession = getParent.find('#c-profession');
     var $_phone = getParent.find('#c-phone');
@@ -99,7 +102,10 @@ function addContact() {
     var $_nameValue = $_name.val();
     var $_prenomValue = $_prenom.val();
     var $_villeValue = $_ville.val();
+    var $_centreValue = $_centre.val();
+    var $_serviceValue = $_service.val();
     var $_emailValue = $_email.val();
+    var $_emailappValue = $_emailapp.val();
     var $_professionValue = $_profession.val();
     var $_phoneValue = $_phone.val();
     var $_locationValue = $_location.val();
@@ -134,6 +140,16 @@ function addContact() {
     } else {
       $_getValidationField[5].style.display = 'none';
     }
+/* 
+    if ($_emailappValue == "") {
+      $_getValidationField[9].innerHTML = 'veuillez renseigner votre email';
+      $_getValidationField[9].style.display = 'block';
+    } else if((reg.test($_emailValue) == false)) {
+      $_getValidationField[9].innerHTML = 'Email invalide';
+      $_getValidationField[9].style.display = 'block';
+    } else {
+      $_getValidationField[9].style.display = 'none';
+    } */
 
     if((phoneReg.test($_phoneValue) == false)) {
       $_getValidationField[4].innerHTML = 'veuillez saisir une valeur numérique';
@@ -165,19 +181,27 @@ function addContact() {
                                 '</label>' +
                             '</div>' +
 
-                            '<img src="{!! asset("assets/img/90x90.jpg") !!}">' +
+                            '<img id="usr-img" src="">' +
                             '<div class="user-meta-info">' +
-                                '<p class="user-name" data-name='+ $_nameValue +'>'+ $_nameValue +'</p>' +
-                                '<p class="user-prenom" data-prenom='+ $_prenomValue +'>'+ $_prenomValue +'</p>' +
+                                '<p class="user-ID" data-ID='+ data.user.id +'></p>'+
+                                '<p class="user-prenom" data-name='+ $_nameValue +' data-prenom='+ $_prenomValue +'>'+ $_nameValue +' '+ $_prenomValue +'</p>' +
                                 '<p class="user-work" data-profession='+ $_professionValue +'>'+ $_professionValue +'</p>' +
                             '</div>' +
                         '</div>' +
+                        '<div class="user-centre">'+
+                            '<p class="info-title">Centre: </p>'+
+                            '<p class="usr-centre" data-centre='+ $_centreValue +'>'+data.user.centreU+'</p>'+
+                        '</div>'+
+                        '<div class="user-service">'+
+                            '<p class="info-title">Service: </p>'+
+                            '<p class="usr-service" data-service='+ $_serviceValue +'>'+data.user.serviceU+'</p>'+
+                        '</div>'+
                         '<div class="user-ville">' +
                             '<p class="info-title">Ville: </p>' +
                             '<p class="usr-ville" data-ville='+ $_villeValue +'>'+ $_villeValue +'</p>' +
                         '</div>' +
                         '<div class="user-email">' +
-                            '<p class="info-title">Email: </p>' +
+                            '<p class="info-title">Email personnel: </p>' +
                             '<p class="usr-email-addr" data-email='+ $_emailValue +'>'+ $_emailValue +'</p>' +
                         '</div>' +
                         '<div class="user-location">' +
@@ -188,14 +212,19 @@ function addContact() {
                             '<p class="info-title">Phone: </p>' +
                             '<p class="usr-ph-no" data-phone='+ $_phoneValue +'>'+ $_phoneValue +'</p>' +
                         '</div>' +
+                        '<div class="user-emailchu">' +
+                            '<p class="info-title">Email: </p>' +
+                            '<p class="usr-emailchu" data-emailchu='+ $_emailappValue +'>'+data.user.email+'</p>'+
+                          '</div>' +
                         '<div class="action-btn">' +
                             '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 edit"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>'+
-                            '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-toggle="modal" data-target="#exampleModalCenter" data-id="'+data.id+'" data-nom="'+$_nameValue+'" class="feather feather-user-minus delete"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="23" y1="11" x2="17" y2="11"></line></svg>'
+                            '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-toggle="modal" data-target="#exampleModalCenter" data-id="'+data.id+'" data-nom="'+$_nameValue+'" class="feather feather-user-minus delete"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="23" y1="11" x2="17" y2="11"></line></svg>'+
                         '</div>' +
                     '</div>' +
                 '</div>';
 
             $(".searchable-items > .items-header-section").after($html);
+            $('#usr-img').attr("src", "http://localhost:8000/assets/img/profile-15.jpg");
             $('#addContactModal').modal('hide');
             var $_setNameValueEmpty = $_name.val('');
             var $_setPrenomValueEmpty = $_prenom.val('');
@@ -226,6 +255,9 @@ $('#addContactModal').on('hidden.bs.modal', function (e) {
     var $_profession = document.getElementById('c-profession');
     var $_phone = document.getElementById('c-phone');
     var $_location = document.getElementById('c-adresse');
+    var $_centre = document.getElementById('c-centre');
+    var $_service = document.getElementById('c-service');
+    var $_email = document.getElementById('c-email');
     var $_getValidationField = document.getElementsByClassName('validation-text');
 
     var $_setIDValueEmpty = $_ID.value = '';
@@ -236,6 +268,9 @@ $('#addContactModal').on('hidden.bs.modal', function (e) {
     var $_setProfessionValueEmpty = $_profession.value = '';
     var $_setPhoneValueEmpty = $_phone.value = '';
     var $_setLocationValueEmpty = $_location.value = '';
+    var $_setCentreValueEmpty = $_centre.value = '';
+    var $_setServiceValueEmpty = $_service.value = '';
+    var $_setEmailValueEmpty = $_email.value = '';
 
     for (var i = 0; i < $_getValidationField.length; i++) {
       e.preventDefault();
@@ -341,8 +376,7 @@ function editContact() {
           data:data,
           url:'/admin/edit/user',
           success:function(data){
-            var  setUpdatedNameValue = $_name.text($_nameValue);
-            var  setUpdatedPrenomValue = $_prenom.text($_prenomValue);
+            var  setUpdatedPrenomValue = $_prenom.text($_nameValue+" "+$_prenomValue);
             var  setUpdatedCentreValue = $_centre.text($_centreValue);
             var  setUpdatedServiceValue = $_service.text($_serviceValue);
             var  setUpdatedVilleValue = $_ville.text($_villeValue);
@@ -354,9 +388,9 @@ function editContact() {
 
             var  setUpdatedAttrNameValue = $_name.attr('data-name', $_nameValue);
             var  setUpdatedAttrPrenomValue = $_name.attr('data-prenom', $_prenomValue);
-            var  setUpdatedAttrCentreValue = $_name.attr('data-centre', $_centreValue);
-            var  setUpdatedAttrServiceValue = $_name.attr('data-service', $_serviceValue);
-            var  setUpdatedAttrVilleValue = $_name.attr('data-ville', $_villeValue);
+            var  setUpdatedAttrCentreValue = $_centre.attr('data-centre', $_centreValue);
+            var  setUpdatedAttrServiceValue = $_service.attr('data-service', $_serviceValue);
+            var  setUpdatedAttrVilleValue = $_ville.attr('data-ville', $_villeValue);
             var  setUpdatedAttrEmailValue = $_email.attr('data-email', $_emailValue);
             var  setUpdatedAttrProfessionValue = $_profession.attr('data-profession', $_professionValue);
             var  setUpdatedAttrPhoneValue = $_phone.attr('data-phone', $_phoneValue);

@@ -231,6 +231,22 @@
 									<div class="custom-file mb-4">
 										<input id="nomAct" type="text" class="form-control" placeholder="Nom action">
 									</div>
+									<div class="custom-file mb-4">
+										<select id="act_idU" name="responsableA" class="selectpicker" data-live-search="true" data-width="100%">
+											<option value="" disabled selected >Responsable</option>
+											@foreach ($users as $user)
+												<option value="{{$user->id}}"> {{$user->nomU}} {{$user->prenomU}} </option>
+											@endforeach
+										</select>
+									</div>
+									<div class="custom-file mb-4">
+										<select id="act_idG" name="responsableA" class="selectpicker" data-live-search="true" data-width="100%">
+											<option value="" disabled selected >Groupe</option>
+											@foreach ($groupes as $groupe)
+												<option value="{{$groupe->id}}"> {{$groupe->nomG}} </option>
+											@endforeach
+										</select>
+									</div>
 									<div class="row">
 										<div class="form-group col-md-6">
 											<input id="date_limiteAct" type="text" class="form-control" placeholder="Délais">
@@ -256,14 +272,6 @@
 												<option value="m" >minute(s)</option>
 											</select>
 										</div>
-									</div>
-									<div class="custom-file mb-4">
-										<select id="act_idU" name="responsableA" class="selectpicker" data-live-search="true" data-width="100%">
-											<option value="" disabled selected >Responsable</option>
-											@foreach ($users as $user)
-												<option value="{{$user->id}}"> {{$user->nomU}} {{$user->prenomU}} </option>
-											@endforeach
-										</select>
 									</div>
 									<div class="custom-file mb-4">
 										<div class="n-chk">
@@ -578,11 +586,13 @@
 			//Email
 			$('input[type=radio][name=custom-radio-1-email]').change(function() {
 				if (this.value == 'Interne') {
+					$('#destE').val('');
 					$('#destE').attr('disabled', 'disabled');
 					$('#destI').removeAttr("disabled");
 					$('.selectpicker').selectpicker('refresh');
 				}
 				else if (this.value == 'Externe') {
+					$('#destI').val('');
 					$('#destE').removeAttr("disabled");
 					$('#destI').attr('disabled', 'disabled');
 					$('.selectpicker').selectpicker('refresh');

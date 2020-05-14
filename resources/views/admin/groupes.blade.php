@@ -1,5 +1,8 @@
 @extends('layout.app')
 
+@section('link')
+@endsection
+
 @section('script')
     <script src="{{asset('assets/js/apps/groupe.js')}}"></script>
 @endsection
@@ -24,10 +27,8 @@
 
                             <div class="col-xl-8 col-lg-7 col-md-7 col-sm-5 text-sm-right text-center layout-spacing align-self-center">
                                 <div class="d-flex justify-content-sm-end justify-content-center">
+                                    <button class="btn btn-outline-primary mb-2">Nouveau</button>
                                     <svg id="btn-add-contact" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users-plus"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>                                   
-                                    <div class="switch align-self-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-grid view-grid active-view"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-                                    </div>
                                 </div>
 
                                 <!-- Modal -->
@@ -40,6 +41,8 @@
                                                     <div class="add-contact-content">
                                                         <form id="addContactModalTitle">
                                                                 {{ csrf_field() }}
+                                                            <input type="hidden" id="idGroupe" name="idGroupe" value="">
+                                                            <input name="IDG" type="hidden" id="c-ID" value="">
                                                             <div class="row">
                                                                 <div class="form-group col-md-12">
                                                                     <div class="contact-name">
@@ -51,7 +54,7 @@
                                                             </div>
                                                             <div class="row">
                                                                 <div class="form-group col-md-12">
-                                                                    <select name="userG[]" class="selectpicker form-control" multiple data-live-search="true" data-actions-box="true">
+                                                                    <select name="userG[]" id="c-users" class="selectpicker form-control" multiple data-live-search="true" data-actions-box="true">
                                                                         @foreach ($users as $user)
                                                                             <option value="{{$user->id}}"> {{$user->nomU}} </option>
                                                                         @endforeach
@@ -65,7 +68,7 @@
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <button id="btn-edit" class="float-left btn">Save</button>
+                                                <button id="btn-edit" class="float-left btn">Enregistrer</button>
 
                                                 <button class="btn" data-dismiss="modal"> <i class="flaticon-delete-1"></i> Annuler</button>
 
@@ -74,38 +77,11 @@
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
 
                         <div class="searchable-items grid">
-                            <div class="items items-header-section">
-                                <div class="item-content">
-                                    <div class="">
-                                        <div class="n-chk align-self-center text-center">
-                                            <label class="new-control new-checkbox checkbox-primary">
-                                              <input type="checkbox" class="new-control-input" id="contact-check-all">
-                                              <span class="new-control-indicator"></span>
-                                            </label>
-                                        </div>
-                                        <h4>Name</h4>
-                                    </div>
-                                    <div class="user-ville">
-                                        <h4>Ville</h4>
-                                    </div>
-                                    <div class="user-email">
-                                        <h4>Email</h4>
-                                    </div>
-                                    <div class="user-location">
-                                        <h4 style="margin-left: 0;">Location</h4>
-                                    </div>
-                                    <div class="user-phone">
-                                        <h4 style="margin-left: 3px;">Phone</h4>
-                                    </div>
-                                    <div class="action-btn">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2  delete-multiple"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-                                    </div>
-                                </div>
-                            </div>
                             @foreach ($groupes as $groupe)
                                 <div class="items" id="items{{$groupe->idG}}">
                                     <div class="item-content">
@@ -117,28 +93,32 @@
                                                 </label>
                                             </div>
                                             <div class="user-meta-info">
-                                                <p class="user-name" data-name=""> {{ucfirst($groupe->nomG)}} </p>
+                                                 <p class="group-ID" data-ID="{{$groupe->idG}}"></p>
+                                                <p class="user-name" data-name="{{ucfirst($groupe->nomG)}}"> {{ucfirst($groupe->nomG)}} </p>
+                                                <p class="users-groupe" data-users="{{$groupe->users}}"></p>
                                             </div>
                                             <div class="layout-top-spacing">
                                                 <ul class="list-inline badge-collapsed-img mb-0 mb-3">
-                                                    <li class="list-inline-item chat-online-usr">
-                                                        <img alt="avatar" src="{{asset('assets/img/profile-2.jpg')}}" class="ml-0">
-                                                    </li>
-                                                    <li class="list-inline-item chat-online-usr">
-                                                        <img alt="avatar" src="{{asset('assets/img/profile-3.jpg')}}">
-                                                    </li>
+                                                        <?php $var=1; ?>
+                                                    @foreach ($groupe->users->take(3) as $user)
+                                                        <li class="list-inline-item chat-online-usr">
+                                                            <img alt="avatar" src="{{asset('assets/img/profile-2.jpg')}}" @if($var==1) class="ml-0" @endif>
+                                                        </li>
+                                                        <?php $var++; ?>
+                                                    @endforeach
                                                     <li class="list-inline-item badge-notify mr-0">
                                                         <div class="notification">
-                                                            <span class="badge badge-info badge-pill">+5 more</span>
+                                                            @if ($groupe->users->count()-3 > 0)
+                                                                <span class="badge badge-info badge-pill">+{{$groupe->users->count()-3}} more</span>
+                                                            @endif
                                                         </div>
                                                     </li>
                                                 </ul>
-
                                             </div>
                                         </div>
                                         <div class="action-btn">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye view"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 edit"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+                                            <svg id="idEdit{{$groupe->idG}}" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 edit" ><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-toggle="modal" data-target="#exampleModal" data-id="{{$groupe->idG}}" data-nom="{{$groupe->nomG}}" class="feather feather-user-minus delete"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                                         </div>
                                     </div>

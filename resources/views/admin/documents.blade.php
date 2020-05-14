@@ -1,17 +1,59 @@
 @extends('layout.app')
 
+@section('link')
+<link href="{{asset('plugins/notification/snackbar/snackbar.min.css')}}" rel="stylesheet" type="text/css" />
+@endsection
+
+@section('script')
+    <script>
+        $('.bottom-right').click(function() {
+            Snackbar.show({
+                text: 'veuillez importer un fichier excel.',
+                pos: 'bottom-right'
+            });
+        });
+    </script>
+    <script src="{{asset('plugins/notification/snackbar/snackbar.min.js')}}"></script>
+
+    
+@endsection
+
 @section('content')
+
+
+<script>
+    function myFunction(cpt) {
+        var x = document.getElementById("TtypeM"+cpt).value;
+        if(x=="Enuméré")
+        {
+            $('.lst'+cpt).each(function() {
+                $(this).remove();
+            });
+            $('.addmeta'+cpt).append(
+                                    '<div class="form-group col lst'+cpt+'">'+
+                                        '<input id="listeEnum" style="height:45px" type="file" class=" listeEnum form-control-file" id="exampleFormControlFile1" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">'+                                   
+                                    '</div>'
+                                );
+        }
+        else{
+            $('.lst'+cpt).each(function() {
+                $(this).remove();
+            });
+        }
+            
+    }
+</script>
 
 <script>
         $(document).ready(function () {
-
             $('.addinput').click(function(){
-                $(this).after( '<div class="addmeta row mb-4">'+
+                var cpt = $('#cpt').val()*1;
+                $(this).after( '<div class="metaslist addmeta'+cpt+' row mb-4">'+
                                     '<div class="col">'+
                                         '<input id="TlibelleM" type="text" class=" TlibelleM form-control" placeholder="Intitulé">'+
                                     '</div>'+
                                     '<div class="col">'+
-                                        '<select id="TtypeM"  class="TtypeM form-control" data-width="fit">'+
+                                        '<select onchange="myFunction('+cpt+')" id="TtypeM'+cpt+'"  class="TtypeM form-control" data-width="fit">'+
                                             '<option>Type document</option>'+
                                             '<option value="Date" >Date</option>'+
                                             '<option value="Heure" >Heure</option>'+
@@ -20,11 +62,15 @@
                                             '<option value="Enuméré" >Enuméré</option>'+
                                         '</select>'+
                                     '</div>'+
-                                '</div>')
+                                '</div>');
+                $('#cpt').val(cpt*1+1);
             });
-
+            
             $('#fadeupModal').on('hidden.bs.modal',function(){
-                $('.addmeta').remove();
+                $('.metaslist').remove();
+                $('#libelleM').val('');
+                $('#typeM').val('');
+                $('#listeM').val('');
                 $('#intituléT').val('');
                 $('#description').val('');
             });
@@ -32,68 +78,147 @@
 
             $("#addType").submit(function(e){
                 e.preventDefault();
-                
-                //libelle
-                var inputs = $(".TlibelleM");
-                var l='';
-                for(var i = 0; i < inputs.length; i++){
-                     l = $(inputs[i]).val() + ',' + l; 
-                }
-                $('#libelleM').val(l)
+                var path=$('#listeEnum').val(); /* 
+                if( path )
+                { *//* 
+                    if(path.search(".xlsx") > 0 || path.search(".xls") > 0)
+                    { */
+                        //libelle
+                        var inputs = $(".TlibelleM");
+                        var l='';
+                        for(var i = 0; i < inputs.length; i++){
+                            l = $(inputs[i]).val() + ',' + l; 
+                        }
+                        $('#libelleM').val(l)
 
-                //type
-                var inputs = $(".TtypeM");
-                var t='';
-                for(var i = 0; i < inputs.length; i++){
-                     t = $(inputs[i]).children("option:selected").val() + ',' + t; 
-                }
-                $('#typeM').val(t) 
-                
-                 var data = $('#addType').serialize(); 
-                $.ajax({
-                    type:'POST',
-                    data:data,
-                    url:'/admin/documents',
-                    success:function(data){
-                        var intitule=data.type.intituleTd;
-                        var desc = data.type.descriptionTd;
-                        $('#fadeupModal').modal('hide');
-                        $('#toggleAccordion').append(
-                            '<div class="card">'+
-                                '<div class="card-header" id="headingOne1">'+
-                                    '<section class="mb-0 mt-0">'+
-                                    '<div role="menu" class="collapsed" data-toggle="collapse" data-target="#defaultAccordionOne'+data.type.idTd+'" aria-expanded="true" aria-controls="defaultAccordionOne'+data.type.idTd+'">'
-                                        +intitule+'<div class="icons"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg></div>'+
+                        //type
+                        var inputs = $(".TtypeM");
+                        var t='';
+                        for(var i = 0; i < inputs.length; i++){
+                            t = $(inputs[i]).children("option:selected").val() + ',' + t; 
+                        }
+                        $('#typeM').val(t) 
+                        
+                        var data = $('#addType').serialize(); 
+                        $.ajax({
+                            type:'POST',
+                            data:data,
+                            url:'/admin/documents',
+                            success:function(data){
+                                var intitule=data.type.intituleTd;
+                                var desc = data.type.descriptionTd;
+                                $('#fadeupModal').modal('hide');
+                                $('#toggleAccordion').append(
+                                    '<div class="card">'+
+                                        '<div class="card-header" id="headingOne1">'+
+                                            '<section class="mb-0 mt-0">'+
+                                            '<div role="menu" class="collapsed" data-toggle="collapse" data-target="#defaultAccordionOne'+data.type.idTd+'" aria-expanded="true" aria-controls="defaultAccordionOne'+data.type.idTd+'">'
+                                                +intitule+'<div class="icons"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg></div>'+
+                                            '</div>'+
+                                            '</section>'+
+                                        '</div>'+
+
+                                        '<div id="defaultAccordionOne'+data.type.idTd+'" class="collapse" aria-labelledby="headingOne1" data-parent="#toggleAccordion">'+
+                                            '<div class="card-body">'+
+                                                '<p class="">'+
+                                                    desc+
+                                                '</p>'+
+                                                '<div id="widget-content'+data.type.idTd+'" class="widget-content container">'+
+                                                '</div>'+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</div>'
+                                )
+                                for(i=0;i<data["metas"].length;i++)
+                                {
+                                    $('#widget-content'+data["metas"][i].m_idTd).append(
+                                        '<span class="badge outline-badge-primary">'+ 
+                                                data["metas"][i].libelleM+
+                                        '</span>'+'&nbsp;'  
+                                    );
+                                }
+                            }
+                        });   
+                   /* } 
+                    else{
+                        $('#notif').click();
+                    } 
+                }else{
+                    //libelle
+                    var inputs = $(".TlibelleM");
+                    var l='';
+                    for(var i = 0; i < inputs.length; i++){
+                        l = $(inputs[i]).val() + ',' + l; 
+                    }
+                    $('#libelleM').val(l)
+
+                    //type
+                    var inputs = $(".TtypeM");
+                    var t='';
+                    for(var i = 0; i < inputs.length; i++){
+                        t = $(inputs[i]).children("option:selected").val() + ',' + t; 
+                    }
+                    $('#typeM').val(t) 
+
+                    //liste
+                    var inputs = $(".listeEnum");
+                    var taille = $(".TtypeM");
+                    var ls='';
+                    for(var i = 0; i < taille.length; i++){
+                        ls = $(inputs[i]).val() + ',' + ls; 
+                        alert(ls)
+                        alert(i)
+                    }
+                    $('#listeM').val(ls)
+                    
+                    var data = $('#addType').serialize(); 
+                    $.ajax({
+                        type:'POST',
+                        data:data,
+                        url:'/admin/documents',
+                        success:function(data){
+                            var intitule=data.type.intituleTd;
+                            var desc = data.type.descriptionTd;
+                            $('#fadeupModal').modal('hide');
+                            $('#toggleAccordion').append(
+                                '<div class="card">'+
+                                    '<div class="card-header" id="headingOne1">'+
+                                        '<section class="mb-0 mt-0">'+
+                                        '<div role="menu" class="collapsed" data-toggle="collapse" data-target="#defaultAccordionOne'+data.type.idTd+'" aria-expanded="true" aria-controls="defaultAccordionOne'+data.type.idTd+'">'
+                                            +intitule+'<div class="icons"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg></div>'+
+                                        '</div>'+
+                                        '</section>'+
                                     '</div>'+
-                                    '</section>'+
-                                '</div>'+
 
-                                '<div id="defaultAccordionOne'+data.type.idTd+'" class="collapse" aria-labelledby="headingOne1" data-parent="#toggleAccordion">'+
-                                    '<div class="card-body">'+
-                                        '<p class="">'+
-                                            desc+
-                                        '</p>'+
-                                        '<div id="widget-content'+data.type.idTd+'" class="widget-content container">'+
+                                    '<div id="defaultAccordionOne'+data.type.idTd+'" class="collapse" aria-labelledby="headingOne1" data-parent="#toggleAccordion">'+
+                                        '<div class="card-body">'+
+                                            '<p class="">'+
+                                                desc+
+                                            '</p>'+
+                                            '<div id="widget-content'+data.type.idTd+'" class="widget-content container">'+
+                                            '</div>'+
                                         '</div>'+
                                     '</div>'+
-                                '</div>'+
-                            '</div>'
-                        )
-                        for(i=0;i<data["metas"].length;i++)
-                        {
-                            $('#widget-content'+data["metas"][i].m_idTd).append(
-                                '<span class="badge outline-badge-primary">'+ 
-                                        data["metas"][i].libelleM+
-                                '</span>'+'&nbsp;'  
-                            );
+                                '</div>'
+                            )
+                            for(i=0;i<data["metas"].length;i++)
+                            {
+                                $('#widget-content'+data["metas"][i].m_idTd).append(
+                                    '<span class="badge outline-badge-primary">'+ 
+                                            data["metas"][i].libelleM+
+                                    '</span>'+'&nbsp;'  
+                                );
+                            }
                         }
-                    }
-                });   
+                    }); 
+                } */
             });
         });
 </script>
 
 <div id="content" >
+    <input type="hidden" id="cpt" value="0">
+    <button hidden id="notif" class="btn btn-dark bottom-right">Bottom right</button>
     <div class="container col-lg-12 col-12 ">
         <div class="col-lg-12 col-12 ">
             <div class="row layout-top-spacing">
@@ -209,8 +334,9 @@
                                                             <form id="addType" enctype="multipart/form-data">
                                                             {{ csrf_field() }}
                                                                 <div class="modal-body">
-                                                                        <input type="hidden" id="libelleM" name="libelleM" value="">
-                                                                        <input type="hidden" id="typeM" name="typeM" value="">
+                                                                        <input type="text" id="libelleM" name="libelleM" value="">
+                                                                        <input type="text" id="typeM" name="typeM" value="">
+                                                                        <input type="text" id="listeM" name="listeM" value="">
                                                                         <div class="form-group">
                                                                             <input name="intituleT" id="intituléT" type="text" class="form-control" id="exampleFormControlInput1" value="" placeholder="(*) Intitulé">
                                                                         </div>

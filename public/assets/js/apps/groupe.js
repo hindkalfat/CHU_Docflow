@@ -100,6 +100,7 @@ function addContact() {
         data:data,
         url:'/admin/groupes',
         success:function(data){
+            var c=1;
             $html = '<div class="items">' +
             '<div class="item-content">' +
                 '<div class="user-profile">' +
@@ -111,8 +112,20 @@ function addContact() {
                         '</label>' +
                     '</div>' +
                     '<div class="user-meta-info">' +
-                        '<p class="user-name" data-name="'+ $_nomValue +'">'+ $_nomValue +'</p>' +
+                        '<p class="user-name" data-name="'+ $_nomValue +'">'+ data.groupe.nomG +'</p>' +
                     '</div>' +
+                    '<div class="layout-top-spacing">'+
+                        '<ul class="list-inline badge-collapsed-img mb-0 mb-3">'+
+                              '<li class="list-inline-item chat-online-usr">'+
+                                  '<img alt="avatar" src="{{asset("assets/img/profile-2.jpg")}}" if($var==1) class="ml-0" endif>'+
+                              '</li>'+
+                            '<li class="list-inline-item badge-notify mr-0">'+
+                                '<div class="notification">'+
+                                        '<span class="badge badge-info badge-pill">+{{$groupe->users->count()-3}} more</span>'+
+                                '</div>'+
+                            '</li>'+
+                        '</ul>'+
+                    '</div>'+
                 '</div>' +
                 '<div class="action-btn">' +
                     '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 edit"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>'+
@@ -127,7 +140,7 @@ function addContact() {
             var $_setNomValueEmpty = $_nom.val('');
 
           deleteContact();
-          //editContact();
+          editContact();
           checkall('contact-check-all', 'contact-chkbox');
         }
     });
@@ -147,7 +160,7 @@ $('#addContactModal').on('hidden.bs.modal', function (e) {
     }
 })
 
-/* function editContact() {
+function editContact() {
   $('.edit').on('click', function(event) {
 
     $('#addContactModal #btn-add').hide();
@@ -159,31 +172,23 @@ $('#addContactModal').on('hidden.bs.modal', function (e) {
 
     // Get List Item Fields
     var $_name = getParentItem.find('.user-name');
-    var $_description = getParentItem.find('.usr-description-addr');
-    var $_occupation = getParentItem.find('.user-work');
-    var $_phone = getParentItem.find('.usr-ph-no');
-    var $_location = getParentItem.find('.usr-location');
+    var $_users = getParentItem.find('.users-groupe');
+    var $_ID = getParentItem.find('.group-ID');
 
     // Get Attributes
     var $_nameAttrValue = $_name.attr('data-name');
-    var $_descriptionAttrValue = $_description.attr('data-description');
-    var $_occupationAttrValue = $_occupation.attr('data-occupation');
-    var $_phoneAttrValue = $_phone.attr('data-phone');
-    var $_locationAttrValue = $_location.attr('data-location');
-
+    var $_usersAttrValue = $_users.attr('data-users');
+    var $_IDAttrValue = $_ID.attr('data-ID');
+    
     // Get Modal Attributes
-    var $_getModalNameInput = getModal.find('#c-name');
-    var $_getModalDescriptionInput = getModal.find('#c-description');
-    var $_getModalOccupationInput = getModal.find('#c-occupation');
-    var $_getModalPhoneInput = getModal.find('#c-phone');
-    var $_getModalLocationInput = getModal.find('#c-location');
+    var $_getModalNameInput = getModal.find('#c-nom');
+    var $_getModalUsersInput = getModal.find('#c-users');
+    var $_getModalIDInput = getModal.find('#c-ID');
 
     // Set Modal Field's Value
+    var $_setModalIDValue = $_getModalIDInput.val($_IDAttrValue);
     var $_setModalNameValue = $_getModalNameInput.val($_nameAttrValue);
-    var $_setModalDescriptionValue = $_getModalDescriptionInput.val($_descriptionAttrValue);
-    var $_setModalOccupationValue = $_getModalOccupationInput.val($_occupationAttrValue);
-    var $_setModalPhoneValue = $_getModalPhoneInput.val($_phoneAttrValue);
-    var $_setModalLocationValue = $_getModalLocationInput.val($_locationAttrValue);
+    var $_setModalUsersValue = $_getModalUsersInput.val($_usersAttrValue);
 
     $('#addContactModal').modal('show');
 
@@ -191,34 +196,32 @@ $('#addContactModal').on('hidden.bs.modal', function (e) {
 
       var getParent = $(this).parents('.modal-content');
 
-      var $_getInputName = getParent.find('#c-name');
-      var $_getInputNmail = getParent.find('#c-description');
-      var $_getInputNccupation = getParent.find('#c-occupation');
-      var $_getInputNhone = getParent.find('#c-phone');
-      var $_getInputNocation = getParent.find('#c-location');
-
+      var $_getInputName = getParent.find('#c-nom');
+      var $_getInputUsers = getParent.find('#c-users');
+      
 
       var $_nameValue = $_getInputName.val();
-      var $_descriptionValue = $_getInputNmail.val();
-      var $_occupationValue = $_getInputNccupation.val();
-      var $_phoneValue = $_getInputNhone.val();
-      var $_locationValue = $_getInputNocation.val();
+      var $_usersValue = $_getInputUsers.val();
 
-      var  setUpdatedNameValue = $_name.text($_nameValue);
-      var  setUpdatedDescriptionValue = $_description.text($_descriptionValue);
-      var  setUpdatedOccupationValue = $_occupation.text($_occupationValue);
-      var  setUpdatedPhoneValue = $_phone.text($_phoneValue);
-      var  setUpdatedLocationValue = $_location.text($_locationValue);
+      var data = $('#addContactModalTitle').serialize(); 
 
-      var  setUpdatedAttrNameValue = $_name.attr('data-name', $_nameValue);
-      var  setUpdatedAttrDescriptionValue = $_description.attr('data-description', $_descriptionValue);
-      var  setUpdatedAttrOccupationValue = $_occupation.attr('data-occupation', $_occupationValue);
-      var  setUpdatedAttrPhoneValue = $_phone.attr('data-phone', $_phoneValue);
-      var  setUpdatedAttrLocationValue = $_location.attr('data-location', $_locationValue);
-      $('#addContactModal').modal('hide');
+      $.ajax({
+          type:'POST',
+          data:data,
+          url:'/admin/edit/groupe',
+          success:function(data){
+
+            var  setUpdatedNameValue = $_name.text($_nameValue);
+            var  setUpdatedUsersValue = $_userse.text($_usersValue);
+      
+            var  setUpdatedAttrNameValue = $_name.attr('data-name', $_nameValue);
+            var  setUpdatedAttrUsersValue = $_users.attr('data-users', $_nameValue);
+            $('#addContactModal').modal('hide');
+          }
+        });
     });
   })
-} */
+}
 
 $(".delete-multiple").on("click", function() {
     var inboxCheckboxParents = $(".contact-chkbox:checked").parents('.items');   
@@ -227,7 +230,7 @@ $(".delete-multiple").on("click", function() {
 
 deleteContact();
 addContact();
-//editContact();
+editContact();
 
 })
 

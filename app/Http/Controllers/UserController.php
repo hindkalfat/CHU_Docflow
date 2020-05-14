@@ -66,7 +66,7 @@ class UserController extends Controller
 
         $user_role->save();
 
-        return response()->json(['success' => "updated" , 'id' => $user->id]);;
+        return response()->json(['success' => "updated" , 'id' => $user->id, 'user' => $user]);;
     }
 
     /**
@@ -112,6 +112,8 @@ class UserController extends Controller
         $user->professionU = $request->professionU;
         $user->centreU = $request->centreU;
         $user->serviceU = $request->serviceU;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->input('password'));
 
         $user->save();
         return response()->json(['success' => "updated"]);;
