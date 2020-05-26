@@ -1,0 +1,48 @@
+#deleteConformation .modal-content {
+    border: 0;
+    -webkit-box-shadow: 2px 5px 17px 0 rgba(31,45,61,.1);
+    box-shadow: 2px 5px 17px 0 rgba(31,45,61,.1);
+    padding: 30px;
+}
+#deleteConformation .modal-content .modal-header {
+    border: none;
+    padding: 0;
+}
+#deleteConformation .modal-content .modal-header .icon {
+    padding: 7px 9px;
+    background: rgba(231, 81, 90, 0.37);
+    text-align: center;
+    margin-right: 8px;
+    border-radius: 50%;
+}
+#deleteConformation .modal-content .modal-header svg {
+    width: 20px;
+    color: #e7515a;
+    fill: rgba(231, 81, 90, 0.37);
+}
+#deleteConformation .modal-content .modal-header .modal-title {
+    color: #3b3f5c;
+    font-size: 18px;
+    font-weight: 700;
+    align-self: center;
+}
+#deleteConformation .modal-content .modal-body { padding: 28px 0; }
+#deleteConformation .modal-content .modal-body p {
+    color: #888ea8;
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 0;
+}
+#deleteConformation .modal-content .modal-footer { padding: 0; border: none; }
+#deleteConformation .modal-content .modal-footer [data-dismiss="modal"] {
+    background-color: #fff;
+    color: #e7515a;
+    font-weight: 700;
+    border: 1px solid #e8e8e8;
+    padding: 10px 25px;
+}
+#deleteConformation .modal-content .modal-footer [data-remove="task"] {
+    color: #fff;
+    font-weight: 600;
+    padding: 10px 25px;
+}

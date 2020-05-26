@@ -35,8 +35,8 @@
     <link href="{{asset('plugins/drag-and-drop/dragula/dragula.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('plugins/drag-and-drop/dragula/example.css')}}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="{{asset('plugins/editors/quill/quill.snow.css')}}">
-    <link href="{{asset('assets/css/apps/todolist.css')}}" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="{{asset('assets/css/forms/theme-checkbox-radio.css')}}">
+{{--     <link href="{{asset('assets/css/apps/todolist.css')}}" rel="stylesheet" type="text/css" />
+ --}}    <link rel="stylesheet" type="text/css" href="{{asset('assets/css/forms/theme-checkbox-radio.css')}}">
     <link href="{{asset('plugins/jquery-ui/jquery-ui.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/css/apps/contacts.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/css/components/tabs-accordian/custom-tabs.css')}}" rel="stylesheet" type="text/css" />
@@ -45,16 +45,14 @@
     <link href="{{asset('assets/css/components/tabs-accordian/custom-accordions.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('plugins/noUiSlider/nouislider.min.css')}}" rel="stylesheet" type="text/css">
     <link href="{{asset('plugins/noUiSlider/custom-nouiSlider.css')}}" rel="stylesheet" type="text/css">
-    <link href="{{asset('plugins/bootstrap-range-Slider/bootstrap-slider.css')}}" rel="stylesheet" type="text/css">
+	<link href="{{asset('plugins/bootstrap-range-Slider/bootstrap-slider.css')}}" rel="stylesheet" type="text/css">
+	<link href="{{asset('assets/css/components/custom-modal.css')}}" rel="stylesheet" type="text/css" />
+	<link href="{{asset('plugins/perfect-scrollbar/perfect-scrollbar.css')}}" rel="stylesheet" type="text/css" />
 	
  	<link rel="stylesheet" type="text/css" href="{{asset('plugins/bootstrap-select/bootstrap-select.min.css')}}">
 	 @yield('link')
 
 
-
-    <!-- Flowchart CSS and JS -->
-	<link rel="stylesheet" href="{{asset('css/jquery.flowchart.css')}}">
-    <script src="{{asset('js/jquery.flowchart.js')}}"></script>
     <!-- jQuery & jQuery UI are required -->
 	<script src="{{asset('https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')}}"></script>
 	<script src="{{asset('https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js')}}"></script>
@@ -94,7 +92,6 @@
     <!-- END MAIN CONTAINER -->
 
 	<!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
-	@yield('script')    
 	
 	<script src="{{asset('bootstrap/js/popper.min.js')}}"></script>
     <script src="{{asset('bootstrap/js/bootstrap.min.js')}}"></script>
@@ -122,8 +119,8 @@
     <script src="{{asset('plugins/drag-and-drop/dragula/custom-dragula.js')}}"></script>
     <script src="{{asset('assets/js/ie11fix/fn.fix-padStart.js')}}"></script>
     <script src="{{asset('plugins/editors/quill/quill.js')}}"></script>
-    <script src="{{asset('assets/js/apps/todoList.js')}}"></script>
-    <script src="{{asset('plugins/jquery-ui/jquery-ui.min.js')}}"></script>
+{{--     <script src="{{asset('assets/js/apps/todoList.js')}}"></script>
+ --}}    <script src="{{asset('plugins/jquery-ui/jquery-ui.min.js')}}"></script>
     <script src="{{asset('plugins/table/datatable/datatables.js')}}"></script>
     <script src="{{asset('assets/js/components/ui-accordions.js')}}"></script>
     <script src="{{asset('plugins/noUiSlider/nouislider.min.js')}}"></script>
@@ -473,6 +470,7 @@
         
 
     <!-- END PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
+	@yield('script')    
 
 
 </body>

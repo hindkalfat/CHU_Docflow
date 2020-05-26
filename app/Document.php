@@ -27,4 +27,9 @@ class Document extends Model
     {
         return $this->belongsTo(User::class,'d_idU');
     }
+
+    public function taches()
+    {
+        return $this->hasMany(Tache::class, 't_idD');
+    }
 }

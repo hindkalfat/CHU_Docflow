@@ -249,7 +249,7 @@
                                             <form id="deleteF">
                                                 {{ csrf_field() }}
                                                 <input name="idU" type="hidden" id="idU">
-                                                <button type="button" class="btn btn-primary dlt">Confirmer</button>
+                                                <button type="button" class="btn btn-primary dlt" id="dlt">Confirmer</button>
                                             </form>
                                         </div>
                                     </div>

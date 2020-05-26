@@ -101,7 +101,7 @@
 .new-control.new-checkbox.checkbox-outline-primary>input:checked~span.new-control-indicator:after { border-color: #1b55e2; }
 .new-control.new-checkbox.checkbox-primary>input:checked~span.new-control-indicator { background: #1b55e2; }
 .list-group-item{
-    border: 1px solid #e0e6ed;
+    border-bottom: 1px solid #e0e6ed;
     padding: 10px 12px;
 }
 .list-group-item.active {

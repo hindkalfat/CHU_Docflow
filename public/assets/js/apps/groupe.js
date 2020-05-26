@@ -25,9 +25,9 @@ $(document).ready(function() {
 
   });
 
-  $('.view-list').on('click', function(event) {
+  /* $('.feather-eye').on('click', function(event) {
     event.preventDefault();
-    /* Act on the event */
+    /* /* Act on the event 
     $(this).parents('.switch').find('.view-grid').removeClass('active-view');
     $(this).addClass('active-view');
 
@@ -35,8 +35,14 @@ $(document).ready(function() {
     $(this).parents('.searchable-container').addClass('list');
 
     $(this).parents('.searchable-container').find('.searchable-items').removeClass('grid');
-    $(this).parents('.searchable-container').find('.searchable-items').addClass('list');
-  });
+    $(this).parents('.searchable-container').find('.searchable-items').addClass('list'); 
+    $("#profileModal").on('show.bs.modal', function(event) {
+      var a = $(event.relatedTarget).data('nom');
+      var m = $(this);
+      m.find('.modal-title').text(a);
+    });
+  
+  }); */
 
   $('#btn-add-contact').on('click', function(event) {
     $('#addContactModal #btn-add').show();
@@ -45,7 +51,7 @@ $(document).ready(function() {
   })
 
 function deleteContact() {
-  $("#exampleModal").on('show.bs.modal', function(event) {
+  $("#deleteConformation").on('show.bs.modal', function(event) {
     var a = $(event.relatedTarget).data('nom');
     var b = $(event.relatedTarget).data('id');
     var m = $(this);
@@ -53,8 +59,8 @@ function deleteContact() {
     m.find("#idG").val(b);
   });
 
-  $(".dlt").on('click', function(event) {
-    event.preventDefault();
+  $("#dlt").on('click', function(event) {
+    event.preventDefault();  
      var data = $('#deleteF').serialize(); 
       $.ajax({
           type:'POST',
@@ -63,7 +69,7 @@ function deleteContact() {
           success:function(data){
 
             $(".delete").parents('#items'+data.idG).remove();
-            $('#exampleModal').modal('hide');
+            $('#deleteConformation').modal('hide');
           }
         }); 
     
@@ -76,6 +82,7 @@ function addContact() {
     var getParent = $(this).parents('.modal-content');
 
     var $_nom = getParent.find('#c-nom');
+    var $_users = getParent.find('#c-users');
 
     var $_getValidationField = document.getElementsByClassName('validation-text');
     var reg = /^.+@[^\.].*\.[a-z]{2,}$/;
@@ -101,10 +108,16 @@ function addContact() {
         url:'/admin/groupes',
         success:function(data){
             var c=1;
-            $html = '<div class="items">' +
+            var x='';
+
+            for(i=0;i<data["users"].length;i++){
+              x= data["users"][i].id.toString()+','+x
+            }
+            alert(x)
+
+            $html = '<div class="items" id="items'+ data.groupe.idG +'">' +
             '<div class="item-content">' +
                 '<div class="user-profile">' +
-
                     '<div class="n-chk align-self-center text-center">' +
                         '<label class="new-control new-checkbox checkbox-primary">' +
                           '<input type="checkbox" class="new-control-input contact-chkbox">' +
@@ -112,34 +125,85 @@ function addContact() {
                         '</label>' +
                     '</div>' +
                     '<div class="user-meta-info">' +
-                        '<p class="user-name" data-name="'+ $_nomValue +'">'+ data.groupe.nomG +'</p>' +
+                        '<p class="user-name" data-name="'+ data.groupe.nomG+'">'+ data.groupe.nomG+'</p>' +
+                        '<p class="users-groupe" data-users="'+x+'"></p>'+
                     '</div>' +
                     '<div class="layout-top-spacing">'+
                         '<ul class="list-inline badge-collapsed-img mb-0 mb-3">'+
-                              '<li class="list-inline-item chat-online-usr">'+
-                                  '<img alt="avatar" src="{{asset("assets/img/profile-2.jpg")}}" if($var==1) class="ml-0" endif>'+
-                              '</li>'+
-                            '<li class="list-inline-item badge-notify mr-0">'+
-                                '<div class="notification">'+
-                                        '<span class="badge badge-info badge-pill">+{{$groupe->users->count()-3}} more</span>'+
-                                '</div>'+
-                            '</li>'+
+                           //users
                         '</ul>'+
                     '</div>'+
                 '</div>' +
                 '<div class="action-btn">' +
-                    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 edit"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>'+
-                    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-minus delete"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="23" y1="11" x2="17" y2="11"></line></svg>'
+                  '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye view" data-toggle="modal" data-target="#profileModal'+ data.groupe.idG+'"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'+
+                  '<svg id="idEdit'+ data.groupe.idG+'" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 edit" ><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>'+
+                  '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-toggle="modal" data-target="#deleteConformation" data-id="'+ data.groupe.idG+'" data-nom="'+ data.groupe.nomG+'" class="feather feather-user-minus delete"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>'+
                 '</div>' +
             '</div>' +
+        '</div>'+
+        '<div class="modal fade profile-modal" id="profileModal'+ data.groupe.idG+'" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel" aria-hidden="true">'+
+            '<div class="modal-dialog modal-sm" role="document">'+
+                '<div class="modal-content">'+
+                    '<button type="button" class="close" data-dismiss="modal" aria-label="Close">'+
+                    '<span aria-hidden="true">&times;</span>'+
+                    '</button>'+
+
+                   ' <div class="modal-header justify-content-center" id="profileModalLabel">'+
+                        '<div class="modal-profile mt-4">'+
+                            '<h5 class="modal-title">'+ data.groupe.nomG+'</h5>'+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="modal-body text-center">'+
+                            '<ul class="nav nav-tabs mb-3" id="myTab" role="tablist">'+
+                                '<li class="nav-item">'+
+                                    '<a class="nav-link active" id="home-tab" data-toggle="tab" href="#home'+ data.groupe.idG+'" role="tab" aria-controls="home" aria-selected="true">Membres</a>'+
+                                '</li>'+
+                                '<li class="nav-item">'+
+                                    '<a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile'+ data.groupe.idG+'" role="tab" aria-controls="profile" aria-selected="false">Droits</a>'+
+                                '</li>'+
+                            '</ul>'+
+                            '<div class="tab-content" id="myTabContent">'+
+                                '<div class="tab-pane fade show active" id="home'+ data.groupe.idG+'" role="tabpanel" aria-labelledby="home-tab">'+
+                                    '<ul id="ul'+ data.groupe.idG+'" class="list-group list-group-media">'+
+                                      //users  
+                                    '</ul>'+
+                                '</div>'+
+                               ' <div class="tab-pane fade" id="profile'+ data.groupe.idG+'" role="tabpanel" aria-labelledby="profile-tab">'+
+                                '</div>'+
+                            '</div>'+
+                    '</div>'+
+                '</div>'+
+            '</div>'+
         '</div>';
 
             $(".searchable-items > .items-header-section").after($html);
+
+            for(i=0;i<data["users"].length;i++)
+            {
+              $('#ul'+data.groupe.idG).append(
+                '<li class="list-group-item list-group-item-action">'+
+                    '<div class="media">'+
+                        '<div class="mr-3">'+
+                            '<img alt="avatar" src="http://localhost:8000/assets/img/profile-1.jpg" class="img-fluid rounded-circle">'+
+                        '</div>'+
+                        '<div class="media-body">'+
+                            '<h6 class="tx-inverse">'+data["users"][i].nomU+' '+data["users"][i].prenomU+'</h6>'+
+                            '<p class="mg-b-0">'+data["users"][i].professionU+'</p>'+
+                        '</div>'+
+                    '</div>'+
+                '</li>'
+              );
+            }
+            const containerJS = document.querySelector('.tab-content');
+            document.querySelectorAll('.tab-content').forEach(containerJS => {
+                new PerfectScrollbar(containerJS);
+            });
+
             $('#addContactModal').modal('hide');
 
             var $_setNomValueEmpty = $_nom.val('');
+            $('.bs-deselect-all').click();
 
-          deleteContact();
           editContact();
           checkall('contact-check-all', 'contact-chkbox');
         }
@@ -153,6 +217,7 @@ $('#addContactModal').on('hidden.bs.modal', function (e) {
     var $_getValidationField = document.getElementsByClassName('validation-text');
 
     var $_setNomValueEmpty = $_nom.value = '';
+    $('.bs-deselect-all').click();
 
     for (var i = 0; i < $_getValidationField.length; i++) {
       e.preventDefault();
@@ -188,7 +253,9 @@ function editContact() {
     // Set Modal Field's Value
     var $_setModalIDValue = $_getModalIDInput.val($_IDAttrValue);
     var $_setModalNameValue = $_getModalNameInput.val($_nameAttrValue);
-    var $_setModalUsersValue = $_getModalUsersInput.val($_usersAttrValue);
+    var dataarray=$_usersAttrValue.split(",");
+    $("#c-users").val(dataarray);
+    $("#c-users").selectpicker("refresh");
 
     $('#addContactModal').modal('show');
 
@@ -202,6 +269,7 @@ function editContact() {
 
       var $_nameValue = $_getInputName.val();
       var $_usersValue = $_getInputUsers.val();
+      alert($_usersValue)
 
       var data = $('#addContactModalTitle').serialize(); 
 
@@ -212,10 +280,29 @@ function editContact() {
           success:function(data){
 
             var  setUpdatedNameValue = $_name.text($_nameValue);
-            var  setUpdatedUsersValue = $_userse.text($_usersValue);
+            var  setUpdatedUsersValue = $_users.text($_usersValue);
       
             var  setUpdatedAttrNameValue = $_name.attr('data-name', $_nameValue);
-            var  setUpdatedAttrUsersValue = $_users.attr('data-users', $_nameValue);
+            var  setUpdatedAttrUsersValue = $_users.attr('data-users', $_usersValue);
+
+            $('#ul'+$_IDAttrValue).empty();
+
+            for(i=0;i<data["users"].length;i++)
+            {
+              $('#ul'+$_IDAttrValue).append(
+                '<li class="list-group-item list-group-item-action">'+
+                    '<div class="media">'+
+                        '<div class="mr-3">'+
+                            '<img alt="avatar" src="http://localhost:8000/assets/img/profile-1.jpg" class="img-fluid rounded-circle">'+
+                        '</div>'+
+                        '<div class="media-body">'+
+                            '<h6 class="tx-inverse">'+data["users"][i].nomU+' '+data["users"][i].prenomU+'</h6>'+
+                            '<p class="mg-b-0">'+data["users"][i].professionU+'</p>'+
+                        '</div>'+
+                    '</div>'+
+                '</li>');
+            }
+            
             $('#addContactModal').modal('hide');
           }
         });

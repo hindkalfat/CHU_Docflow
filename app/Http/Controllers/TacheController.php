@@ -23,9 +23,30 @@ class TacheController extends Controller
         $id = Auth::user()->id;
         $user = User::find($id);
         $actions = $user->actions->where('couranteA',1)->pluck('idA'); 
-        $taches = Tache::whereIn('t_idA',$actions)->get();
-    
-        return view('user.taches1',['taches' => $taches]);
+        $tachesEnCours = Tache::whereIn('t_idA',$actions)->get();
+        $tachesTerminées = Tache::where('etatT',0)->get();
+        $tachesImportantes =  DB::table('taches')
+                            ->join('actions', 'taches.t_idA', '=', 'actions.idA')
+                            ->where('taches.etatT',1)
+                            ->where('actions.prioriteA','=','Haute')
+                            ->get();
+        $tachesGroupe = DB::table('taches')
+                            ->join('actions', 'taches.t_idA', '=', 'actions.idA')
+                            ->where('etatT',1)
+                            ->whereNotNull('a_idG')
+                            ->get();
+
+/*
+        $t = Tache::find(4); return $t->document->versions->where('numV',1)->first()->nomV;
+        /*foreach ( $t->versions_recentes() as $tv) {
+            dd($tv->nomV);
+        }
+        $mondoc= $t->document;
+        $predecesseurs = $t->action->predecesseurs()->pluck('_idFrom');
+        foreach(Action::whereIn('idA',$predecesseurs)->where('versionA',1)->get() as $a)
+            $a->taches->where('t_idD',$mondoc->idD); */
+
+        return view('user.taches1',['taches' => $tachesEnCours, 'tachesT' => $tachesTerminées, 'tachesG' => $tachesGroupe]);
     }
 
     /**

@@ -15,7 +15,7 @@ class Action extends Model
 
     public function workflow()
     {
-        return $this->belongsTo(Workflow::class);
+        return $this->belongsTo(Workflow::class, 'a_idW');
     }
 
     public function taches()
@@ -31,5 +31,10 @@ class Action extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'a_idU');
+    }
+
+    public function predecesseurs()
+    {
+        return Successeur::where('_idTo','=',$this->idA)->get();
     }
 }

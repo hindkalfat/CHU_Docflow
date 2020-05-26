@@ -28,21 +28,13 @@
     <link href="{{asset('plugins/drag-and-drop/dragula/dragula.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('plugins/drag-and-drop/dragula/example.css')}}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="{{asset('plugins/editors/quill/quill.snow.css')}}">
-    <link href="{{asset('assets/css/apps/todolist.css')}}" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="{{asset('assets/css/forms/theme-checkbox-radio.css')}}">
     <link href="{{asset('plugins/jquery-ui/jquery-ui.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/css/components/tabs-accordian/custom-tabs.css')}}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="{{asset('plugins/table/datatable/datatables.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('plugins/table/datatable/dt-global_style.css')}}">
     <link href="{{asset('assets/css/components/tabs-accordian/custom-accordions.css')}}" rel="stylesheet" type="text/css" />
-	<link href="{{asset('plugins/fullcalendar/fullcalendar.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{asset('plugins/fullcalendar/custom-fullcalendar.advance.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{asset('assets/css/forms/theme-checkbox-radio.css')}}" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="{{asset('plugins/editors/quill/quill.snow.css')}}">
 	<link href="{{asset('assets/css/apps/todolist.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/css/elements/popover.css')}}" rel="stylesheet" type="text/css" />
-	<link href="{{asset('plugins/noUiSlider/nouislider.min.css')}}" rel="stylesheet" type="text/css">
-    <link href="{{asset('plugins/noUiSlider/custom-nouiSlider.css')}}" rel="stylesheet" type="text/css">
     <link href="{{asset('plugins/bootstrap-range-Slider/bootstrap-slider.css')}}" rel="stylesheet" type="text/css">
 
 
@@ -111,20 +103,11 @@
     <script src="{{asset('plugins/drag-and-drop/dragula/custom-dragula.js')}}"></script>
     <script src="{{asset('assets/js/ie11fix/fn.fix-padStart.js')}}"></script>
     <script src="{{asset('plugins/editors/quill/quill.js')}}"></script>
-    <script src="{{asset('assets/js/apps/todoList.js')}}"></script>
     <script src="{{asset('plugins/jquery-ui/jquery-ui.min.js')}}"></script>
     <script src="{{asset('plugins/table/datatable/datatables.js')}}"></script>
     <script src="{{asset('assets/js/components/ui-accordions.js')}}"></script>
-	<script src="{{asset('plugins/fullcalendar/moment.min.js')}}"></script>
-    <script src="{{asset('plugins/fullcalendar/fullcalendar.min.js')}}"></script>
-    <script src="{{asset('plugins/fullcalendar/custom-fullcalendar.advance.js')}}"></script>
-    <script src="{{asset('assets/js/ie11fix/fn.fix-padStart.js')}}"></script>
-    <script src="{{asset('plugins/editors/quill/quill.js')}}"></script>
 	<script src="{{asset('assets/js/apps/todoList.js')}}"></script>
 	<script src="{{asset('assets/js/elements/popovers.js')}}"></script>
-	<script src="{{asset('plugins/noUiSlider/custom-nouiSlider.js')}}"></script>
-    <script src="{{asset('plugins/bootstrap-range-Slider/bootstrap-rangeSlider.js')}}"></script>
-	<script src="{{asset('plugins/noUiSlider/nouislider.min.js')}}"></script>
     <script src="{{asset('plugins/bootstrap-range-Slider/bootstrap-rangeSlider.js')}}"></script>
 
 	@yield('script')

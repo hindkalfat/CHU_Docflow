@@ -58,7 +58,7 @@ function deleteContact() {
     m.find("#idU").val(b);
   });
 
-  $(".dlt").on('click', function(event) {
+  $("#dlt").on('click', function(event) {
     event.preventDefault();
      var data = $('#deleteF').serialize(); 
       $.ajax({
@@ -170,7 +170,7 @@ function addContact() {
         data:data,
         url:'/admin/users',
         success:function(data){
-          $html = '<div class="items">' +
+          $html = '<div class="items" id="items'+ data.user.id +'">' +
                     '<div class="item-content">' +
                         '<div class="user-profile">' +
 

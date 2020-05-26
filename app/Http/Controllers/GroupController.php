@@ -54,7 +54,7 @@ class GroupController extends Controller
             $user_grp->save();
         }
 
-        return response()->json(['success' => "updated" , 'id' => $groupe->idG, 'groupe' => $groupe]);;
+        return response()->json(['success' => "updated" , 'id' => $groupe->idG, 'groupe' => $groupe, 'users' => $groupe->users]);;
     }
 
     /**
@@ -89,12 +89,35 @@ class GroupController extends Controller
     public function update(Request $request)
     {
         $id = $request->IDG;
+        $users =  $request->input('userG'); //1 2 8
+
         $groupe = Groupe::find($id);
 
         $groupe->nomG = $request->nomG;
 
+        $bdd = GroupeUser::where('_idG',$id)->pluck('_idU'); //2
+       
+        $toRemove = GroupeUser::whereNotIn('_idU',$users)->where('_idG',$id)->get(); 
+        foreach ($toRemove as $t ) {
+            $t->delete();
+        }
+        $except = GroupeUser::where('_idG',$id)->pluck('_idU'); //2
+        
+        foreach ($users as $user) {
+            if(  $except->search($user*1) === false )
+            {
+                $user_grp = new GroupeUser();
+                $user_grp->_idU = $user;
+                $user_grp->_idG = $groupe->idG;
+                $user_grp->save();
+            }
+            
+        }
+
         $groupe->save();
-        return response()->json(['success' => "updated"]);;
+
+        $usersF = User::whereIn('id',$users)->get();
+        return response()->json(['success' => "updated", "users" => $usersF]);
     }
 
     /**

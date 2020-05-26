@@ -111,23 +111,28 @@
     Profile
 */
 .profile-modal .modal-content {
-    background-color: #5c1ac3;
+    background-color: #ffffff;
+    position: relative;
+    overflow-y:auto;
 }
 .profile-modal .modal-content .close {
     font-size: 19px;
     font-weight: 600;
     line-height: 1;
-    color: #fff;
+    color: rgb(15, 0, 68);
     text-shadow: none;
     opacity: 1;
     text-align: right;
     margin-right: 13px;
-    margin-top: 8px;
 }
 .profile-modal .modal-content .modal-header { border: none; }
 .profile-modal .modal-content .modal-footer { border: none; }
 .profile-modal .modal-content .modal-body p { color: #fff }
+#myTabContent { overflow-y:auto; max-height: 300px; position: relative;}
 .profile-modal .modal-content .modal-footer button.btn { box-shadow: none; }
+.profile-modal .modal-content .modal-body {
+    padding: 2px 2px;
+}
 
 /*
     Slider

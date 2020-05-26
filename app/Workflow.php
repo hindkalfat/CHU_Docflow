@@ -25,6 +25,6 @@ class Workflow extends Model
 
     public function type_doc()
     {
-        return $this->belongsTo(TypeDoc::class);
+        return $this->belongsTo(TypeDoc::class, 'w_idTd');
     }
 }

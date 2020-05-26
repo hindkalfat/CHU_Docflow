@@ -913,6 +913,11 @@
         });
 	</script>
 
+	<script>
+		const ps = new PerfectScrollbar('.invoice-inbox');
+		const pslist = new PerfectScrollbar('.inv-list-container');
+	</script>
+
 
 </body>
 

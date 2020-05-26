@@ -14,6 +14,7 @@ use App\Version;
 use App\Successeur;
 use App\Action;
 use App\Tache;
+use App\UserTache;
 use File;
 use Auth;
 use Notification;
@@ -67,7 +68,8 @@ class DocController extends Controller
         $document->save(); 
         $version = new Version;
 
-        $version->numV = 01;
+        $version->numV = 1;
+        $version->nomV = $File->getClientOriginalName();
 
         $File = $request->file('file'); 
         $fileName = uniqid().$File->getClientOriginalName();
@@ -207,9 +209,9 @@ class DocController extends Controller
                             ->where('_idFrom','=',13)
                             ->where('couranteA', '=', 0)
                             ->pluck('_idTo');
-        return $predecesseurs = Successeur::where('_idTo','=',$actionsS[0])->get();
+        return $predecesseurs = Successeur::where('_idTo','=',$actionsS[0])->get(); //all cour=0
                             
-        foreach ($actionsS as $actionS ) {
+        foreach ($actionsS as $actionS ) {//avec predecesseurs
             $action = Action::find($actionS);
             $action->couranteA = 1;
             $action->save();
@@ -241,5 +243,36 @@ class DocController extends Controller
             $tache->save();
         }
 
+    }
+
+    public function effectuerTache(Request $request)
+    {
+        $tache = Tache::find($request->input('idTache'));
+        $tache->Etat_avcT = $request->input('typeTache');
+        $tache->etatT = 0;
+        $tache->save();
+
+        $user_tache = new UserTache;
+        $user_tache->_idT = $tache->idT;
+        $user_tache->_idU = $tache->action->user->id;
+
+        $version = new Version;
+        $document = $tache->document;
+
+        $lastVersion = Version::where('v_idD',$tache->document->idD)->max('numV');
+        $version->numV = $lastVersion + 1;
+
+        $File = $request->file('versionTache');  
+        $version->nomV = $File->getClientOriginalName();
+        $fileName = uniqid().$File->getClientOriginalName();
+        $File->move(public_path('pdf'), $fileName);
+        $version->doc = $fileName;
+        $version->v_idD = $document->idD;
+        $version->save();
+
+        $user_tache->_idV = $version->idV;
+        $user_tache->save();
+
+        return response()->json(['success' => "created"]);
     }
 }

@@ -86,6 +86,7 @@ Route::group(['middleware' => ['auth']], function () {
 
         //tache
         Route::get('/user/taches','TacheController@index');
+        Route::post('/user/taches','DocController@effectuerTache');
     
     });
 
