@@ -15,7 +15,7 @@ class Groupe extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class,'groupes_users', '_idG', '_idU');
+        return $this->belongsToMany(User::class,'groupes_users', '_idU', '_idG');
     }
 
     public function actions()

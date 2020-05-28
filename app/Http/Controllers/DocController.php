@@ -69,10 +69,10 @@ class DocController extends Controller
         $version = new Version;
 
         $version->numV = 1;
-        $version->nomV = $File->getClientOriginalName();
 
         $File = $request->file('file'); 
         $fileName = uniqid().$File->getClientOriginalName();
+        $version->nomV = $File->getClientOriginalName();
         $File->move(public_path('pdf'), $fileName);
         $version->doc = $fileName;
         $version->v_idD = $document->idD;
@@ -165,6 +165,7 @@ class DocController extends Controller
 
             $tache = new Tache;
             $tache->t_idA = $action->idA;
+            $tache->t_idD = $id;
             switch ($action->opt_limiteA) {
                 case 'j':
                     $a = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$action->date_limiteA.' days'));
@@ -191,7 +192,7 @@ class DocController extends Controller
             if($action->a_idU)
                 $user = User::find($action->a_idU);
             else if($action->a_idG)
-                $user = Groupe::find($action->a_idG);
+                $user = Groupe::find($action->a_idG);//foreach
             Notification::send($user, new NewTask(Action::find($action->idA)));
             
             return response()->json(['success' => "created", 'document' => $document, 'version' => $version]);
@@ -200,16 +201,18 @@ class DocController extends Controller
 
     }
 
-    public function nextActions() //$id
+    public function nextActions($id,$doc) //$id
     {
-        $action = Action::find(13); //tache finie
+        $action = Action::find($id); //tache finie 
         $action->couranteA = 0;
+        $action->save();
         $actionsS = DB::table('successeurs')
                             ->join('actions','successeurs._idTo','=','actions.idA')//Successeur::
-                            ->where('_idFrom','=',13)
+                            ->where('_idFrom','=',$id)
                             ->where('couranteA', '=', 0)
-                            ->pluck('_idTo');
-        return $predecesseurs = Successeur::where('_idTo','=',$actionsS[0])->get(); //all cour=0
+                            ->pluck('_idTo'); 
+
+        //return $predecesseurs = Successeur::where('_idTo','=',$actionsS[0])->get(); //all cour=0
                             
         foreach ($actionsS as $actionS ) {//avec predecesseurs
             $action = Action::find($actionS);
@@ -218,6 +221,7 @@ class DocController extends Controller
 
             $tache = new Tache;
             $tache->t_idA = $action->idA;
+            $tache->t_idD = $doc;
             switch ($action->opt_limiteA) {
                 case 'j':
                     $a = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$action->date_limiteA.' days'));
@@ -273,6 +277,6 @@ class DocController extends Controller
         $user_tache->_idV = $version->idV;
         $user_tache->save();
 
-        return response()->json(['success' => "created"]);
+        return $this->nextActions($tache->action->idA,$document->idD);
     }
 }

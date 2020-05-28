@@ -558,6 +558,7 @@
 
 			//type act -priorite-
 			$('input[type=radio][name=custom-radio-5-priorite]').change(function() {
+				alert(this.value)
 				if (this.value == 'Faible') {
 					$('#prioriteA'+opId).val(this.value);
 				}
@@ -573,8 +574,6 @@
 				$("#addAction").modal("hide");
 				$('#nomA'+opId).val($('#nomAct').val());
 				$('#directiveA'+opId).val($('#exampleFormControlTextarea1').val());
-				$('#responsableA'+opId).val($('#responsableAct').val());
-				$('#prioriteA'+opId).val($('#prioriteAct').val());
 				$('#date_limiteA'+opId).val($('#date_limiteAct').val());
 				$('#opt_limiteA'+opId).val($('#opt_limiteAct').val());
 				$('#date_rappelA'+opId).val($('#date_rappelAct').val());

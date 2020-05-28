@@ -221,8 +221,8 @@
                                             <div class="modal-content">
                                                 <form id="formT{{$tache->idT}}" enctype="multipart/form-data">
                                                         {{ csrf_field() }}
-                                                    <input type="text" value="{{$tache->idT}}" id="idTache{{$tache->idT}}" name="idTache">
-                                                    <input type="text" value="" id="typeTache{{$tache->idT}}" name="typeTache">
+                                                    <input type="hidden" value="{{$tache->idT}}" id="idTache{{$tache->idT}}" name="idTache">
+                                                    <input type="hidden" value="" id="typeTache{{$tache->idT}}" name="typeTache">
                                                     <div class="modal-body">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x close" data-dismiss="modal"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                                                         <div class="compose-box">
@@ -235,7 +235,7 @@
                                                                             <div class=" col-md-12 mb-4">
                                                                             <b> Version(s) récente(s): </b>
                                                                             </div>
-                                                                            @if(App\Tache::find($tache->idT)->versions_recentes())
+                                                                            {{-- @if(App\Tache::find($tache->idT)->versions_recentes())
                                                                                 @foreach ( App\Tache::find(6)->versions_recentes() as $tv) 
                                                                                 <div class=" col-md-12">
                                                                                     <div class=" media-body">
@@ -255,7 +255,7 @@
                                                                                     </p>
                                                                                 </div>
                                                                             </div>
-                                                                            @endif
+                                                                            @endif --}}
 
                                                                         </div>
                                                                     </div>
@@ -333,7 +333,7 @@
                                                                 
                                                                 @if ($tache->action->versionA==1)
                                                                     <div class="custom-file mb-4">
-                                                                        <input type="file" class="custom-file-input" id="customFile" name="versionTache">
+                                                                        <input required type="file" class="custom-file-input" id="customFile" name="versionTache">
                                                                         <label class="custom-file-label" for="customFile">Choose file</label>
                                                                     </div>
                                                                 @endif

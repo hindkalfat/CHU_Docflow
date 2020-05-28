@@ -357,6 +357,21 @@ jQuery(function ($) {
             this.callbackEvent('afterChange', ['link_change_main_color']);
         },
 
+        getLinksFrom: function(operatorId) {
+            var result = [];
+
+            for (var linkId in this.data.links) {
+                if (this.data.links.hasOwnProperty(linkId)) {
+                    var linkData = this.data.links[linkId];
+                    if (linkData.fromOperator === operatorId) {
+                        result.push(linkData);
+                    }
+                }
+            }
+
+            return result;
+        },
+
         _drawLink: function (linkId) {
             var linkData = this.data.links[linkId];
 
@@ -373,14 +388,9 @@ jQuery(function ($) {
             var subConnectors = this._getSubConnectors(linkData);
             var fromSubConnector = subConnectors[0];
             var toSubConnector = subConnectors[1];
-
-            if(linkData.fromOperatorType.includes("Condition"))
-                if(linkId==0)
-                    var color= this.setLinkMainColor(linkId,'green');
-                else
-                    var color= this.setLinkMainColor(linkId,'red');   
-            else
-                var color = this.getLinkMainColor(linkId);
+            console.log(linkId)
+            console.log(linkData)
+            console.log($('#nblink'+this.data.links[linkId].fromOperator).val())
 
             var fromOperator = this.data.operators[fromOperatorId];
             var toOperator = this.data.operators[toOperatorId];
@@ -422,6 +432,7 @@ jQuery(function ($) {
             group.setAttribute('data-link_id', linkId);
             overallGroup.appendChild(group);
 
+
             var shape_path = document.createElementNS("http://www.w3.org/2000/svg", "path");
             shape_path.setAttribute("stroke-width", this.options.linkWidth.toString());
             shape_path.setAttribute("fill", "none");
@@ -433,6 +444,52 @@ jQuery(function ($) {
             shape_rect.setAttribute("mask", "url(#" + maskId + ")");
             group.appendChild(shape_rect);
             linkData.internal.els.rect = shape_rect;
+
+            //text OUI
+            var textOUI = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            textOUI.setAttribute('x', 10);
+            textOUI.setAttribute('y', 10);
+            textOUI.style.fill = 'green';
+            textOUI.style.fontFamily = 'Verdana';
+            textOUI.style.fontSize = '15';
+            textOUI.innerHTML = "Oui";
+
+            //text NON
+            var textNON = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            textNON.setAttribute('x', 10);
+            textNON.setAttribute('y', 10);
+            textNON.style.fill = 'red';
+            textNON.style.fontFamily = 'Verdana';
+            textNON.style.fontSize = '15';
+            textNON.innerHTML = "Non";
+
+
+            if(linkData.fromOperatorType.includes("Condition"))
+                if($('#nblink'+this.data.links[linkId].fromOperator).val() == 1)
+                {
+                    var color= this.setLinkMainColor(linkId,'green');
+                    group.appendChild(textOUI);
+                    linkData.internal.els.text = textOUI;
+                }
+                    
+                else
+                    if(this.getLinksFrom(fromOperatorId)[0].color == "red")
+                    {
+                        var color= this.setLinkMainColor(linkId,'green');
+                        group.appendChild(textOUI);
+                        linkData.internal.els.text = textOUI;
+                    }
+                        
+                    else
+                    {
+                        var color= this.setLinkMainColor(linkId,'red');  
+                        group.appendChild(textNON);
+                        linkData.internal.els.text = textNON;
+                    }
+                         
+            else
+                var color = this.getLinkMainColor(linkId);
+                
 
             this._refreshLinkPositions(linkId);
             this.uncolorizeLink(linkId);
@@ -493,11 +550,19 @@ jQuery(function ($) {
                 bezierIntensity = Math.min(100, Math.max(Math.abs(bezierFromX - bezierToX) / 2, Math.abs(fromY - toY)));
                 linkData.internal.els.path.setAttribute("d", 'M' + bezierFromX + ',' + (fromY) + ' C' + (fromX + offsetFromX + distanceFromArrow + bezierIntensity) + ',' + fromY + ' ' + (toX - bezierIntensity) + ',' + toY + ' ' + bezierToX + ',' + toY);
                 linkData.internal.els.rect.setAttribute("x", fromX);
+                //text
+                if(linkData.fromOperatorType.includes("Condition"))
+                    linkData.internal.els.text.setAttribute("x", fromX+10);
             }
 
             linkData.internal.els.rect.setAttribute("y", fromY - this.options.linkWidth / 2);
             linkData.internal.els.rect.setAttribute("width", offsetFromX + distanceFromArrow + 1);
             linkData.internal.els.rect.setAttribute("height", this.options.linkWidth);
+            //text
+            if(linkData.fromOperatorType.includes("Condition") && linkData.internal.els.text.innerHTML == "Non")
+                linkData.internal.els.text.setAttribute("y", (fromY - this.options.linkWidth / 2)+20);
+            if(linkData.fromOperatorType.includes("Condition") && linkData.internal.els.text.innerHTML == "Oui")
+                linkData.internal.els.text.setAttribute("y", (fromY - this.options.linkWidth / 2)-10);
 
         },
 
@@ -544,28 +609,28 @@ jQuery(function ($) {
                                 '<input type="hidden" name="opt_limiteA" value="" id="opt_limiteA'+cpt+'"/>'+
                                 '<input type="hidden" name="date_rappelA" value="" id="date_rappelA'+cpt+'"/>'+
                                 '<input type="hidden" name="opt_rappelA" value="" id="opt_rappelA'+cpt+'"/>'+
-                                '<input type="text" name="prioriteA" value="Moyenne" id="prioriteA'+cpt+'"/>'+
-                                '<input type="text" name="typeA" value="Validation" id="typeA'+cpt+'"/>'+
-                                '<input type="text" name="versionA" value="1" id="versionA'+cpt+'"/>'+
+                                '<input type="hidden" name="prioriteA" value="Moyenne" id="prioriteA'+cpt+'"/>'+
+                                '<input type="hidden" name="typeA" value="Validation" id="typeA'+cpt+'"/>'+
+                                '<input type="hidden" name="versionA" value="1" id="versionA'+cpt+'"/>'+
                                 '<input type="hidden" name="a_idG" value="" id="a_idG'+cpt+'"/>'+
                                 '<input type="hidden" name="a_idU" value="" id="a_idU'+cpt+'"/>'+
                                 '<input type="hidden" name="a_idW" class="inptwf" value="" id="a_idW'+cpt+'"/>'+
-                                '<input type="text" name="idoperator" value="'+cpt+'" id="idoperator'+cpt+'"/>'+
+                                '<input type="hidden" name="idoperator" value="'+cpt+'" id="idoperator'+cpt+'"/>'+
                             '</form>');
 
             var $formEmail = $(' <form class="monform" id="formEmail'+cpt+'" method="post">'+
                                     '<input type="hidden" name="nomA" class="inpt" value="envoiEmail" id="nomA'+cpt+'"/>'+
-                                    '<input type="text" name="typeA" value="Email" id="typeA'+cpt+'"/>'+
-                                    '<input type="text" name="objetA" value="" id="objetA'+cpt+'"/>'+
-                                    '<input type="text" name="messageA" value="" id="messageA'+cpt+'"/>'+
-                                    '<input type="text" name="a_destinataireU" value="" id="a_destinataireU'+cpt+'"/>'+
-                                    '<input type="text" name="destinataireIA"  value="" id="destinataireIA'+cpt+'"/>'+
-                                    '<input type="text" name="a_idW" class="inptwf" value="" id="a_idW'+cpt+'"/>'+
-                                    '<input type="text" name="idoperator" value="'+cpt+'" id="idoperator'+cpt+'"/>'+
+                                    '<input type="hidden" name="typeA" value="Email" id="typeA'+cpt+'"/>'+
+                                    '<input type="hidden" name="objetA" value="" id="objetA'+cpt+'"/>'+
+                                    '<input type="hidden" name="messageA" value="" id="messageA'+cpt+'"/>'+
+                                    '<input type="hidden" name="a_destinataireU" value="" id="a_destinataireU'+cpt+'"/>'+
+                                    '<input type="hidden" name="destinataireIA"  value="" id="destinataireIA'+cpt+'"/>'+
+                                    '<input type="hidden" name="a_idW" class="inptwf" value="" id="a_idW'+cpt+'"/>'+
+                                    '<input type="hidden" name="idoperator" value="'+cpt+'" id="idoperator'+cpt+'"/>'+
                                 '</form>');
 
-            var $form1 = $('<input type="text" name="nblink" value="0" id="nblink'+cpt+'"/>'+
-                            '<input type="text" name="idop" value="'+cpt+'" id="idop'+cpt+'"/>');
+            var $form1 = $('<input type="hidden" name="nblink" value="0" id="nblink'+cpt+'"/>'+
+                            '<input type="hidden" name="idop" value="'+cpt+'" id="idop'+cpt+'"/>');
 
                             
             if(indice=="email")
@@ -1190,7 +1255,7 @@ jQuery(function ($) {
             return data;
         },
 
-        getLinksFrom: function(operatorId) {
+        /* getLinksFrom: function(operatorId) {
             var result = [];
 
             for (var linkId in this.data.links) {
@@ -1203,7 +1268,7 @@ jQuery(function ($) {
             }
 
             return result;
-        },
+        }, */
 
         getLinksTo: function(operatorId) {
             var result = [];

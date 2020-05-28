@@ -22,19 +22,30 @@ class TacheController extends Controller
     {
         $id = Auth::user()->id;
         $user = User::find($id);
+        $groupes = $user->groupes->unique()->pluck('idG');
         $actions = $user->actions->where('couranteA',1)->pluck('idA'); 
-        $tachesEnCours = Tache::whereIn('t_idA',$actions)->get();
-        $tachesTerminées = Tache::where('etatT',0)->get();
+
+        $tachesEnCours = Tache::whereIn('t_idA',$actions)->where('etatT',1)->get();
+
+        $tachesTerminées = Tache::join('actions', 'taches.t_idA', '=', 'actions.idA')
+        ->where('etatT',0)->where('a_idU',$id)->get();
+
         $tachesImportantes =  DB::table('taches')
                             ->join('actions', 'taches.t_idA', '=', 'actions.idA')
+                            ->where('couranteA',1)
+                            ->where('a_idU',$id)
                             ->where('taches.etatT',1)
                             ->where('actions.prioriteA','=','Haute')
                             ->get();
+
         $tachesGroupe = DB::table('taches')
                             ->join('actions', 'taches.t_idA', '=', 'actions.idA')
+                            ->where('couranteA',1)
+                            ->where('a_idU',$id)
                             ->where('etatT',1)
                             ->whereNotNull('a_idG')
-                            ->get();
+                            ->whereIn('a_idG',$groupes)
+                            ->get(); 
 
 /*
         $t = Tache::find(4); return $t->document->versions->where('numV',1)->first()->nomV;
