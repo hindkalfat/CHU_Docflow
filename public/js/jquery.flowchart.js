@@ -880,6 +880,7 @@ jQuery(function ($) {
                 this.objs.temporaryLink.setAttribute('y1', y.toString());
                 this._mousemove(x, y);
             }
+            
             if (connectorCategory == 'inputs' && this.lastOutputConnectorClicked != null) {
                 var linkData = {
                     fromOperator: this.lastOutputConnectorClicked.operator,
@@ -887,9 +888,11 @@ jQuery(function ($) {
                     fromConnector: this.lastOutputConnectorClicked.connector,
                     fromSubConnector: this.lastOutputConnectorClicked.subConnector,
                     toOperator: operator,
+                    toOperatorType:this.getOperatorData(operator).properties.title ,
                     toConnector: connector,
                     toSubConnector: subConnector
                 };
+                console.log(linkData);
 
                 this.addLink(linkData);
                 this._unsetTemporaryLink();

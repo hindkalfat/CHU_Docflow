@@ -59,7 +59,10 @@
                                         <div class="col-sm-7 align-self-center">
                                             <p class="inv-customer-name">{{ucfirst($doc->titreD)}} </p>
                                             <p class="inv-street-addr">{{ucfirst($doc->etatD)}} </p>
-                                            <p class="inv-email-address">Action courante</p>
+                                            <p class="inv-email-address">Action(s) courante(s): 
+                                            @foreach ($actionC as $a)
+                                                {{$a->nomA}}
+                                            @endforeach</p>
                                         </div>
                                         <div class="col-sm-5 align-self-center  text-sm-right order-2">
                                             <p class="inv-list-number"><span class="inv-title">Nombre de version(s) : </span> <span class="inv-number"> {{$versions->count()}} </span></p>

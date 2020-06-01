@@ -153,6 +153,14 @@ class WfController extends Controller
                             ->get();
                 $successeur->_idFrom = null;
                 $successeur->_idTo = $actionT[0]->idA;
+            }else if($data['toOperatorType'] == 'Fin')
+            {
+                $actionF= Action::where('idop',$data['fromOperator'])
+                            ->where('a_idW',$request->input('idWf'))
+                            ->take(1)
+                            ->get();
+                $successeur->_idFrom = $actionF[0]->idA;
+                $successeur->_idTo = null;
             }else{
                 $actionF= Action::where('idop',$data['fromOperator'])
                             ->where('a_idW',$request->input('idWf'))

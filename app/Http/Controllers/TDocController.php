@@ -8,6 +8,8 @@ use App\TypeDoc;
 use App\Metadonnee;
 use App\Document;
 use App\User;
+use App\Liste;
+use Excel;
 
 class TDocController extends Controller
 {
@@ -51,10 +53,12 @@ class TDocController extends Controller
 
         $str_arr_l = explode (",", $request->input('libelleM'));
         $str_arr_t = explode (",", $request->input('typeM'));
+        $str_arr_lst = explode (",", $request->input('listeM')); 
         $metas = array_combine($str_arr_l, $str_arr_t);
+        $metasLst = array_combine($str_arr_l, $str_arr_lst);
         
          $type->save();
-        $i=0;
+        $i=0; $excel = null;
          foreach ( array_keys($metas) as $meta) {
              if($meta != '')
              {
@@ -63,11 +67,43 @@ class TDocController extends Controller
                 $metadonnee->libelleM = $meta;
                 $metadonnee->typeM= array_values($metas)[$i];
                 $metadonnee->m_idTd = $type->idTd;
-                $i++;
                 $metadonnee->save();
+
+                if(array_values($metasLst)[$i] != '' && $request->file(array_values($metasLst)[$i]))
+                {
+                    $excel = $request->file(array_values($metasLst)[$i])->getRealPath();
+
+                    $data= Excel::load($excel)->get();
+
+                    if($data->count() > 0)
+                    {
+                        foreach($data->toArray() as $key => $value)
+                        {
+                            $j=0; 
+                            foreach($value as $row)
+                                { 
+                                    $tab[$j]=$row; $j++;   
+                                }
+                            $insert_data[] = array(
+                                'libelleL' => $tab[0],
+                                'l_idM' => $metadonnee->idM
+                            );
+                        }
+
+                        if(!empty($insert_data))
+                        {
+                            DB::table('listes')->insert($insert_data);
+                            $insert_data = null;
+                        }
+                    }
+                    
+                }
+                    
+                $i++;
              }
                 
         } 
+              
         return response()->json(['success' => "created" , 'type' => $type , 'metas' => $type->metadonnees]); 
     }
 

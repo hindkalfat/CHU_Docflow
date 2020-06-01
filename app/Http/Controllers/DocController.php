@@ -145,7 +145,8 @@ class DocController extends Controller
     {
         $document = Document::find($id); 
         $versions = $document->versions;
-        return view('user.document',['doc' => $document],['versions' => $versions]);
+        $actionC = $document->type_doc->workflow->actions->where('couranteA',1);
+        return view('user.document',['doc' => $document,'versions' => $versions, 'actionC' => $actionC]);
     }
 
     public static function actions($id,$document,$version) //$id

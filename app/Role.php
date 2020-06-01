@@ -10,6 +10,6 @@ class Role extends Model
     protected $primaryKey = 'idR';
     public function users()
     {
-        return $this->belongsToMany(User::class, 'roles_users', '_idU', '_idR');
+        return $this->belongsToMany(User::class)->using('App\RoleUser');
     }
 }

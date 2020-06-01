@@ -26,14 +26,17 @@
         var x = document.getElementById("TtypeM"+cpt).value;
         if(x=="Enuméré")
         {
+            var c=$('#x').val();
             $('.lst'+cpt).each(function() {
                 $(this).remove();
             });
             $('.addmeta'+cpt).append(
-                                    '<div class="form-group col lst'+cpt+'">'+
-                                        '<input id="listeEnum" style="height:45px" type="file" class=" listeEnum form-control-file" id="exampleFormControlFile1" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">'+                                   
+                                    '<div class="form-group col-lg-12 layout-top-spacing lst'+cpt+'">'+
+                                        '<input id="listeEnum'+cpt+'" type="file" name="testF'+c+'" class=" listeEnum form-control-file" id="exampleFormControlFile1" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">'+                                   
                                     '</div>'
                                 );
+                                
+            $('#x').val(c*1+1);
         }
         else{
             $('.lst'+cpt).each(function() {
@@ -48,11 +51,12 @@
         $(document).ready(function () {
             $('.addinput').click(function(){
                 var cpt = $('#cpt').val()*1;
-                $(this).after( '<div class="metaslist addmeta'+cpt+' row mb-4">'+
-                                    '<div class="col">'+
+                $(this).after( '<hr/>'+
+                                '<div class="metaslist addmeta'+cpt+' row mb-4">'+
+                                    '<div class="col-lg-6">'+
                                         '<input id="TlibelleM" type="text" class=" TlibelleM form-control" placeholder="Intitulé">'+
                                     '</div>'+
-                                    '<div class="col">'+
+                                    '<div class="col-lg-6">'+
                                         '<select onchange="myFunction('+cpt+')" id="TtypeM'+cpt+'"  class="TtypeM form-control" data-width="fit">'+
                                             '<option>Type document</option>'+
                                             '<option value="Date" >Date</option>'+
@@ -73,6 +77,7 @@
                 $('#listeM').val('');
                 $('#intituléT').val('');
                 $('#description').val('');
+                $('#x').val(0);
             });
 
 
@@ -94,19 +99,47 @@
                         //type
                         var inputs = $(".TtypeM");
                         var t='';
+                        var j=0;
+                        var inputsl = $(".listeEnum");
+                        console.log(inputsl)
+                        var ls=''; 
                         for(var i = 0; i < inputs.length; i++){
-                            t = $(inputs[i]).children("option:selected").val() + ',' + t; 
+                            var id = $(inputs[i]).attr("id");
+                            var idT=id.substring(6,id.length);
+                            if($(inputs[i]).children("option:selected").val() == "Type document")
+                                t = '' + ',' + t
+                            else
+                            {
+                                t = $(inputs[i]).children("option:selected").val() + ',' + t; 
+                                if($('#listeEnum'+idT).length > 0)
+                                {
+                                    ls = $(inputsl[j]).attr('name') + ',' + ls;
+                                    j++;
+                                }
+                                else
+                                {
+                                    ls = '' + ',' + ls;
+                                }      
+                            }
                         }
                         $('#typeM').val(t) 
+                        $('#listeM').val(ls) 
                         
-                        var data = $('#addType').serialize(); 
+                        var form = $(this);
+                        var data = new FormData(form[0]);
                         $.ajax({
                             type:'POST',
                             data:data,
                             url:'/admin/documents',
+                            cache: false,
+                            processData: false,
+                            contentType : false,
                             success:function(data){
                                 var intitule=data.type.intituleTd;
-                                var desc = data.type.descriptionTd;
+                                if(data.type.descriptionTd)
+                                    var desc = data.type.descriptionTd;
+                                else
+                                    var desc = "Aucune desription disponible";
                                 $('#fadeupModal').modal('hide');
                                 $('#toggleAccordion').append(
                                     '<div class="card">'+
@@ -218,6 +251,7 @@
 
 <div id="content" >
     <input type="hidden" id="cpt" value="0">
+    <input type="hidden" id="x" value="0">
     <button hidden id="notif" class="btn btn-dark bottom-right">Bottom right</button>
     <div class="container col-lg-12 col-12 ">
         <div class="col-lg-12 col-12 ">
@@ -234,7 +268,7 @@
                                     <a class="nav-link" id="underline-home-tab" data-toggle="tab" href="#underline-home" role="tab" aria-controls="underline-home" aria-selected="true">Documents</a>
                                 </li>
                             </ul>
-
+                            
                             <div class="tab-content" id="lineTabContent-3">
                                 <div class="tab-pane fade " id="underline-home" role="tabpanel" aria-labelledby="underline-home-tab">
                                     <div class="row" id="cancel-row">
@@ -334,17 +368,19 @@
                                                             <form id="addType" enctype="multipart/form-data">
                                                             {{ csrf_field() }}
                                                                 <div class="modal-body">
-                                                                        <input type="text" id="libelleM" name="libelleM" value="">
-                                                                        <input type="text" id="typeM" name="typeM" value="">
-                                                                        <input type="text" id="listeM" name="listeM" value="">
+
+                                                                        <input type="hidden" id="libelleM" name="libelleM" value="">
+                                                                        <input type="hidden" id="typeM" name="typeM" value="">
+                                                                        <input type="hidden" id="listeM" name="listeM" value="">
                                                                         <div class="form-group">
                                                                             <input name="intituleT" id="intituléT" type="text" class="form-control" id="exampleFormControlInput1" value="" placeholder="(*) Intitulé">
                                                                         </div>
                                                                         <div class="form-group">
                                                                             <textarea name="description" id="description" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Description"></textarea>
                                                                         </div>
-                                                                        <a href="#" class="addinput">
+                                                                        <a href="#" class="addinput row container">
                                                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle mb-4"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                                                                            &nbsp;<h6 style="color:#1b55e2;">  Ajouter une métadonnée</h6> 
                                                                         </a>
                                                                 </div>
                                                                 <div class="modal-footer md-button">
@@ -371,7 +407,11 @@
                                                             <div id="defaultAccordionOne{{$var}}" class="collapse" aria-labelledby="headingOne1" data-parent="#toggleAccordion">
                                                                 <div class="card-body">
                                                                     <p class="">
+                                                                        @if($typeDoc->descriptionTd)
                                                                             {{$typeDoc->descriptionTd}}
+                                                                        @else
+                                                                            Aucune desription disponible
+                                                                        @endif
                                                                     </p>
                                                                     <div class="widget-content container">
                                                                         @foreach ($typeDoc->metadonnees as $metadonnee)
