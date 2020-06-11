@@ -10,6 +10,7 @@ use App\Workflow;
 use App\Action;
 use App\Successeur;
 use App\Groupe;
+use App\Condition;
 
 class WfController extends Controller
 {
@@ -132,6 +133,19 @@ class WfController extends Controller
         $action->idop = $request->input('idoperator');
 
         $action->save();
+    }
+
+    public function addCond(Request $request)
+    {
+        $condition = new Condition;
+        $condition->c_idA = Action::where('idop',$data['toOperator'])
+                                    ->where('a_idW',$request->input('a_idW'))
+                                    ->take(1)
+                                    ->select('idA')
+                                    ->get();
+        $condition->typeC = $request->input('typeC');
+
+        $condition->save();
     }
 
     public function successeurs(Request $request)

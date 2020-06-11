@@ -29,7 +29,8 @@
 	<link rel="stylesheet" type="text/css" href="{{asset('assets/css/forms/theme-checkbox-radio.css')}}">
 	<link rel="stylesheet" type="text/css" href="{{asset('assets/css/forms/switches.css')}}">
 	<link rel="stylesheet" type="text/css" href="{{asset('plugins/editors/quill/quill.snow.css')}}">
-    <link href="{{asset('plugins/notification/snackbar/snackbar.min.css')}}" rel="stylesheet" type="text/css" />
+	<link href="{{asset('plugins/notification/snackbar/snackbar.min.css')}}" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" type="text/css" href="{{asset('plugins/jquery-step/jquery.steps.css')}}">
 
 	<style>
 		.flowchart-example-container {
@@ -74,6 +75,10 @@
 		} 
 		
 	</style>
+
+	<style>
+        #example-vertical.wizard > .content {min-height: 24.5em;}
+    </style>
 </head>
 
 <body class="alt-menu sidebar-noneoverflow">
@@ -221,111 +226,128 @@
 
 		<!-- Modal addAction-->
 		<div class="modal fade" id="addAction" tabindex="-1" role="dialog" aria-labelledby="addContactModalTitle" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 550px;">
 				<div class="modal-content">
 					<div class="modal-body">
 						<i class="flaticon-cancel-12 close" data-dismiss="modal"></i>
 						<div class="add-contact-box">
 							<div class="add-contact-content">
 								<form id="addContactModalTitle">
-									<div class="custom-file mb-4">
-										<input id="nomAct" type="text" class="form-control" placeholder="Nom action">
-									</div>
-									<div class="custom-file mb-4">
-										<select id="act_idU" name="responsableA" class="selectpicker" data-live-search="true" data-width="100%">
-											<option value="" disabled selected >Responsable</option>
-											@foreach ($users as $user)
-												<option value="{{$user->id}}"> {{$user->nomU}} {{$user->prenomU}} </option>
-											@endforeach
-										</select>
-									</div>
-									<div class="custom-file mb-4">
-										<select id="act_idG" name="responsableA" class="selectpicker" data-live-search="true" data-width="100%">
-											<option value="" disabled selected >Groupe</option>
-											@foreach ($groupes as $groupe)
-												<option value="{{$groupe->id}}"> {{$groupe->nomG}} </option>
-											@endforeach
-										</select>
-									</div>
-									<div class="row">
-										<div class="form-group col-md-6">
-											<input id="date_limiteAct" type="text" class="form-control" placeholder="Délais">
-										</div>
-										<div class="form-group col-md-6">
-											<select id="opt_limiteAct" name="optRA" class="selectpicker" >
-												<option value="" disabled selected>Option délais</option>
-												<option value="j" >jour(s)</option>
-												<option value="h" >heure(s)</option>
-												<option value="m" >minute(s)</option>
-											</select>
-										</div>
-									</div>
-									<div class="row">
-										<div class="form-group col-md-6">
-											<input id="date_rappelAct" type="text" class="form-control" placeholder="Délais rappel">
-										</div>
-										<div class="form-group col-md-6">
-											<select id="opt_rappelAct" name="optRA" class="selectpicker" >
-												<option value="" disabled selected>Option délais</option>
-												<option value="j" >jour(s)</option>
-												<option value="h" >heure(s)</option>
-												<option value="m" >minute(s)</option>
-											</select>
-										</div>
-									</div>
-									<div class="custom-file mb-4">
-										<div class="n-chk">
-											<label>Priorité:</label>
-											<label class="new-control new-radio new-radio-text radio-classic-default">
-												<input type="radio" class="new-control-input" value="Faible" name="custom-radio-5-priorite">
-												<span class="new-control-indicator"></span><span class="new-radio-content">Faible</span>
-											</label>
-											<label class="new-control new-radio new-radio-text radio-classic-primary">
-												<input type="radio" class="new-control-input" value="Moyenne" name="custom-radio-5-priorite" checked>
-												<span class="new-control-indicator"></span><span class="new-radio-content">Moyenne</span>
-											</label>
-											<label class="new-control new-radio new-radio-text radio-classic-secondary">
-												<input type="radio" class="new-control-input" value="Haute" name="custom-radio-5-priorite">
-												<span class="new-control-indicator"></span><span class="new-radio-content">Haute</span>
-											</label>
-										</div>
-									</div>
-									<div class="custom-file mb-4">
-										<p class="">Type de tâche</p>
-										<div class="col-sm-12 col-12 input-fields">
-											<div class="n-chk">
-												<label class="new-control new-radio radio-primary">
-													<input type="radio" class="new-control-input" value="1" name="custom-radio-1-version" checked="checked">
-													<span class="new-control-indicator"></span>Avec entrée
-												</label>
-												<label class="new-control new-radio radio-primary">
-													<input type="radio" class="new-control-input" value="0" name="custom-radio-1-version">
-													<span class="new-control-indicator"></span>Sans entrée
-												</label>
+									<div id="circle-basic">
+										<h3></h3>
+										<section>
+											<div class="custom-file mb-4">
+													<input id="nomAct" type="text" class="form-control" placeholder="Nom action">
 											</div>
-											<div class="n-chk">
-												<label class="new-control new-radio radio-primary">
-													<input type="radio" class="new-control-input" value="Approbation" name="custom-radio-1-typeA">
-													<span class="new-control-indicator"></span>Approbation
-												</label>
-												<label class="new-control new-radio radio-primary">
-													<input type="radio" class="new-control-input" value="Validation" name="custom-radio-1-typeA" checked="checked">
-													<span class="new-control-indicator"></span>Validation
-												</label>
+											<div class="custom-file mb-4">
+												<select id="act_idU" name="responsableA" class="selectpicker" data-live-search="true" data-width="100%">
+													<option value="" disabled selected >Responsable</option>
+													@foreach ($users as $user)
+														<option value="{{$user->id}}"> {{$user->nomU}} {{$user->prenomU}} </option>
+													@endforeach
+												</select>
 											</div>
-										</div>
+											<div class="custom-file mb-4">
+												<select id="act_idG" name="responsableA" class="selectpicker" data-live-search="true" data-width="100%">
+													<option value="" disabled selected >Groupe</option>
+													@foreach ($groupes as $groupe)
+														<option value="{{$groupe->id}}"> {{$groupe->nomG}} </option>
+													@endforeach
+												</select>
+											</div>
+											<div class="custom-file mb-4">
+												<textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Description"></textarea>
+											</div>
+										</section>
+										<h3></h3>
+										<section>
+											<div class="row">
+												<div class="form-group col-md-6">
+													<input id="date_limiteAct" type="text" class="form-control" placeholder="Délais">
+												</div>
+												<div class="form-group col-md-6">
+													<select id="opt_limiteAct" name="optRA" class="selectpicker" >
+														<option value="" disabled selected>Option délais</option>
+														<option value="j" >jour(s)</option>
+														<option value="h" >heure(s)</option>
+														<option value="m" >minute(s)</option>
+													</select>
+												</div>
+											</div>
+											<div class="row">
+												<div class="form-group col-md-6">
+													<input id="date_rappelAct" type="text" class="form-control" placeholder="Délais rappel">
+												</div>
+												<div class="form-group col-md-6">
+													<select id="opt_rappelAct" name="optRA" class="selectpicker" >
+														<option value="" disabled selected>Option délais</option>
+														<option value="j" >jour(s)</option>
+														<option value="h" >heure(s)</option>
+														<option value="m" >minute(s)</option>
+													</select>
+												</div>
+											</div>
+											<div class="custom-file mb-4">
+												<div class="n-chk">
+													<label>Priorité:</label>
+													<br>
+													<label class="new-control new-radio new-radio-text radio-classic-default">
+														<input id="f" type="radio" class="new-control-input" value="Faible" name="custom-radio-5-priorite">
+														<span class="new-control-indicator"></span><span class="new-radio-content">Faible</span>
+													</label>
+													<label class="new-control new-radio new-radio-text radio-classic-primary">
+														<input id="m" type="radio" class="new-control-input" value="Moyenne" name="custom-radio-5-priorite" checked>
+														<span class="new-control-indicator"></span><span class="new-radio-content">Moyenne</span>
+													</label>
+													<label class="new-control new-radio new-radio-text radio-classic-secondary">
+														<input id="h" type="radio" class="new-control-input" value="Haute" name="custom-radio-5-priorite">
+														<span class="new-control-indicator"></span><span class="new-radio-content">Haute</span>
+													</label>
+												</div>
+											</div>
+										</section>
+										<h3></h3>
+										<section>
+											<div class="custom-file mb-4">
+												<p class="">Mise à jour du document requise</p>
+												<div class="col-sm-12 col-12 input-fields">
+													<div class="n-chk">
+														<label class="new-control new-radio radio-primary">
+															<input type="radio" class="new-control-input" value="1" name="custom-radio-1-version" checked="checked">
+															<span class="new-control-indicator"></span>Oui
+														</label>
+														<label class="new-control new-radio radio-primary">
+															<input type="radio" class="new-control-input" value="0" name="custom-radio-1-version">
+															<span class="new-control-indicator"></span>Non
+														</label>
+													</div>
+												</div>
+												<br>
+												<p class="">Type de tâche</p>
+												<div class="col-sm-12 col-12 input-fields">
+													<div class="n-chk">
+														<label class="new-control new-radio radio-primary">
+															<input type="radio" class="new-control-input" value="Approbation" name="custom-radio-1-typeA">
+															<span class="new-control-indicator"></span>Approbation
+														</label>
+														<label class="new-control new-radio radio-primary">
+															<input type="radio" class="new-control-input" value="Validation" name="custom-radio-1-typeA" checked="checked">
+															<span class="new-control-indicator"></span>Validation
+														</label>
+													</div>
+												</div>
+											</div>
+										</section>
 									</div>
-									<div class="custom-file mb-4">
-										<textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Description"></textarea>
-									</div>
+									
 								</form>
 							</div>
 						</div>
 					</div>
-					<div class="modal-footer">
+					{{-- <div class="modal-footer">
 						<button class="btn" data-dismiss="modal"> <i class="flaticon-delete-1"></i> Annuler</button>
 						<button id="btn-add" class="btn btn-success">Valider</button>
-					</div>
+					</div> --}}
 				</div>
 			</div>
 		</div>
@@ -390,8 +412,101 @@
 				</div>
 			</div>
 		</div>
+
+		<!-- Modal modalCondition-->
+		<div class="modal fade" id="modalCondition" tabindex="-1" role="dialog" aria-labelledby="addContactModalTitle" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalCenterTitle">Choisissez le type de condition</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+						</button>
+					</div>
+					<div class="modal-body">
+						<small id="emailHelp1" class="form-text text-muted mb-4">Le deuxième choix est activé si la condition a une tâche d'approbation comme prédecesseur.</small>
+						<div class="custom-control custom-radio custom-control-inline">
+							<input type="radio" id="customRadioInline1" value="metas" name="customRadioInline1" class="custom-control-input">
+							<label class="custom-control-label" for="customRadioInline1">Condition sur les métadonnées</label>
+						</div>
+						<br>
+						<div class="custom-control custom-radio custom-control-inline">
+							<input type="radio" id="customRadioInline2" value="appro" name="customRadioInline1" class="custom-control-input" disabled>
+							<label class="custom-control-label" for="customRadioInline2">Condition d'approbation</label>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Modal choix action approbation-->
+		<div class="modal fade" id="modalChoice" tabindex="-1" role="dialog" aria-labelledby="addContactModalTitle" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalCenterTitle">Tâche d'approbation</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+						</button>
+					</div>
+					<div class="modal-body" id="choix">
+						<select id="mySelect" class="selectpicker" data-live-search="true" data-width="100%">
+						</select>	
+					</div>
+					<div class="modal-footer">
+						<button class="btn" data-dismiss="modal"> <i class="flaticon-delete-1"></i> Annuler</button>
+						<button id="btn-add-approbation" class="btn btn-success">Valider</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Modal choix metas -->
+		<div class="modal fade" id="modalMetas" tabindex="-1" role="dialog" aria-labelledby="addContactModalTitle" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalCenterTitle">Condition sur les métadonnées</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+						</button>
+					</div>
+					<div class="modal-body" >
+						<div class="form-row mb-12">
+							<div class="form-group col-md-4">
+								<label for="inputCity">Métadonnée </label>
+								<select id="inputState" class="form-control" data-live-search="true">
+									<option selected>Choose...</option>
+									<option>meta1</option>
+									<option>meta2</option>
+									<option>meta3</option>
+								</select>
+							</div>
+							<div class="form-group col-md-3">
+								<label for="inputState">Est</label>
+								<select id="inputState" class="form-control">
+									<option>égal à</option>
+									<option>supérieur à</option>
+									<option>inférieur à</option>
+									<option>contient</option>
+								</select>
+							</div>
+							<div class="form-group col-md-5">
+								<label for="inputZip">Valeur</label>
+								<input type="text" class="form-control" id="inputZip">
+							</div>
+							<a href="#" class="addinput row layout-top-spacing container">
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle mb-4"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+								&nbsp;<h6>  Ajouter un test</h6> 
+							</a>
+						</div>	 
+					</div>
+				</div>
+			</div>
+		</div>
 		<!--  END CONTENT AREA  -->
 
+		{{-- <button id="bt">data</button>
+		<input type="text" name="" id="tt"> --}}
 	<script type="text/javascript">
 		/* global $ */
 		$(document).ready(function() {
@@ -450,6 +565,7 @@
 			var i=0;
 			var opId;
 			var called = 0;
+			var calledC = 0;
 
  
 			$flowchart.flowchart({
@@ -461,11 +577,6 @@
 					});
 
 					opId = operatorId;
-					/* $('#btn-add').click(function(){
-						var nomA=$('#nomA').val();
-						$('#test'+opId).val(nomA);
-						$("#addAction").modal("hide");
-					}); */
 					i++;
 					if(i==2){
 						$('#nomAct').val('');
@@ -476,9 +587,56 @@
 						  && !$flowchart.flowchart('getOperatorTitle', opId).includes("Fin")
 						  && !$flowchart.flowchart('getOperatorTitle', opId).includes("Début")
 						  && !$flowchart.flowchart('getOperatorTitle', opId).includes("Condition"))	
+						  {
+							$('#date_limiteAct').val($('#date_limiteA'+opId).val() ) 
+							$('#date_rappelAct').val($('#date_rappelA'+opId).val() ) 
+							$('#exampleFormControlTextarea1').val($('#directiveA'+opId).val() ) 
+							var prt = $('#prioriteA'+opId).val()
+							
+							switch(prt) {
+								case 'Faible':
+									$("input[name=custom-radio-5-priorite][value='Faible']").prop("checked",true);
+									break;
+								case 'Moyenne':
+									$("input[name=custom-radio-5-priorite][value='Moyenne']").prop("checked",true);
+									break;
+								default:
+									$("input[name=custom-radio-5-priorite][value='Haute']").prop("checked",true);
+							}
 							$("#addAction").modal("show");
+						  }
 						else if($flowchart.flowchart('getOperatorTitle', opId).includes("Email"))
 							$("#sendEmail").modal("show");
+						else if($flowchart.flowchart('getOperatorTitle', opId).includes("Condition"))
+						{
+							var cc= $flowchart.flowchart('getData');
+							var linksF = cc.links
+							var cmb=0;
+							$('#mySelect').empty();
+							$('#mySelect').append('<option value="" disabled selected>choisissez une tâche</option>');
+							 $.each( linksF, function( key, value ) { //liste predecesseur
+								 if(value.toOperator == opId)
+									if($('#typeA'+value.fromOperator).val() == "Approbation")
+									{
+										cmb++;
+										$('#mySelect').append($('<option>', { 
+											value: value.fromOperator,
+											text : $flowchart.flowchart('getOperatorTitle', value.fromOperator)
+										}));
+										$('#mySelect').selectpicker('refresh');
+									}
+							}); 
+
+							if(cmb>0)
+								$('#customRadioInline2').removeAttr("disabled")
+							else
+							{
+								$("#customRadioInline2"). prop("checked", false);
+								$("#customRadioInline2").prop('disabled', true);
+							}
+								
+							$("#modalCondition").modal("show");
+						}
 						i=0;
 					}
 					$operatorProperties.show();
@@ -538,10 +696,10 @@
 
 			//type act -version-
 			$('input[type=radio][name=custom-radio-1-version]').change(function() {
-				if (this.value == 'Avec') {
+				if (this.value == '1') {
 					$('#versionA'+opId).val(this.value);
 				}
-				else if (this.value == 'Sans') {
+				else if (this.value == '0') {
 					$('#versionA'+opId).val(this.value);
 				}
 			});
@@ -558,7 +716,6 @@
 
 			//type act -priorite-
 			$('input[type=radio][name=custom-radio-5-priorite]').change(function() {
-				alert(this.value)
 				if (this.value == 'Faible') {
 					$('#prioriteA'+opId).val(this.value);
 				}
@@ -569,9 +726,13 @@
 					$('#prioriteA'+opId).val(this.value);
 				}
 			});
+					 $('#bt').click(function(){
+						var data = $flowchart.flowchart('getData');
+						var data1 = JSON.stringify(data, null, 2);
+						$('#tt').val(data1)
+					}); 
 
-			$('#btn-add').click(function() {
-				$("#addAction").modal("hide");
+			$('.vld').click(function() {
 				$('#nomA'+opId).val($('#nomAct').val());
 				$('#directiveA'+opId).val($('#exampleFormControlTextarea1').val());
 				$('#date_limiteA'+opId).val($('#date_limiteAct').val());
@@ -606,6 +767,11 @@
 				$('#destinataireIA'+opId).val($('#destE').val());				
 			});
 
+			$('#btn-add-approbation').click(function() {
+				$('#Tappro'+opId).val($('#mySelect').val());
+				$("#modalChoice").modal("hide");
+			});
+
 			$("#form-addWF").submit(function(e){
 				e.preventDefault();
 				var data = $('#form-addWF').serialize(); 
@@ -628,9 +794,33 @@
                 }); 
 			});
 
+			ajax_recaller_formC = function(formsC){
+			/*	$.ajax({
+					type: "POST",
+					data: formsC[calledC].serialize(),                             // to submit fields at once
+					success: function(data) {
+						calledC++;                                                                 // this will serve as a key
+						
+						if(calledC < formsC.length) {
+							ajax_recaller_formC(formsC);                                            // call the ajax function again
+						} 
+						else {
+							calledC=0;
+							$("#exampleModalCenter").modal("hide");
+							var data = $flowchart.flowchart('getData');
+							var data1 = JSON.stringify(data, null, 2);
+							$('#getData').val(data1);
+							$('#formData').submit();
+						}
+					
+					}
+				
+				});*/alert(formsC)
+				console.log(formsC)
+				
+			}
+
 			ajax_recaller = function(forms){
-				var id = forms[called].attr("id").substring(10);
-				alert("id "+id)
 				$.ajax({
 					type: "POST",
 					data: forms[called].serialize(),                             // to submit fields at once
@@ -642,11 +832,20 @@
 						} 
 						else {
 							called=0;
-							$("#exampleModalCenter").modal("hide");
+							/*$("#exampleModalCenter").modal("hide");
 							var data = $flowchart.flowchart('getData');
 							var data1 = JSON.stringify(data, null, 2);
 							$('#getData').val(data1);
-							$('#formData').submit();
+							$('#formData').submit();*/
+							alert("fini")
+							var formsC = new Array();
+							var i=0;
+							$(".Condform").each(function(){
+								formsC[i] = $(this);
+								i++;
+							});
+							$(".Condform").attr('action','/admin/cond');
+							ajax_recaller_formC(formsC);
 						}
 					
 					}
@@ -676,7 +875,7 @@
                     success:function(data){
 						var text ='{!! csrf_field() !!}';
 						$(text).insertBefore( $( ".inpt" ) );
-						$("#monform").attr('action','/admin/test');
+						$(".monform").attr('action','/admin/test');
 						//$("#formAction").attr('action','/admin/test');
 						
 						$('.inptwf').val(data.workflow.idWf);
@@ -684,6 +883,24 @@
 						ajax_recaller(forms);
                     }
                 });   
+			});
+
+			//conditionModal
+			$('#modalCondition').on('hidden.bs.modal',function(){
+                $("#customRadioInline1"). prop("checked", false);
+                $("#customRadioInline2"). prop("checked", false);
+			});
+			
+			//type act -approbation-
+			$('input[type=radio][name=customRadioInline1]').change(function() {
+				if (this.value == 'appro') {
+					$("#modalCondition").modal("hide");
+					$('#modalChoice').modal('show');
+				}
+				else if (this.value == 'metas') {
+					$("#modalCondition").modal("hide");
+					$('#modalMetas').modal('show');
+				}
 			});
 
 			//-----------------------------------------
@@ -897,6 +1114,7 @@
 	<script src="{{asset('plugins/editors/quill/quill.js')}}"></script>
     <script src="{{asset('plugins/editors/quill/custom-quill.js')}}"></script>
 	<script src="{{asset('plugins/notification/snackbar/snackbar.min.js')}}"></script>
+	<script src="{{asset('plugins/jquery-step/jquery.steps.min.js')}}"></script>
 	<script>
 		$('.bottom-right').click(function() {
             Snackbar.show({
@@ -909,7 +1127,15 @@
                 text: 'Ce type de document a déja un workflow.',
                 pos: 'bottom-right'
             });
-        });
+		});
+		//wizard
+		$("#circle-basic").steps({
+			headerTag: "h3",
+			bodyTag: "section",
+			transitionEffect: "slideLeft",
+			autoFocus: true,
+			cssClass: 'circle wizard'
+		});
 	</script>
 
 	<script>

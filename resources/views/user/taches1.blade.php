@@ -25,8 +25,29 @@
 <script>
     $(document).ready(function () {
 
+        new dynamicBadgeNotification('allList');
+        new dynamicBadgeNotification('completedList');
+        new dynamicBadgeNotification('importantList');
         var $el = $('.all-list').fadeIn(); 
         $('#ct > div').not($el).hide();
+        var $btns = $('.list-actions').click(function() {
+            
+            if (this.id == 'all-list') {
+                var $el = $('.' + this.id).fadeIn();
+                $('#ct > div').not($el).hide();
+            } else if (this.id == 'todo-task-done') {
+                var $el = $('.' + this.id).fadeIn();
+                $('#ct > div').not($el).hide();
+            } else if (this.id == 'todo-task-trash') {
+                var $el = $('.' + this.id).fadeIn();
+                $('#ct > div').not($el).hide();
+            }else {
+                var $el = $('.' + this.id).fadeIn();
+                $('#ct > div').not($el).hide();
+            }
+            $btns.removeClass('active');
+            $(this).addClass('active');  
+        })
 
         $(".submitF").click(function() { 
 
@@ -45,17 +66,16 @@
                 processData: false,
                 contentType : false,
                 success:function(data){
+                    console.log(data)
                     $('#tache'+id).attr("class","todo-item todo-task-done")
                     $(".todo-item").parents('.todo-item').addClass('todo-task-done');
                     new dynamicBadgeNotification('completedList')
                     new dynamicBadgeNotification('allList');
+                    $('#exampleModal'+data['idT']).modal('hide');
                 }
             });
         });
 
-        $("#customFile").change(function() { 
-        alert($('#customFile').val())
-            }); 
         
             /* if($('#basicFlatpickr').length > 0){
                 var f1 = flatpickr(document.getElementById('basicFlatpickr'));
@@ -89,7 +109,6 @@
         });
         $("#exampleModal").on('show.bs.modal', function(event) {
                 var b = $(event.relatedTarget).data('id');
-                alert(b)
         });
         /* $('#task').click(function(){
             $('#taskModal').modal('show');
@@ -138,18 +157,15 @@
                                 <div class="col-md-12 col-sm-12 col-12 mt-4 pl-0">
                                     <ul class="nav nav-pills d-block" id="pills-tab" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link list-actions active" id="all-list" data-toggle="pill" href="#pills-inbox" role="tab" aria-selected="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg> En cours <span class="todo-badge badge"></span></a>
+                                            <a class="nav-link list-actions active" id="all-list" data-toggle="pill" href="#pills-inbox" role="tab" aria-selected="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3" y2="6"></line><line x1="3" y1="12" x2="3" y2="12"></line><line x1="3" y1="18" x2="3" y2="18"></line></svg> Mes tâches <span class="todo-badge badge"></span></a>
                                         </li> 
-                                        <li class="nav-item">
-                                            <a class="nav-link list-actions" id="todo-task-done" data-toggle="pill" href="#pills-sentmail" role="tab" aria-selected="false"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-thumbs-up"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg> 
-                                                Terminées <span class="todo-badge badge"></span></a>
-                                        </li>
                                         <li class="nav-item">
                                             <a class="nav-link list-actions" id="todo-task-important" data-toggle="pill" href="#pills-important" role="tab" aria-selected="false">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>Groupe <span class="todo-badge badge"></span></a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link list-actions" id="todo-task-trash" data-toggle="pill" href="#pills-trash" role="tab" aria-selected="false"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> Importantes</a>
+                                            <a class="nav-link list-actions" id="todo-task-done" data-toggle="pill" href="#pills-sentmail" role="tab" aria-selected="false"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-thumbs-up"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg> 
+                                                Terminées <span class="todo-badge badge"></span></a>
                                         </li>
                                     </ul>
                                 </div>
@@ -162,15 +178,6 @@
                         <div class="search">
                             <input type="text" class="form-control input-search" placeholder="Search Here...">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu mail-menu d-lg-none"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-                        </div>
-
-                        <div class="search row layout-px-spacing">
-                            <div class="col-9"></div>
-                            <div class="row filtre container col-3">
-                                <div class="fl"> <a class="aa btn-popover-primary mb-2 rounded" data-placement="top" id="iconefl1" href="#" role="button" data-toggle="popover" data-trigger="hover" data-content="Groupe"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="iconefl1 feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> </a> </div>                       
-                                <div class="fl"> <a class="aa" id="iconefl2" href="#" role="button" data-placement="top" data-toggle="popover" data-trigger="hover" data-content="Urgent"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="iconefl2 feather feather-bell"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg> </a> </div>                      
-                                <div class="fl"> <a class="aa " id="iconefl3" href="#" role="button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="iconefl3 feather feather-star fav-note"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></a></div>
-                            </div>
                         </div>
                 
                         <div class="todo-box">
@@ -235,6 +242,18 @@
                                                                             <div class=" col-md-12 mb-4">
                                                                             <b> Version(s) récente(s): </b>
                                                                             </div>
+                                                                            @if ($tache->versions_recentes())
+                                                                                @foreach ( $tache->versions_recentes() as $tv) 
+                                                                                <div class=" col-md-12">
+                                                                                    <div class=" media-body">
+                                                                                        <p class="file-name ">
+                                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                                                                            {{$tv->nomV}}
+                                                                                        </p>
+                                                                                    </div>
+                                                                                </div>
+                                                                                @endforeach
+                                                                            @endif
                                                                             {{-- @if(App\Tache::find($tache->idT)->versions_recentes())
                                                                                 @foreach ( App\Tache::find(6)->versions_recentes() as $tv) 
                                                                                 <div class=" col-md-12">
@@ -354,6 +373,7 @@
                                         </div>
                                     </div>
                                 @endforeach
+                                
                                 @foreach ($tachesT as $tacheT)
                                     <div id="tacheT{{$tacheT->idT}}" class="todo-item todo-task-done">
                                         <div class="todo-item-inner">
@@ -365,7 +385,7 @@
                                             </div>
 
                                             <div class="todo-content">
-                                                <h5 data-toggle="modal" id="taskT{{$tache->idT}}" data-id="{{$tacheT->idT}}" class="todo-heading" data-todoHeading="{{$tacheT->action->nomA}}">{{$tacheT->action->nomA}}</h5>
+                                                <h5 data-toggle="modal" id="taskT{{$tacheT->idT}}" data-id="{{$tacheT->idT}}" class="todo-heading" data-todoHeading="{{$tacheT->action->nomA}}">{{$tacheT->action->nomA}}</h5>
                                                 <p class="meta-date">{{$tacheT->created_at->format('d/m/Y')}}</p>
                                                 @if($tacheT->action->directiveA)
                                                 <p class="todo-text" data-todoHtml="<p>{{$tacheT->action->directiveA}}</p>" data-todoText='{"ops":[{"insert":"{{$tacheT->action->directiveA}}.\n"}]}'>{{$tacheT->action->directiveA}}.</p>
@@ -374,9 +394,50 @@
 
                                             <div class="priority-dropdown custom-dropdown-icon">
                                                 <div class="dropdown p-dropdown">
-                                                    @if ($tache->action->prioriteA == "Haute")
+                                                    @if ($tacheT->action->prioriteA == "Haute")
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="red" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-octagon"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12" y2="16"></line></svg>
-                                                    @elseif($tache->action->prioriteA == "Faible")
+                                                    @elseif($tacheT->action->prioriteA == "Faible")
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="blue" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-octagon"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12" y2="16"></line></svg>
+                                                    @else
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="orange" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-octagon"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12" y2="16"></line></svg>
+                                                    @endif
+                                                </div>
+                                            </div>
+
+                                            <div class="action-dropdown custom-dropdown-icon">
+                                                <div class="dropdown">
+                                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink-2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                @endforeach
+
+                                @foreach ($tachesG as $tacheT)
+                                    <div id="tacheT{{$tacheT->idT}}" class="todo-item todo-task-important">
+                                        <div class="todo-item-inner">
+
+                                            <div class="n-chk text-center">
+                                                <label class="new-control new-checkbox checkbox-primary">
+                                                    <input type="checkbox" class="new-control-input inbox-chkbox">
+                                                </label>
+                                            </div>
+
+                                            <div class="todo-content">
+                                                <h5 data-toggle="modal" id="taskT{{$tacheT->idT}}" data-id="{{$tacheT->idT}}" class="todo-heading" data-todoHeading="{{$tacheT->action->nomA}}">{{$tacheT->action->nomA}}</h5>
+                                                <p class="meta-date">{{$tacheT->created_at->format('d/m/Y')}}</p>
+                                                @if($tacheT->action->directiveA)
+                                                <p class="todo-text" data-todoHtml="<p>{{$tacheT->action->directiveA}}</p>" data-todoText='{"ops":[{"insert":"{{$tacheT->action->directiveA}}.\n"}]}'>{{$tacheT->action->directiveA}}.</p>
+                                                @endif
+                                            </div>
+
+                                            <div class="priority-dropdown custom-dropdown-icon">
+                                                <div class="dropdown p-dropdown">
+                                                    @if ($tacheT->action->prioriteA == "Haute")
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="red" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-octagon"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12" y2="16"></line></svg>
+                                                    @elseif($tacheT->action->prioriteA == "Faible")
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="blue" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-octagon"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12" y2="16"></line></svg>
                                                     @else
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="orange" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-octagon"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12" y2="16"></line></svg>

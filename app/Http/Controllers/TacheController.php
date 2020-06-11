@@ -18,7 +18,7 @@ class TacheController extends Controller
      */
 
 
-    public function index()
+    public function index1()
     {
         $id = Auth::user()->id;
         $user = User::find($id);
@@ -58,6 +58,23 @@ class TacheController extends Controller
             $a->taches->where('t_idD',$mondoc->idD); */
 
         return view('user.taches1',['taches' => $tachesEnCours, 'tachesT' => $tachesTerminées, 'tachesG' => $tachesGroupe]);
+    }
+
+    public function index()
+    {
+        $id = Auth::user()->id;
+        $user = User::find($id);
+        $groupes = $user->groupes->unique()->pluck('idG'); 
+
+        $actions = $user->actions->pluck('idA');
+        $action_grp=Action::whereIn('a_idG',$groupes)->pluck('idA');
+        
+        $encours = Tache::whereIn('t_idA',$actions)->where('etatT',1)->get();
+        $terminées = Tache::whereIn('t_idA',$actions)->where('etatT',0)->get();
+        $Tgroupes = Tache::whereIn('t_idA',$action_grp)->where('etatT',1)->get();
+        
+        return view('user.taches1',['taches' => $encours, 'tachesT' => $terminées, 'tachesG' => $Tgroupes ]);
+
     }
 
     /**

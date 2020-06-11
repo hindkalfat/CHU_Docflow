@@ -71,8 +71,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/admin/test','WfController@index');
         Route::post('/admin/addWf','WfController@store');
         Route::post('/admin/test','WfController@addAction');
+        Route::post('/admin/cond','WfController@addCond');
         Route::post('/admin/unique','WfController@checkUniqueWf');
         Route::post('/admin/successeurs','WfController@successeurs');
+        Route::get('my-demo-mail','Controller@myDemoMail');
 
     });
 

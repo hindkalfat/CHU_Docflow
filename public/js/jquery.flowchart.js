@@ -470,6 +470,8 @@ jQuery(function ($) {
                     var color= this.setLinkMainColor(linkId,'green');
                     group.appendChild(textOUI);
                     linkData.internal.els.text = textOUI;
+                    $("#Toui"+fromOperatorId).val(toOperatorId)
+                    $("#Ttoui"+fromOperatorId).val( linkData.toOperatorType)
                 }
                     
                 else
@@ -478,6 +480,8 @@ jQuery(function ($) {
                         var color= this.setLinkMainColor(linkId,'green');
                         group.appendChild(textOUI);
                         linkData.internal.els.text = textOUI;
+                        $("#Toui"+fromOperatorId).val(toOperatorId)
+                        $("#Ttoui"+fromOperatorId).val( linkData.toOperatorType)
                     }
                         
                     else
@@ -485,6 +489,8 @@ jQuery(function ($) {
                         var color= this.setLinkMainColor(linkId,'red');  
                         group.appendChild(textNON);
                         linkData.internal.els.text = textNON;
+                        $("#Tnon"+fromOperatorId).val(toOperatorId)
+                        $("#Ttnon"+fromOperatorId).val( linkData.toOperatorType)
                     }
                          
             else
@@ -629,6 +635,17 @@ jQuery(function ($) {
                                     '<input type="hidden" name="idoperator" value="'+cpt+'" id="idoperator'+cpt+'"/>'+
                                 '</form>');
 
+            var $formCondition = $( ' <form class="Condform" id="formCondition'+cpt+'" method="post">'+
+                                        '<input type="hidden" class="inpt"/>'+
+                                        '<input type="text" name="typeC" value="condApp" id="typeC'+cpt+'"/>'+
+                                        '<input type="text" name="Tappro" id="Tappro'+cpt+'"/>'+
+                                        '<input type="text" name="Toui" id="Toui'+cpt+'"/>'+
+                                        '<input type="text" name="Ttoui" id="Ttoui'+cpt+'"/>'+
+                                        '<input type="text" name="Tnon" id="Tnon'+cpt+'"/>'+
+                                        '<input type="text" name="Ttnon" id="Ttnon'+cpt+'"/>'+
+                                        '<input type="hidden" name="a_idW" class="inptwf" value="" id="a_idW'+cpt+'"/>'+
+                                    '</form>');
+
             var $form1 = $('<input type="hidden" name="nblink" value="0" id="nblink'+cpt+'"/>'+
                             '<input type="hidden" name="idop" value="'+cpt+'" id="idop'+cpt+'"/>');
 
@@ -647,6 +664,8 @@ jQuery(function ($) {
                 $operator.append($form);
             else if(indice=="email")
                 $operator.append($formEmail);
+            else if(indice=="condition")
+                $operator.append($formCondition);
 
             var $operator_body = $('<div class="flowchart-operator-body"></div>');
             $operator_body.html(infos.body);

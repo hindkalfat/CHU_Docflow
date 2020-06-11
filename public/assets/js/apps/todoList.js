@@ -224,20 +224,7 @@ function todoItem() {
     $('#todoShowListItem').modal('show');
   });
 }
-var $btns = $('.list-actions').click(function() {
-  if (this.id == 'all-list') {
-    var $el = $('.' + this.id).fadeIn();
-    $('#ct > div').not($el).hide();
-  } else if (this.id == 'todo-task-trash') {
-    var $el = $('.' + this.id).fadeIn();
-    $('#ct > div').not($el).hide();
-  } else {
-    var $el = $('.' + this.id).fadeIn();
-    $('#ct > div').not($el).hide();
-  }
-  $btns.removeClass('active');
-  $(this).addClass('active');  
-})
+//
 
 checkCheckbox();
 deleteDropdown();

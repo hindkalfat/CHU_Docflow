@@ -8,6 +8,7 @@ use App\Notifications\NewTask;
 use Illuminate\Notifications\DatabaseNotification;
 use App\Document;
 use App\User;
+use App\Groupe;
 use App\Metadonnee;
 use App\TypeDoc;
 use App\Version;
@@ -15,10 +16,11 @@ use App\Successeur;
 use App\Action;
 use App\Tache;
 use App\UserTache;
+use App\Mail\SendMail;
 use File;
 use Auth;
 use Notification;
-
+use Mail;
 class DocController extends Controller
 {
     /**
@@ -161,40 +163,70 @@ class DocController extends Controller
 
         foreach ($actionsS as $actionS ) {
             $action = Action::find($actionS);
-            $action->couranteA = 1;
-            $action->save();
 
-            $tache = new Tache;
-            $tache->t_idA = $action->idA;
-            $tache->t_idD = $id;
-            switch ($action->opt_limiteA) {
-                case 'j':
-                    $a = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$action->date_limiteA.' days'));
-                    break;
-                case 'h':
-                    $b = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$action->date_limiteA.' hours'));
-                    break;
-                case 'm':
-                    $c = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$action->date_limiteA.' minutes'));
-                    break;
-            } 
-            switch ($action->opt_rappelA) {
-                case 'j':
-                    $tache->date_rappelT = Date($a, strtotime('-'.$action->date_rappelA.' days')) ;
-                    break;
-                case 'h':
-                    $tache->date_rappelT = Date($b, strtotime('-'.$action->date_rappelA.' hours')) ;
-                    break;
-                case 'm':
-                    $tache->date_rappelT = Date($c, strtotime('-'.$action->date_rappelA.' minutes'));
-                    break;
-            } 
-            $tache->save();
-            if($action->a_idU)
-                $user = User::find($action->a_idU);
-            else if($action->a_idG)
-                $user = Groupe::find($action->a_idG);//foreach
-            Notification::send($user, new NewTask(Action::find($action->idA)));
+            if($action->typeA == "Email")
+            {
+                $myEmail = $action->destinataireIA;
+   
+                $details = [
+                    'title' => $action->objetA,
+                    'body' => $action->messageA
+                ];
+        
+               // Mail::to($myEmail)->send(new SendMail($details));
+                $data =  array('message' => $action->messageA);
+                $obj = $action->objetA;
+                Mail::send('emails.sendMail', $data, function($message) use ($myEmail,$obj) {
+                    $message->to($myEmail, 'A ')
+                            ->subject($obj);
+                    $message->from('chudocflow@gmail.com','CHUDocflow');
+                  });
+
+            }
+            else
+            {
+                $tache = new Tache;
+                $tache->t_idA = $action->idA;
+                $tache->t_idD = $id;
+                switch ($action->opt_limiteA) {
+                    case 'j':
+                        $a = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$action->date_limiteA.' days'));
+                        break;
+                    case 'h':
+                        $b = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$action->date_limiteA.' hours'));
+                        break;
+                    case 'm':
+                        $c = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$action->date_limiteA.' minutes'));
+                        break;
+                } 
+                switch ($action->opt_rappelA) {
+                    case 'j':
+                        $tache->date_rappelT = Date($a, strtotime('-'.$action->date_rappelA.' days')) ;
+                        break;
+                    case 'h':
+                        $tache->date_rappelT = Date($b, strtotime('-'.$action->date_rappelA.' hours')) ;
+                        break;
+                    case 'm':
+                        $tache->date_rappelT = Date($c, strtotime('-'.$action->date_rappelA.' minutes'));
+                        break;
+                } 
+                $tache->save();
+
+                if($action->a_idU)
+                {
+                    $user = User::find($action->a_idU);
+                    Notification::send($user, new NewTask(Action::find($action->idA)));
+                }
+                else if($action->a_idG) //tester
+                {
+                    $groupe = Groupe::find($action->a_idG);
+                    foreach ($groupe->users as $user) {
+                        Notification::send($user, new NewTask(Action::find($action->idA)));
+                    }
+                }
+                
+            }
+                
             
             return response()->json(['success' => "created", 'document' => $document, 'version' => $version]);
         }
@@ -202,51 +234,89 @@ class DocController extends Controller
 
     }
 
-    public function nextActions($id,$doc) //$id
+    public function nextActions($id,$doc,$idT) 
     {
-        $action = Action::find($id); //tache finie 
-        $action->couranteA = 0;
-        $action->save();
-        $actionsS = DB::table('successeurs')
-                            ->join('actions','successeurs._idTo','=','actions.idA')//Successeur::
-                            ->where('_idFrom','=',$id)
-                            ->where('couranteA', '=', 0)
-                            ->pluck('_idTo'); 
+        $action = Action::find($id); 
+         
+        $actionsS = Successeur::where('_idFrom','=',$id) 
+                                ->pluck('_idTo'); 
 
-        //return $predecesseurs = Successeur::where('_idTo','=',$actionsS[0])->get(); //all cour=0
-                            
-        foreach ($actionsS as $actionS ) {//avec predecesseurs
-            $action = Action::find($actionS);
-            $action->couranteA = 1;
-            $action->save();
+        foreach ($actionsS as $actionS) {
+            
+            $act = Action::find($actionS);
 
-            $tache = new Tache;
-            $tache->t_idA = $action->idA;
-            $tache->t_idD = $doc;
-            switch ($action->opt_limiteA) {
-                case 'j':
-                    $a = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$action->date_limiteA.' days'));
-                    break;
-                case 'h':
-                    $a = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$action->date_limiteA.' hours'));
-                    break;
-                case 'm':
-                    $a = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$action->date_limiteA.' minutes'));
-                    break;
-            } 
-            switch ($action->opt_rappelA) {
-                case 'j':
-                    $tache->date_rappelT = Date($a, strtotime('-'.$action->date_rappelA.' days')) ;
-                    break;
-                case 'h':
-                    $tache->date_rappelT = Date($a, strtotime('-'.$action->date_rappelA.' hours')) ;
-                    break;
-                case 'm':
-                    $tache->date_rappelT = Date($a, strtotime('-'.$action->date_rappelA.' minutes'));
-                    break;
-            } 
-            $tache->save();
+            $predecesseurs = Successeur::join('taches','successeurs._idFrom','=','taches.t_idA')
+                                        ->where('_idTo','=',$actionS)
+                                        ->where('etatT', '=', 1)
+                                        ->pluck('_idFrom');
+
+            if(count($predecesseurs)==0)
+            {
+                if($act->typeA == "Email")
+                {
+                    $myEmail = $act->destinataireIA;
+    
+                    $details = [
+                        'title' => $act->objetA,
+                        'body' => $act->messageA
+                    ];
+            
+                // Mail::to($myEmail)->send(new SendMail($details));
+                    $data =  array('message' => $act->messageA);
+                    $obj = $act->objetA;
+                    Mail::send('emails.sendMail', $data, function($message) use ($myEmail,$obj) {
+                        $message->to($myEmail, 'A ')
+                                ->subject($obj);
+                        $message->from('chudocflow@gmail.com','CHUDocflow');
+                    });
+
+                }
+                else
+                {
+                    $tache = new Tache;
+                    $tache->t_idA = $actionS;
+                    $tache->t_idD = $doc;
+                    switch ($action->opt_limiteA) {
+                        case 'j':
+                            $a = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$action->date_limiteA.' days'));
+                            break;
+                        case 'h':
+                            $a = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$action->date_limiteA.' hours'));
+                            break;
+                        case 'm':
+                            $a = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$action->date_limiteA.' minutes'));
+                            break;
+                    } 
+                    switch ($action->opt_rappelA) {
+                        case 'j':
+                            $tache->date_rappelT = Date($a, strtotime('-'.$action->date_rappelA.' days')) ;
+                            break;
+                        case 'h':
+                            $tache->date_rappelT = Date($a, strtotime('-'.$action->date_rappelA.' hours')) ;
+                            break;
+                        case 'm':
+                            $tache->date_rappelT = Date($a, strtotime('-'.$action->date_rappelA.' minutes'));
+                            break;
+                    } 
+                    $tache->save();
+    
+                    if($act->a_idU)
+                    {
+                        $user = User::find($act->a_idU);
+                        Notification::send($user, new NewTask(Action::find($act->idA)));
+                    }
+                    else if($act->a_idG) //tester
+                    {
+                        $groupe = Groupe::find($act->a_idG);
+                        foreach ($groupe->users as $user) {
+                            Notification::send($user, new NewTask(Action::find($act->idA)));
+                        }
+                    }
+
+                }
+            }
         }
+        return response()->json(['idT' => $idT]);
 
     }
 
@@ -261,23 +331,27 @@ class DocController extends Controller
         $user_tache->_idT = $tache->idT;
         $user_tache->_idU = $tache->action->user->id;
 
-        $version = new Version;
-        $document = $tache->document;
+        if($tache->action->versionA == 1)
+        {
+            $version = new Version;
+            $document = $tache->document;
 
-        $lastVersion = Version::where('v_idD',$tache->document->idD)->max('numV');
-        $version->numV = $lastVersion + 1;
+            $lastVersion = Version::where('v_idD',$tache->document->idD)->max('numV');
+            $version->numV = $lastVersion + 1;
 
-        $File = $request->file('versionTache');  
-        $version->nomV = $File->getClientOriginalName();
-        $fileName = uniqid().$File->getClientOriginalName();
-        $File->move(public_path('pdf'), $fileName);
-        $version->doc = $fileName;
-        $version->v_idD = $document->idD;
-        $version->save();
+            $File = $request->file('versionTache');  
+            $version->nomV = $File->getClientOriginalName();
+            $fileName = uniqid().$File->getClientOriginalName();
+            $File->move(public_path('pdf'), $fileName);
+            $version->doc = $fileName;
+            $version->v_idD = $document->idD;
+            $version->save();
 
-        $user_tache->_idV = $version->idV;
+            $user_tache->_idV = $version->idV;
+        }
+        
         $user_tache->save();
 
-        return $this->nextActions($tache->action->idA,$document->idD);
+        return $this->nextActions($tache->action->idA,$document->idD,$tache->idT);
     }
 }
