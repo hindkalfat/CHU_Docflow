@@ -43,7 +43,7 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/action', 'DocController@actions');
-Route::get('/nextActions/{id}/{doc}', 'DocController@nextActions');
+Route::get('/nextActions/{id}/{doc}/{idT}', 'DocController@nextActions');
 
 
 Route::group(['middleware' => ['auth']], function () {

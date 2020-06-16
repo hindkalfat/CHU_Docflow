@@ -16,6 +16,7 @@
     <link rel="stylesheet" type="text/css" href="{{asset('assets/css/forms/theme-checkbox-radio.css')}}">
     <link href="{{asset('assets/css/apps/contacts.css')}}" rel="stylesheet" type="text/css" />
 	<link rel="stylesheet" href="{{asset('https://use.fontawesome.com/releases/v5.13.0/css/all.css')}}" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">
+    <link href="{{asset('plugins/flatpickr/flatpickr.css')}}" rel="stylesheet" type="text/css">
 
 	<!-- jQuery & jQuery UI are required -->
 	<script src="{{asset('https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')}}"></script>
@@ -90,6 +91,7 @@
 	<!--  BEGIN MAIN CONTAINER  -->
 	<button hidden id="notif" class="btn btn-dark bottom-right">Bottom right</button>
 	<button hidden id="notifUnique" class="btn btn-dark bottom-right-unique">Bottom right</button>
+	<button hidden id="notifAction" class="btn btn-dark bottom-right-action">Bottom right</button>
     <div class="main-container sidebar-closed sbar-open" id="container">
 
         <div class="overlay"></div>
@@ -248,10 +250,10 @@
 												</select>
 											</div>
 											<div class="custom-file mb-4">
-												<select id="act_idG" name="responsableA" class="selectpicker" data-live-search="true" data-width="100%">
+												<select id="act_idG" name="groupeA" class="selectpicker" data-live-search="true" data-width="100%">
 													<option value="" disabled selected >Groupe</option>
 													@foreach ($groupes as $groupe)
-														<option value="{{$groupe->id}}"> {{$groupe->nomG}} </option>
+														<option value="{{$groupe->idG}}"> {{$groupe->nomG}} </option>
 													@endforeach
 												</select>
 											</div>
@@ -474,25 +476,17 @@
 						<div class="form-row mb-12">
 							<div class="form-group col-md-4">
 								<label for="inputCity">Métadonnée </label>
-								<select id="inputState" class="form-control" data-live-search="true">
-									<option selected>Choose...</option>
-									<option>meta1</option>
-									<option>meta2</option>
-									<option>meta3</option>
+								<select id="metasSelect" class="form-control" data-live-search="true">
 								</select>
 							</div>
 							<div class="form-group col-md-3">
 								<label for="inputState">Est</label>
-								<select id="inputState" class="form-control">
-									<option>égal à</option>
-									<option>supérieur à</option>
-									<option>inférieur à</option>
-									<option>contient</option>
+								<select id="opCompar" class="form-control" disabled>
 								</select>
 							</div>
-							<div class="form-group col-md-5">
+							<div id="metashow" class="form-group col-md-5">
 								<label for="inputZip">Valeur</label>
-								<input type="text" class="form-control" id="inputZip">
+								<input type="text" class="form-control" id="inputZip" disabled>
 							</div>
 							<a href="#" class="addinput row layout-top-spacing container">
 								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle mb-4"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
@@ -786,6 +780,15 @@
 							$('#typeDocform').val($('#typeDoc').val());
 							$('#nomWfform').val($('#nomWf').val());
 							$('#messageform').val($('#exampleFormControlTextarea').val());
+							$('#metasSelect').append('<option value="" disabled selected>Choisissez</option>');
+							$.each(data.metas, function (i, item) {
+								$('#metasSelect').append($('<option>', { 
+									value: item.idM,
+									text : item.libelleM 
+								}));
+								$('#metasSelect').append('<input type="hidden" id="typeMeta'+item.idM+'" value="'+item.typeM+'">');
+
+							});
 						}
 						else{
 							$('#notifUnique').click();
@@ -795,7 +798,7 @@
 			});
 
 			ajax_recaller_formC = function(formsC){
-			/*	$.ajax({
+				$.ajax({
 					type: "POST",
 					data: formsC[calledC].serialize(),                             // to submit fields at once
 					success: function(data) {
@@ -815,12 +818,12 @@
 					
 					}
 				
-				});*/alert(formsC)
-				console.log(formsC)
+				});
 				
 			}
 
 			ajax_recaller = function(forms){
+				console.log(forms)
 				$.ajax({
 					type: "POST",
 					data: forms[called].serialize(),                             // to submit fields at once
@@ -832,20 +835,25 @@
 						} 
 						else {
 							called=0;
-							/*$("#exampleModalCenter").modal("hide");
-							var data = $flowchart.flowchart('getData');
-							var data1 = JSON.stringify(data, null, 2);
-							$('#getData').val(data1);
-							$('#formData').submit();*/
-							alert("fini")
-							var formsC = new Array();
-							var i=0;
-							$(".Condform").each(function(){
-								formsC[i] = $(this);
-								i++;
-							});
-							$(".Condform").attr('action','/admin/cond');
-							ajax_recaller_formC(formsC);
+							
+							if($(".Condform").length)
+							{
+								var formsC = new Array();
+								var i=0;
+								$(".Condform").each(function(){
+									formsC[i] = $(this);
+									i++;
+								});
+								$(".Condform").attr('action','/admin/test');
+								ajax_recaller_formC(formsC);
+							}else{
+								$("#exampleModalCenter").modal("hide");
+								var data = $flowchart.flowchart('getData');
+								var data1 = JSON.stringify(data, null, 2);
+								$('#getData').val(data1);
+								$('#formData').submit();
+							}
+							
 						}
 					
 					}
@@ -855,7 +863,10 @@
 			}
 
 			$('#saveWorkflow').click(function(){
-				$("#addWf").submit();
+				if($('.monform').length)
+					$("#addWf").submit();
+				else
+				$('#notifAction').click();
 			});
 
 			//add WF
@@ -900,6 +911,73 @@
 				else if (this.value == 'metas') {
 					$("#modalCondition").modal("hide");
 					$('#modalMetas').modal('show');
+				}
+			});
+
+			//metas condition
+			$('#metasSelect').change(function(){
+				var valS = this.value;
+				
+				var typeM = $('#typeMeta'+valS).val()
+				
+				$('#metashow').empty();
+				if(typeM == 'Date'){
+					$('#opCompar').removeAttr("disabled");
+					$('#opCompar').append($('<option>', {
+						value: 's',
+						text: 'supérieur à'
+					}));
+
+					$('#opCompar').append($('<option>', {
+						value: 's',
+						text: 'inférieur à'
+					}));
+
+					$('#opCompar').append($('<option>', {
+						value: 's',
+						text: 'égale à'
+					}));
+
+					$('#metashow').append(
+						'<label for="inputZip">Valeur</label>'+
+						'<input id="basicFlatpickr" value="2019-09-04" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">'
+					);
+					var f1 = flatpickr(document.getElementById('basicFlatpickr'));
+				}else if(typeM == 'Heure'){
+					$('#metashow').append(
+						'<div class="form-group col-md-6">'+
+							'<input id="timeFlatpickr" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">'+
+						'</div>'
+					);
+					var f4 = flatpickr(document.getElementById('timeFlatpickr'), {
+						enableTime: true,
+						noCalendar: true,
+						dateFormat: "H:i",
+						defaultDate: "00:00"
+					});
+				}else if(typeM == 'Numérique'){
+					$('#metashow').append(
+						
+						'<div class="form-group col-md-6">'+
+							'<input id="demo2" type="text" value="0" name="demo2" class="form-control">'+
+						'</div>'
+					);
+					$("input[name='demo2']").TouchSpin({
+						min: 0,
+						max: 1000000,
+						step: 0.1,
+						decimals: 2,
+						boostat: 5,
+						maxboostedstep: 10,
+						buttondown_class: "btn btn-outline-dark",
+						buttonup_class: "btn btn-outline-dark"
+					});
+				}else{
+					$('#metashow').append(
+						'<div class="form-group col-md-6">'+
+							'<input type="text" class="form-control" placeholder="...">'+
+						'</div>'
+					);
 				}
 			});
 
@@ -1115,6 +1193,8 @@
     <script src="{{asset('plugins/editors/quill/custom-quill.js')}}"></script>
 	<script src="{{asset('plugins/notification/snackbar/snackbar.min.js')}}"></script>
 	<script src="{{asset('plugins/jquery-step/jquery.steps.min.js')}}"></script>
+	<script src="{{asset('plugins/flatpickr/flatpickr.js')}}"></script>
+
 	<script>
 		$('.bottom-right').click(function() {
             Snackbar.show({
@@ -1125,6 +1205,12 @@
 		$('.bottom-right-unique').click(function() {
             Snackbar.show({
                 text: 'Ce type de document a déja un workflow.',
+                pos: 'bottom-right'
+            });
+		});
+		$('.bottom-right-action').click(function() {
+            Snackbar.show({
+                text: 'Le workflow doit avoir au moins une action.',
                 pos: 'bottom-right'
             });
 		});

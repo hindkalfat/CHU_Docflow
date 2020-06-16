@@ -13,7 +13,9 @@ use App\Metadonnee;
 use App\TypeDoc;
 use App\Version;
 use App\Successeur;
+use App\CondSuccesseur;
 use App\Action;
+use App\Condition;
 use App\Tache;
 use App\UserTache;
 use App\Mail\SendMail;
@@ -182,6 +184,8 @@ class DocController extends Controller
                     $message->from('chudocflow@gmail.com','CHUDocflow');
                   });
 
+                 static::nextActions($action->idA,$id,null);
+
             }
             else
             {
@@ -234,14 +238,27 @@ class DocController extends Controller
 
     }
 
-    public function nextActions($id,$doc,$idT) 
+    public static function nextActions($id,$doc,$idT) 
     {
         $action = Action::find($id); 
          
         $actionsS = Successeur::where('_idFrom','=',$id) 
-                                ->pluck('_idTo'); 
+                                ->pluck('_idTo');
+        $conditionsS = CondSuccesseur::where('_idFrom','=',$id) 
+                                ->pluck('_idTo');
 
-        foreach ($actionsS as $actionS) {
+                               // return ["1"=>$actionsS , "2"=>$conditionsS];
+        foreach ($conditionsS as $conditionS) {
+            $cond = Condition::find($conditionS);
+            if($cond->typeC == "condApp")
+            {
+                $actApp = Action::find($cond->c_idA);
+                $tacheApp = $actApp->taches->where('t_idD',$doc)->orderBy('created_at', 'desc')->first();;
+                return $tacheApp[0]->Etat_avcT;
+            }
+        }
+
+        /* foreach ($actionsS as $actionS) {
             
             $act = Action::find($actionS);
 
@@ -249,6 +266,7 @@ class DocController extends Controller
                                         ->where('_idTo','=',$actionS)
                                         ->where('etatT', '=', 1)
                                         ->pluck('_idFrom');
+            return $predecesseurs;
 
             if(count($predecesseurs)==0)
             {
@@ -261,7 +279,7 @@ class DocController extends Controller
                         'body' => $act->messageA
                     ];
             
-                // Mail::to($myEmail)->send(new SendMail($details));
+                    // Mail::to($myEmail)->send(new SendMail($details));
                     $data =  array('message' => $act->messageA);
                     $obj = $act->objetA;
                     Mail::send('emails.sendMail', $data, function($message) use ($myEmail,$obj) {
@@ -269,6 +287,8 @@ class DocController extends Controller
                                 ->subject($obj);
                         $message->from('chudocflow@gmail.com','CHUDocflow');
                     });
+
+                    static::nextActions($act->idA,$doc);
 
                 }
                 else
@@ -315,9 +335,10 @@ class DocController extends Controller
 
                 }
             }
-        }
-        return response()->json(['idT' => $idT]);
+        } */
 
+        if($idT)
+            return response()->json(['idT' => $idT]);
     }
 
     public function effectuerTache(Request $request)

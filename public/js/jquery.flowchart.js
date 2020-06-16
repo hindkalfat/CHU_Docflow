@@ -637,13 +637,14 @@ jQuery(function ($) {
 
             var $formCondition = $( ' <form class="Condform" id="formCondition'+cpt+'" method="post">'+
                                         '<input type="hidden" class="inpt"/>'+
-                                        '<input type="text" name="typeC" value="condApp" id="typeC'+cpt+'"/>'+
-                                        '<input type="text" name="Tappro" id="Tappro'+cpt+'"/>'+
-                                        '<input type="text" name="Toui" id="Toui'+cpt+'"/>'+
-                                        '<input type="text" name="Ttoui" id="Ttoui'+cpt+'"/>'+
-                                        '<input type="text" name="Tnon" id="Tnon'+cpt+'"/>'+
-                                        '<input type="text" name="Ttnon" id="Ttnon'+cpt+'"/>'+
+                                        '<input type="hidden" name="typeC" value="condApp" id="typeC'+cpt+'"/>'+
+                                        '<input type="hidden" name="Tappro" id="Tappro'+cpt+'"/>'+
+                                        '<input type="hidden" name="Toui" id="Toui'+cpt+'"/>'+
+                                        '<input type="hidden" name="Ttoui" id="Ttoui'+cpt+'"/>'+
+                                        '<input type="hidden" name="Tnon" id="Tnon'+cpt+'"/>'+
+                                        '<input type="hidden" name="Ttnon" id="Ttnon'+cpt+'"/>'+
                                         '<input type="hidden" name="a_idW" class="inptwf" value="" id="a_idW'+cpt+'"/>'+
+                                        '<input type="hidden" name="idoperator" value="'+cpt+'" id="idoperator'+cpt+'"/>'+
                                     '</form>');
 
             var $form1 = $('<input type="hidden" name="nblink" value="0" id="nblink'+cpt+'"/>'+
