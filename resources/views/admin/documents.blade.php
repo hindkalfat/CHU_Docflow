@@ -275,7 +275,7 @@
                                         <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
                                             <div class="widget-content widget-content-area br-6">
                                                 
-                                                {{-- <select class="selectpicker mb-4" data-width="fit">
+                                                <select class="selectpicker mb-4" data-width="fit">
                                                     <option>Type document</option>
                                                     <option>Ketchup</option>
                                                     <option>Relish</option>
@@ -295,7 +295,7 @@
                                                             <input type="checkbox" checked>
                                                             <span class="slider"></span>
                                                         </label>
-                                                    </div> --}}
+                                                    </div>
                                                 
                                                 <div class="table-responsive mb-4 mt-4">
                                                     <table id="zero-config" class="table table-hover" style="width:100%">

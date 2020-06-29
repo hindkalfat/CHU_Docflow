@@ -8,6 +8,34 @@
     <script>
         $(document).ready(function () {
 
+            $("#deleteConformation").on('show.bs.modal', function(event) {
+                var a = $(event.relatedTarget).data('nom');
+                var b = $(event.relatedTarget).data('id');
+                var m = $(this);
+                m.find('#nomD').text(a);
+                m.find("#idD").val(b);
+            });
+
+            $("#dlt").on('click', function(event) {
+                event.preventDefault();
+                var table = $('#zero-config').DataTable();
+                var data = $('#deleteF').serialize(); 
+                $.ajax({
+                    type:'POST',
+                    data:data,
+                    url:'/user/delete/document',
+                    success:function(data){
+                       // $('#items'+data.id).remove().draw();
+                       table
+                  .row( $('#items'+data.id) )
+                  .remove()
+                  .draw();
+                        $('#deleteConformation').modal('hide');
+                    }
+                    }); 
+                
+            });
+
             $('#fadeupModal').on('hidden.bs.modal', function (e) {
                 $('#typeDoc').val("choisissez").change();;
                 $('#metashow').empty();
@@ -33,7 +61,7 @@
                                             '<span class="badge outline-badge-info">'+this.libelleM+
                                             '</span>'+
                                         '</div><br/>'+
-                                        '<input id="basicFlatpickr" value="2019-09-04" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">'+
+                                        '<input id="basicFlatpickr" name="'+this.idM+'" value="2019-09-04" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">'+
                                     '</div>'
                                 );
                                 var f1 = flatpickr(document.getElementById('basicFlatpickr'));
@@ -44,7 +72,7 @@
                                             '<span class="badge outline-badge-info">'+this.libelleM+
                                             '</span>'+
                                         '</div><br/>'+
-                                        '<input id="timeFlatpickr" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">'+
+                                        '<input id="timeFlatpickr" name="'+this.idM+'" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">'+
                                     '</div>'
                                 );
                                 var f4 = flatpickr(document.getElementById('timeFlatpickr'), {
@@ -61,10 +89,10 @@
                                             '<span class="badge outline-badge-info">'+this.libelleM+
                                             '</span>'+
                                         '</div><br/>'+
-                                        '<input id="demo2" type="text" value="0" name="demo2" class="form-control">'+
+                                        '<input id="demo2" name="'+this.idM+'" type="text" value="0" class="form-control">'+
                                     '</div>'
                                 );
-                                $("input[name='demo2']").TouchSpin({
+                                $("input[name='"+this.idM+"']").TouchSpin({
                                     min: 0,
                                     max: 1000000,
                                     step: 0.1,
@@ -81,7 +109,7 @@
                                             '<span class="badge outline-badge-info">'+this.libelleM+
                                             '</span>'+
                                         '</div><br/>'+
-                                        '<input id="listeEnum" type="file" class="form-control-file" id="exampleFormControlFile1" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">'+                                   
+                                        '<input id="listeEnum" name="'+this.idM+'" type="file" class="form-control-file" id="exampleFormControlFile1" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">'+                                   
                                     '</div>'
                                 );
                             }else{
@@ -91,7 +119,7 @@
                                             '<span class="badge outline-badge-info">'+this.libelleM+
                                             '</span>'+
                                         '</div><br/>'+
-                                        '<input type="text" class="form-control" placeholder="'+this.libelleM+'">'+
+                                        '<input type="text" name="'+this.idM+'" class="form-control" placeholder="'+this.libelleM+'">'+
                                     '</div>'
                                 );
                             }
@@ -118,7 +146,7 @@
                             processData: false,
                             contentType : false,
                             success:function(data){
-                                var dateC = new Date(data.document.created_at);
+                                /* var dateC = new Date(data.document.created_at);
                                 var dateU = new Date(data.document.updated_at);
                                 var datecreated_at = dateC.getDate() + "/" +(dateC.getMonth() + 1) + "/" + dateC.getFullYear();
                                 var dateupdated_at = dateU.getDate() + "/" +(dateU.getMonth() + 1) + "/" + dateU.getFullYear();
@@ -137,8 +165,9 @@
                                             '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" title="supprimer" class="feather feather-x-circle table-cancel"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>'+
                                         '</td>'+
                                     '</tr>'
-                                );
+                                ); */
                                 $('#fadeupModal').modal('hide');
+                                window.location = "/user/document/"+data.document.idD;
                             }
                         });  
                     }
@@ -156,7 +185,7 @@
                         processData: false,
                         contentType : false,
                         success:function(data){
-                            var dateC = new Date(data.document.created_at);
+                           /*  var dateC = new Date(data.document.created_at);
                             var dateU = new Date(data.document.updated_at);
                             var datecreated_at = dateC.getDate() + "/" +(dateC.getMonth() + 1) + "/" + dateC.getFullYear();
                             var dateupdated_at = dateU.getDate() + "/" +(dateU.getMonth() + 1) + "/" + dateU.getFullYear();
@@ -176,8 +205,9 @@
                                     '</td>'+
                                 '</tr>'
                             ).appendTo($('#bodyDoc'));
-                            $('.dataTables_empty').remove();
+                            $('.dataTables_empty').remove(); */
                             $('#fadeupModal').modal('hide');
+                            window.location = "/user/document/"+data.document.idD;
                         }
                     });
                 }
@@ -286,19 +316,21 @@
                             </thead>
                             <tbody id="bodyDoc">
                                 @foreach ($docs as $doc)
-                                   <tr>
+                                   <tr id="items{{$doc->idD}}">
                                         <td> {{$doc->nomD}} </td>
                                         <td> {{$doc->created_at->format('d/m/Y')}} </td>
                                         <td> {{$doc->updated_at->format('d/m/Y')}} </td>
                                         <td>  </td>
-                                        <td>  </td>
+                                        <td> {{$doc->versions->count()}} </td>
                                         <td>  </td>
                                         <td>
-                                            <a href=" {{url('user/document/'.$doc->idD)}} ">                                            
+                                            <a  href=" {{url('user/document/'.$doc->idD)}} ">                                            
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                                             </a>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" title="supprimer" class="feather feather-x-circle table-cancel"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                                            <a  href="#">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" title="supprimer" class="feather feather-x-circle table-cancel" data-toggle="modal" data-target="#deleteConformation" data-id="{{$doc->idD}}" data-nom="{{$doc->nomD}}"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                                            </a>
                                         </td>
                                     </tr> 
                                 @endforeach
@@ -316,6 +348,34 @@
                                 </tr>
                             </tfoot>
                         </table>
+                        <!-- Modal dlt doc -->
+
+                        <div class="modal fade" id="deleteConformation" tabindex="-1" role="dialog" aria-labelledby="deleteConformationLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content" id="deleteConformationLabel">
+                                    <div class="modal-header">
+                                        <div class="icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                        </div>
+                                        <h5 class="modal-title" id="exampleModalLabel">Suppression du document?</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p class="">Voulez vous vraiment supprimer le document: <b id="nomD"></b>?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn" data-dismiss="modal">Annuler</button>
+                                        <form id="deleteF">
+                                            {{ csrf_field() }}
+                                            <input name="idD" type="hidden" id="idD">
+                                            <button type="button" class="btn btn-danger dlt" id="dlt">Confirmer</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

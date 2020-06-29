@@ -17,4 +17,9 @@ class Metadonnee extends Model
     {
         return $this->belongsTo(TypeDoc::class,'m_idTd');
     }
+
+    public function actions()
+    {
+        return $this->belongsToMany(Action::class,'actions_metas', '_idM', '_idA');
+    }
 }

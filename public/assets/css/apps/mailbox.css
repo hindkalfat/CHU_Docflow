@@ -510,7 +510,7 @@
     font-weight: 500;
     font-size: 12px;
     min-width: 75px;
-    max-width: 80px;
+    max-width: 100px;
     text-align: right;
 }
 .mailbox-inbox .mail-item div.mail-item-heading .mail-item-inner .f-body .mail-title {
@@ -821,6 +821,7 @@
     margin-left: 10px;
     border-radius: 6px;
     border: 1px solid #d3d3d3;
+    width: 500px;
 }
 .compose-box .compose-content form .mail-to svg {
     align-self: center;

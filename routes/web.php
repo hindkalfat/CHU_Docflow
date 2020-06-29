@@ -44,9 +44,13 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/action', 'DocController@actions');
 Route::get('/nextActions/{id}/{doc}/{idT}', 'DocController@nextActions');
+Route::get('/mailbox', 'MailboxController@index');
+Route::post('/envoyer', 'MailboxController@envoyer');
 
 
 Route::group(['middleware' => ['auth']], function () {
+
+    Route::get('/profil','UserController@profil');
     
     /*******ADMIN****** */
     Route::group(['middleware' => ['admin']], function () {
@@ -84,6 +88,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/user/documents','DocController@index');
         Route::post('/user/documents','DocController@store');
         Route::get('/user/document/{id}','DocController@details');
+        Route::post('/user/delete/document','DocController@destroy');
         Route::post('/metas','DocController@metas');
 
         //tache

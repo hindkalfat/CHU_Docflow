@@ -18,6 +18,8 @@ use App\Action;
 use App\Condition;
 use App\Tache;
 use App\UserTache;
+use App\MetaDoc;
+use App\Workflow;
 use App\Mail\SendMail;
 use File;
 use Auth;
@@ -37,7 +39,8 @@ class DocController extends Controller
         $user = User::find($id);
         $docs = $user->documents;
 
-        $typesDoc = TypeDoc::all();
+        $workflow = Workflow::pluck('w_idTd');
+        $typesDoc = TypeDoc::wherein('idTD',$workflow)->get();
 
         return view('user.documents',['docs' => $docs], ['typesDoc' => $typesDoc]);
     }
@@ -62,6 +65,7 @@ class DocController extends Controller
     public function store(Request $request)
     {
         $document = new Document;
+        $typeD = TypeDoc::find($request->input('typeDoc'));
 
         $document->d_idTd = $request->input('typeDoc');
         $document->nomD = $request->input('nomD');
@@ -81,6 +85,21 @@ class DocController extends Controller
         $version->doc = $fileName;
         $version->v_idD = $document->idD;
         $version->save();
+
+        $metas = $typeD->metadonnees;
+
+        foreach ($metas as $meta ) {
+            $a = $meta->idM;
+            if ($request->input("".$a)) {
+                $metaDoc = new MetaDoc;
+                $metaDoc->_idM = $meta->idM;
+                $metaDoc->_idD = $document->idD;
+                $metaDoc->_idUT = null;
+                $metaDoc->valeur = $request->input("".$a);
+                $metaDoc->save();
+            }
+
+        }
 
         return $this->actions($document->idD,$document,$version);
     }
@@ -125,9 +144,12 @@ class DocController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $id = $request->idD;
+        $doc = Document::find($id);
+        $doc->delete();
+        return response()->json(['success' => "deleted", 'id' => $id]);;
     }
 
 
@@ -243,22 +265,37 @@ class DocController extends Controller
         $action = Action::find($id); 
          
         $actionsS = Successeur::where('_idFrom','=',$id) 
+                                ->whereNotNull('_idTo')
                                 ->pluck('_idTo');
         $conditionsS = CondSuccesseur::where('_idFrom','=',$id) 
                                 ->pluck('_idTo');
 
-                               // return ["1"=>$actionsS , "2"=>$conditionsS];
         foreach ($conditionsS as $conditionS) {
             $cond = Condition::find($conditionS);
             if($cond->typeC == "condApp")
             {
                 $actApp = Action::find($cond->c_idA);
-                $tacheApp = $actApp->taches->where('t_idD',$doc)->orderBy('created_at', 'desc')->first();;
-                return $tacheApp[0]->Etat_avcT;
+                $tacheApp = Tache::where('t_idA',$cond->c_idA)->where('t_idD',$doc)->whereNotNull('Etat_avcT')->orderBy('updated_at', 'desc')->first();;
+                $nextA_oui = $cond->_idAo;
+                $nextA_non = $cond->_idAn;
+                $nextC_oui = $cond->_idCo;
+                $nextC_non = $cond->_idCn;
+                if($tacheApp->Etat_avcT == 'Accepter')
+                {
+                    if($nextA_oui)
+                        static::nextCondition($nextA_oui,$doc,$action);
+                    else if($nextC_oui)
+                        static::nextCondition($nextC_oui,$doc,$action);
+                }
+                else if($tacheApp->Etat_avcT == 'Rejeter')
+                    if($nextA_non)
+                        static::nextCondition($nextA_non,$doc,$action);
+                    else if($nextC_non)
+                        static::nextCondition($nextC_non,$doc,$action);
             }
         }
 
-        /* foreach ($actionsS as $actionS) {
+        foreach ($actionsS as $actionS) {
             
             $act = Action::find($actionS);
 
@@ -266,7 +303,6 @@ class DocController extends Controller
                                         ->where('_idTo','=',$actionS)
                                         ->where('etatT', '=', 1)
                                         ->pluck('_idFrom');
-            return $predecesseurs;
 
             if(count($predecesseurs)==0)
             {
@@ -288,7 +324,7 @@ class DocController extends Controller
                         $message->from('chudocflow@gmail.com','CHUDocflow');
                     });
 
-                    static::nextActions($act->idA,$doc);
+                    static::nextActions($act->idA,$doc,null);
 
                 }
                 else
@@ -335,10 +371,89 @@ class DocController extends Controller
 
                 }
             }
-        } */
+        }
 
         if($idT)
             return response()->json(['idT' => $idT]);
+    }
+
+    public static function nextCondition($next,$doc,$action) 
+    {
+
+        $act = Action::find($next);
+
+        $predecesseurs = Successeur::join('taches','successeurs._idFrom','=','taches.t_idA')
+                                    ->where('_idTo','=',$next)
+                                    ->where('etatT', '=', 1)
+                                    ->pluck('_idFrom');
+
+        if(count($predecesseurs)==0)
+        {
+            if($act->typeA == "Email")
+            {
+                $myEmail = $act->destinataireIA;
+
+                $details = [
+                    'title' => $act->objetA,
+                    'body' => $act->messageA
+                ];
+        
+                // Mail::to($myEmail)->send(new SendMail($details));
+                $data =  array('message' => $act->messageA);
+                $obj = $act->objetA;
+                Mail::send('emails.sendMail', $data, function($message) use ($myEmail,$obj) {
+                    $message->to($myEmail, 'A ')
+                            ->subject($obj);
+                    $message->from('chudocflow@gmail.com','CHUDocflow');
+                });
+
+                static::nextActions($act->idA,$doc,null);
+
+            }
+            else
+            {
+                $tache = new Tache;
+                $tache->t_idA = $next;
+                $tache->t_idD = $doc;
+                switch ($action->opt_limiteA) {
+                    case 'j':
+                        $a = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$action->date_limiteA.' days'));
+                        break;
+                    case 'h':
+                        $a = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$action->date_limiteA.' hours'));
+                        break;
+                    case 'm':
+                        $a = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$action->date_limiteA.' minutes'));
+                        break;
+                } 
+                switch ($action->opt_rappelA) {
+                    case 'j':
+                        $tache->date_rappelT = Date($a, strtotime('-'.$action->date_rappelA.' days')) ;
+                        break;
+                    case 'h':
+                        $tache->date_rappelT = Date($a, strtotime('-'.$action->date_rappelA.' hours')) ;
+                        break;
+                    case 'm':
+                        $tache->date_rappelT = Date($a, strtotime('-'.$action->date_rappelA.' minutes'));
+                        break;
+                } 
+                $tache->save();
+
+                if($act->a_idU)
+                {
+                    $user = User::find($act->a_idU);
+                    Notification::send($user, new NewTask(Action::find($act->idA)));
+                }
+                else if($act->a_idG) //tester
+                {
+                    $groupe = Groupe::find($act->a_idG);
+                    foreach ($groupe->users as $user) {
+                        Notification::send($user, new NewTask(Action::find($act->idA)));
+                    }
+                }
+
+            }
+        }
     }
 
     public function effectuerTache(Request $request)
@@ -352,10 +467,11 @@ class DocController extends Controller
         $user_tache->_idT = $tache->idT;
         $user_tache->_idU = $tache->action->user->id;
 
+        $document = $tache->document;
+
         if($tache->action->versionA == 1)
         {
             $version = new Version;
-            $document = $tache->document;
 
             $lastVersion = Version::where('v_idD',$tache->document->idD)->max('numV');
             $version->numV = $lastVersion + 1;
@@ -373,6 +489,23 @@ class DocController extends Controller
         
         $user_tache->save();
 
+        $typeD = $tache->document->type_doc;
+        $metas = $typeD->metadonnees;
+
+        foreach ($metas as $meta ) {
+            $a = $meta->idM;
+            if ($request->input("".$a)) {
+                $metaDoc = new MetaDoc;
+                $metaDoc->_idM = $meta->idM;
+                $metaDoc->_idD = $document->idD;
+                $metaDoc->_idUT = $user_tache->idUT;
+                $metaDoc->valeur = $request->input("".$a);
+                $metaDoc->save();
+            }
+
+        }
+
         return $this->nextActions($tache->action->idA,$document->idD,$tache->idT);
     }
+
 }

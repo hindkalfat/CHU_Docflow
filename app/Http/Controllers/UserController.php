@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 
 use App\User;
 use App\RoleUser;
+use Auth;
 
 class UserController extends Controller
 {
@@ -24,6 +25,12 @@ class UserController extends Controller
         $users = User::all();
 
         return view('admin.utilisateurs',['users' => $users]);
+    }
+
+    public function profil()
+    {
+        return Auth::user();
+        return view('user_admin.profil');
     }
 
     /**

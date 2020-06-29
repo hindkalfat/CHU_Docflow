@@ -167,7 +167,13 @@ div.dataTables_wrapper div.dataTables_paginate ul.pagination {
     fill: rgba(0, 23, 55, 0.08);
     cursor: pointer;
 }
-.table-hover:not(.table-dark) tbody tr:hover .table-cancel {
+.table-cancel:hover {
+    color: #e7515a;
+}
+.feather-edit-3:hover {
+    color: #e7515a;
+}
+.feather-eye:hover {
     color: #e7515a;
 }
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {

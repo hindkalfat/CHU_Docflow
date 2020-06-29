@@ -6,13 +6,6 @@ $('.input-search').on('keyup', function() {
     }).show();
 });
 
-const taskViewScroll = new PerfectScrollbar('.task-text', {
-    wheelSpeed:.5,
-    swipeEasing:!0,
-    minScrollbarLength:40,
-    maxScrollbarLength:300,
-    suppressScrollX : true
-});
 function dynamicBadgeNotification( setTodoCategoryCount ) {
   var todoCategoryCount = setTodoCategoryCount;
 
@@ -106,17 +99,7 @@ $('#addTask').on('click', function(event) {
   $('.add-tsk').show();
   $('.edit-tsk').hide();
   $('#addTaskModal').modal('show');
-  const ps = new PerfectScrollbar('.todo-box-scroll', {
-    suppressScrollX : true
-  });
 });
-const ps = new PerfectScrollbar('.todo-box-scroll', {
-    suppressScrollX : true
-  });
-
-const todoListScroll = new PerfectScrollbar('.todoList-sidebar-scroll', {
-    suppressScrollX : true
-  });
 
 function checkCheckbox() {
   $('.todo-item input[type="checkbox"]').click(function() {

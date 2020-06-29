@@ -25,7 +25,7 @@ class Action extends Model
 
     public function groupe()
     {
-        return $this->belongsTo(Groupe::class);
+        return $this->belongsTo(Groupe::class, 'a_idG');
     }
 
     public function user()
@@ -36,5 +36,10 @@ class Action extends Model
     public function predecesseurs()
     {
         return Successeur::where('_idTo','=',$this->idA)->get();
+    }
+
+    public function metadonnees()
+    {
+        return $this->belongsToMany(Metadonnee::class,'actions_metas', '_idA', '_idM');
     }
 }

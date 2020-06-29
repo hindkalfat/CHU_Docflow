@@ -23,6 +23,35 @@
 
 @section('content')
 <script>
+    $(document).ready(function() {
+             if($('#basicFlatpickr').length > 0){
+                var f1 = flatpickr(document.getElementById('basicFlatpickr'));
+            }
+            if($('input[name="demo2"]').length > 0){
+                $("input[name='demo2']").TouchSpin({
+                    min: 0,
+                    max: 1000000,
+                    step: 0.1,
+                    decimals: 2,
+                    boostat: 5,
+                    maxboostedstep: 10,
+                    buttondown_class: "btn btn-outline-dark",
+                    buttonup_class: "btn btn-outline-dark"
+                });
+            }
+            if($('.timeFlatpickr').length > 0){
+                $('.timeFlatpickr').each(function() {
+                    var f4 = flatpickr(document.getElementById('timeFlatpickr'), {
+                        enableTime: true,
+                        noCalendar: true,
+                        dateFormat: "H:i",
+                        defaultDate: "00:00"
+                    });
+                });
+            }
+        });
+</script>
+<script>
     $(document).ready(function () {
 
         new dynamicBadgeNotification('allList');
@@ -176,7 +205,7 @@
 
                     <div id="todo-inbox" class="accordion todo-inbox">
                         <div class="search">
-                            <input type="text" class="form-control input-search" placeholder="Search Here...">
+                            <input type="text" class="form-control input-search" placeholder="Recherche tâche ...">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu mail-menu d-lg-none"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
                         </div>
                 
@@ -234,8 +263,45 @@
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x close" data-dismiss="modal"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                                                         <div class="compose-box">
                                                             <div class="compose-content">
-                                                                <h5 class="task-heading"></h5>  
-                                                                <h6 class="task-text"></h6>
+                                                                <h5>{{$tache->action->nomA}}</h5>  
+                                                                <h6>{{$tache->action->directiveA}}</h6>
+                                                                <div class="row">
+                                                                    @foreach ( $tache->action->metadonnees as $meta) 
+                                                                        @if($meta->typeM == 'Date')
+                                                                            <div class="form-group col-md-6">
+                                                                                <div class=" mt-1">
+                                                                                    <span class="badge outline-badge-info">{{$meta->libelleM}}
+                                                                                    </span>
+                                                                                </div><br/>
+                                                                                <input id="basicFlatpickr" name="{{$meta->idM}}" value="2019-09-04" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">
+                                                                            </div>                                                                      
+                                                                        @elseif($meta->typeM == 'Heure')
+                                                                            <div class="form-group col-md-6">
+                                                                                <div class=" mt-1">
+                                                                                    <span class="badge outline-badge-info">{{$meta->libelleM}}
+                                                                                    </span>
+                                                                                </div><br/>
+                                                                                <input id="timeFlatpickr" name="{{$meta->idM}}" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">
+                                                                            </div>
+                                                                        @elseif($meta->typeM == 'Numérique')
+                                                                            <div class="form-group col-md-6">
+                                                                                <div class=" mt-1">
+                                                                                    <span class="badge outline-badge-info">{{$meta->libelleM}}
+                                                                                    </span>
+                                                                                </div><br/>
+                                                                                <input id="demo2" name="{{$meta->idM}}" type="text" value="0" class="form-control">
+                                                                            </div>
+                                                                        @else
+                                                                            <div class="form-group col-md-6">
+                                                                                <div class=" mt-1">
+                                                                                    <span class="badge outline-badge-info">{{$meta->libelleM}}
+                                                                                    </span>
+                                                                                </div><br/>
+                                                                                <input type="text" name="{{$meta->idM}}" class="form-control" placeholder="{{$meta->libelleM}}">
+                                                                            </div>
+                                                                        @endif
+                                                                    @endforeach
+                                                                </div>
                                                                 <div class="attachment file-pdf">
                                                                     <div class="media">
                                                                         <div class="form-group">

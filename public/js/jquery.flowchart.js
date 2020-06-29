@@ -622,6 +622,7 @@ jQuery(function ($) {
                                 '<input type="hidden" name="a_idU" value="" id="a_idU'+cpt+'"/>'+
                                 '<input type="hidden" name="a_idW" class="inptwf" value="" id="a_idW'+cpt+'"/>'+
                                 '<input type="hidden" name="idoperator" value="'+cpt+'" id="idoperator'+cpt+'"/>'+
+                                '<input type="hidden" name="metasA" value="" id="metasA'+cpt+'"/>'+
                             '</form>');
 
             var $formEmail = $(' <form class="monform" id="formEmail'+cpt+'" method="post">'+

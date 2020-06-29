@@ -12,6 +12,7 @@ use App\Successeur;
 use App\Groupe;
 use App\Condition;
 use App\CondSuccesseur;
+use App\ActionMeta;
 
 class WfController extends Controller
 {
@@ -137,7 +138,21 @@ class WfController extends Controller
             $action->idop = $request->input('idoperator');
 
             $action->save(); 
-
+           
+            if($request->input('metasA'))
+            {
+                $metasA = explode (",", $request->input('metasA'));
+                foreach ($metasA as $metaA) {
+                    if( $metaA != '')
+                    {
+                        $act_meta = new ActionMeta();
+                        $act_meta->_idA = $action->idA;
+                        $act_meta->_idM = $metaA;
+                        $act_meta->save();
+                    }
+                }
+            }
+            
             return response()->json(['success' => "created", "action" => $action ]);   
         }
         

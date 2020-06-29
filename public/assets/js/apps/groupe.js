@@ -113,7 +113,6 @@ function addContact() {
             for(i=0;i<data["users"].length;i++){
               x= data["users"][i].id.toString()+','+x
             }
-            alert(x)
 
             $html = '<div class="items" id="items'+ data.groupe.idG +'">' +
             '<div class="item-content">' +
@@ -269,7 +268,6 @@ function editContact() {
 
       var $_nameValue = $_getInputName.val();
       var $_usersValue = $_getInputUsers.val();
-      alert($_usersValue)
 
       var data = $('#addContactModalTitle').serialize(); 
 

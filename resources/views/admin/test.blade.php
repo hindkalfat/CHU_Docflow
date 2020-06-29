@@ -311,6 +311,12 @@
 										<h3></h3>
 										<section>
 											<div class="custom-file mb-4">
+												<p class="">Les métadonnées à modifier</p>
+												<select name="metasA[]" id="metasAct" class="selectpicker form-control metasA" multiple data-live-search="true" data-actions-box="true">
+													
+												</select>
+											</div>
+											<div class="custom-file mb-4">
 												<p class="">Mise à jour du document requise</p>
 												<div class="col-sm-12 col-12 input-fields">
 													<div class="n-chk">
@@ -473,7 +479,7 @@
 						</button>
 					</div>
 					<div class="modal-body" >
-						<div class="form-row mb-12">
+						<div class="form-row">
 							<div class="form-group col-md-4">
 								<label for="inputCity">Métadonnée </label>
 								<select id="metasSelect" class="form-control" data-live-search="true">
@@ -486,13 +492,20 @@
 							</div>
 							<div id="metashow" class="form-group col-md-5">
 								<label for="inputZip">Valeur</label>
-								<input type="text" class="form-control" id="inputZip" disabled>
+								<input type="text" class="form-control val" id="inputZip" disabled>
 							</div>
-							<a href="#" class="addinput row layout-top-spacing container">
-								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle mb-4"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
-								&nbsp;<h6>  Ajouter un test</h6> 
-							</a>
+							<div class="form-group col-md-3">
+								<label for="inputState">Operateur logique</label>
+								<select id="opComparLog" class="form-control" disabled>
+									<option value="et">ET</option>
+									<option value="ou">OU</option>
+								</select>
+							</div>
 						</div>	 
+						
+						<div class="form-row">
+							<textarea name="" id="condF" cols="30" rows="10" readonly></textarea>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -504,6 +517,7 @@
 	<script type="text/javascript">
 		/* global $ */
 		$(document).ready(function() {
+
 			$('#saveWF').modal('show');
 
 			var $flowchart = $('#flowchartworkspace');
@@ -725,6 +739,18 @@
 						var data1 = JSON.stringify(data, null, 2);
 						$('#tt').val(data1)
 					}); 
+			
+			
+			$('.metasA').on('changed.bs.select', function (e) {
+				var selected = e.target.value; 
+				var optA = ''
+				$.each( e.target.selectedOptions , function( index, obj ){
+					alert(obj.value);
+					optA = obj.value + ',' + optA
+				});
+				alert(optA)
+				$('#metasA'+opId).val(optA);
+			});
 
 			$('.vld').click(function() {
 				$('#nomA'+opId).val($('#nomAct').val());
@@ -782,6 +808,10 @@
 							$('#messageform').val($('#exampleFormControlTextarea').val());
 							$('#metasSelect').append('<option value="" disabled selected>Choisissez</option>');
 							$.each(data.metas, function (i, item) {
+								$('#metasAct').append($('<option>', { 
+									value: item.idM,
+									text : item.libelleM 
+								}));
 								$('#metasSelect').append($('<option>', { 
 									value: item.idM,
 									text : item.libelleM 
@@ -789,6 +819,7 @@
 								$('#metasSelect').append('<input type="hidden" id="typeMeta'+item.idM+'" value="'+item.typeM+'">');
 
 							});
+							$("#metasAct").selectpicker("refresh");
 						}
 						else{
 							$('#notifUnique').click();
@@ -915,7 +946,7 @@
 			});
 
 			//metas condition
-			$('#metasSelect').change(function(){
+			/* $('#metasSelect').change(function(){
 				var valS = this.value;
 				
 				var typeM = $('#typeMeta'+valS).val()
@@ -940,14 +971,13 @@
 
 					$('#metashow').append(
 						'<label for="inputZip">Valeur</label>'+
-						'<input id="basicFlatpickr" value="2019-09-04" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">'
+						'<input id="basicFlatpickr" value="2019-09-04" class="form-control val flatpickr flatpickr-input active" type="text" placeholder="Select Date..">'
 					);
 					var f1 = flatpickr(document.getElementById('basicFlatpickr'));
 				}else if(typeM == 'Heure'){
 					$('#metashow').append(
-						'<div class="form-group col-md-6">'+
-							'<input id="timeFlatpickr" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">'+
-						'</div>'
+						'<label for="inputZip">Valeur</label>'+
+						'<input id="timeFlatpickr" class="form-control val flatpickr flatpickr-input active" type="text" placeholder="Select Date..">'
 					);
 					var f4 = flatpickr(document.getElementById('timeFlatpickr'), {
 						enableTime: true,
@@ -958,9 +988,8 @@
 				}else if(typeM == 'Numérique'){
 					$('#metashow').append(
 						
-						'<div class="form-group col-md-6">'+
-							'<input id="demo2" type="text" value="0" name="demo2" class="form-control">'+
-						'</div>'
+						'<label for="inputZip">Valeur</label>'+
+						'<input id="demo2" type="text" value="0" name="demo2" class="form-control val">'
 					);
 					$("input[name='demo2']").TouchSpin({
 						min: 0,
@@ -974,11 +1003,100 @@
 					});
 				}else{
 					$('#metashow').append(
-						'<div class="form-group col-md-6">'+
-							'<input type="text" class="form-control" placeholder="...">'+
-						'</div>'
+						'<label for="inputZip">Valeur</label>'+
+						'<input type="text" class="form-control val" placeholder="...">'
 					);
 				}
+			}); */
+
+			var valS;
+				
+			var typeM;
+
+			$('#metasSelect').change(function(){
+				valS = this.value;
+				
+				typeM = $('#typeMeta'+valS).val()
+				$('#opCompar').removeAttr("disabled");
+				$('#opCompar').empty();
+				$('#metasSelect').prop("disabled", true);
+				$('#condF').val($("#metasSelect option:selected").text());
+				
+				if(typeM == 'Date' || typeM == 'Heure' || typeM == 'Numérique'){
+					$('#opCompar').append($('<option>', {
+						value: 's',
+						text: 'supérieur à'
+					}));
+
+					$('#opCompar').append($('<option>', {
+						value: 's',
+						text: 'inférieur à'
+					}));
+
+					$('#opCompar').append($('<option>', {
+						value: 's',
+						text: 'égale à'
+					}));
+				}else{
+					$('#opCompar').append($('<option>', {
+						value: 'c',
+						text: 'contient'
+					}));
+					$('#opCompar').append($('<option>', {
+						value: 'ncp',
+						text: 'ne contient pas'
+					}));
+				}
+			});
+			$('#opCompar').change(function(){
+				$('#opCompar').prop("disabled", true);
+				$('#condF').val($('#condF').val()+" "+$("#opCompar option:selected").text());
+				$('#metashow').empty();
+				if(typeM == 'Date'){
+					$('#metashow').append(
+						'<label for="inputZip">Valeur</label>'+
+						'<input id="basicFlatpickr" value="2019-09-04" class="form-control val flatpickr flatpickr-input active" type="text" placeholder="Select Date..">'
+					);
+					var f1 = flatpickr(document.getElementById('basicFlatpickr'));
+				}else if(typeM == 'Heure'){
+					$('#metashow').append(
+						'<label for="inputZip">Valeur</label>'+
+						'<input id="timeFlatpickr" class="form-control val flatpickr flatpickr-input active" type="text" placeholder="Select Date..">'
+					);
+					var f4 = flatpickr(document.getElementById('timeFlatpickr'), {
+						enableTime: true,
+						noCalendar: true,
+						dateFormat: "H:i",
+						defaultDate: "00:00"
+					});
+				}else if(typeM == 'Numérique'){
+					$('#metashow').append(
+						
+						'<label for="inputZip">Valeur</label>'+
+						'<input id="demo2" type="text" value="0" name="demo2" class="form-control val">'
+					);
+					$("input[name='demo2']").TouchSpin({
+						min: 0,
+						max: 1000000,
+						step: 0.1,
+						decimals: 2,
+						boostat: 5,
+						maxboostedstep: 10,
+						buttondown_class: "btn btn-outline-dark",
+						buttonup_class: "btn btn-outline-dark"
+					});
+				}else{
+					$('#metashow').append(
+						'<label for="inputZip">Valeur</label>'+
+						'<input type="text" class="form-control val" placeholder="...">'
+					);
+				}
+			});
+			$('.val').datepicker({
+				endDate: new Date(),
+				autoclose: true,
+			}).on('changeDate', function(ev){
+				alert("ch")
 			});
 
 			//-----------------------------------------

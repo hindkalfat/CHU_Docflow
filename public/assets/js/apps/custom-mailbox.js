@@ -77,45 +77,6 @@ $(document).ready(function() {
 		$('#btn-fwd-save').hide();
 	})
 
-	/*
-		Init. fn. checkAll ==> Checkbox check all
-	*/
-	document.getElementById('inboxAll').addEventListener('click', function() {
-		var getActiveList = document.querySelectorAll('.tab-title .list-actions.active');
-		var getActiveListID = '.'+getActiveList[0].id;
-
-		var getItemsCheckboxes = '';
-
-		if (getActiveList[0].id === 'personal' || getActiveList[0].id === 'work' || getActiveList[0].id === 'social' || getActiveList[0].id === 'private') {
-
-			getItemsGroupCheckboxes = document.querySelectorAll(getActiveListID);
-			for (var i = 0; i < getItemsGroupCheckboxes.length; i++) {
-				getItemsGroupCheckboxes[i].parentNode.parentNode.parentNode;
-
-				getItemsCheckboxes = document.querySelectorAll('.'+getItemsGroupCheckboxes[i].parentNode.parentNode.parentNode.className.split(' ')[0] + ' ' + getActiveListID + ' .inbox-chkbox');
-				
-				if (getItemsCheckboxes[i].checked) {
-					getItemsCheckboxes[i].checked = false;
-				} else {
-					if (this.checked) {
-						getItemsCheckboxes[i].checked = true;
-					}
-				}
-			}
-
-		} else {
-			getItemsCheckboxes = document.querySelectorAll('.mail-item'+getActiveListID + ' .inbox-chkbox');
-			for (var i = 0; i < getItemsCheckboxes.length; i++ ) {
-				if (getItemsCheckboxes[i].checked) {
-					getItemsCheckboxes[i].checked = false;
-				} else {
-					if (this.checked) {
-						getItemsCheckboxes[i].checked = true;
-					}
-				}
-			}
-		}
-	})
 
 	/*
 		fn. randomString ==> Generate Random Numbers
@@ -246,7 +207,7 @@ $(document).ready(function() {
 
 	getEmailToInput.addEventListener('input', function() {
 
-	  	getEmailToInputValue = this.value;
+		  getEmailToInputValue = $("#m-to option:selected").text();
 
 	    if (getEmailToInputValue == "") {
 	      $_getValidationField[0].innerHTML = 'Email Required';
@@ -257,24 +218,6 @@ $(document).ready(function() {
 	    } else {
 	      $_getValidationField[0].style.display = 'none';
 	    }
-	})
-
-	getCCEmailInput = document.getElementById('m-cc');
-	getCCEmailInput.addEventListener('input', function() {
-
-	    getCCEmailInputValue = this.value;
-
-	    if (!getCCEmailInputValue == "") {
-	       if((emailReg.test(getCCEmailInputValue) == false)) {
-		      $_getValidationField[1].innerHTML = 'Invalid Email';
-		      $_getValidationField[1].style.display = 'block';
-		    } else {
-		      	$_getValidationField[1].style.display = 'none';
-		    }
-	    } else {
-	      $_getValidationField[1].style.display = 'none';
-	    }
-
 	})
 
 	getSubjectInput = document.getElementById('m-subject');
@@ -380,7 +323,6 @@ $(document).ready(function() {
 
 	  	$(".inbox-chkbox:checked").parents('.mail-item').toggleClass('important');
  		$(".inbox-chkbox:checked").prop('checked',false);
- 		$("#inboxAll:checked").prop('checked',false);
  		$(".list-actions#important").trigger('click');
 		Snackbar.show({
 	        text: notificationText,
@@ -407,7 +349,6 @@ $(document).ready(function() {
 		}
 	  	inboxCheckboxParents.toggleClass('spam');
  		$(".inbox-chkbox:checked").prop('checked',false);
- 		$("#inboxAll:checked").prop('checked',false);
  		$(".list-actions#spam").trigger('click');
 
  		Snackbar.show({
@@ -429,7 +370,6 @@ $(document).ready(function() {
 
 		inboxCheckboxParents.removeAttr('id');
 		dynamicBadgeNotification('mailInbox');
- 		$("#inboxAll:checked").prop('checked',false);
  		$(".inbox-chkbox:checked").prop('checked',false);
 
  		Snackbar.show({
@@ -453,7 +393,6 @@ $(document).ready(function() {
 
 		inboxCheckboxParents.attr('id', 'unread-'+getMailTitle.replace(/\s+/g, '-').toLowerCase()+randomAlphaNumeric);
 		dynamicBadgeNotification('mailInbox');
- 		$("#inboxAll:checked").prop('checked',false);
  		$(".inbox-chkbox:checked").prop('checked',false);
 
  		Snackbar.show({
@@ -489,7 +428,6 @@ $(document).ready(function() {
         }
 	  	inboxCheckboxParents.addClass('trashed');
  		$(".inbox-chkbox:checked").prop('checked',false);
- 		$("#inboxAll:checked").prop('checked',false);
  		$(".list-actions#trashed").trigger('click');
 
  		Snackbar.show({
@@ -515,7 +453,6 @@ $(document).ready(function() {
 		inboxCheckboxParents.removeClass(getFirstClass);
 		inboxCheckboxParents.addClass('mailInbox');
  		$(".inbox-chkbox:checked").prop('checked',false);
- 		$("#inboxAll:checked").prop('checked',false);
  		$(".list-actions#mailInbox").trigger('click');
 
  		Snackbar.show({
@@ -538,7 +475,6 @@ $(document).ready(function() {
 		if (inboxCheckboxParents.hasClass('trashed')) {
 			inboxCheckboxParents.remove();
 		}
- 		$("#inboxAll:checked").prop('checked',false);
 
  		Snackbar.show({
 	        text: notificationText,
@@ -567,7 +503,6 @@ $(document).ready(function() {
 
 	  	$(".inbox-chkbox:checked").parents('.mail-item-heading').toggleClass(splitLabelColor);
  		$(".inbox-chkbox:checked").prop('checked',false);
- 		$("#inboxAll:checked").prop('checked',false);
 
  		Snackbar.show({
 	        text: notificationText,
@@ -585,12 +520,13 @@ $(document).ready(function() {
 		$("#btn-send").off('click').on('click', function(event) {
 			event.preventDefault();
 			/* Act on the event */
+			$('#msgTxt').val($('.ql-editor').text())
+			$('#msg').val($('.ql-editor').html())
+            $('#sendForm').submit();
 			draftTragetID = getDraftTragetID;
 
-		  	var $_mailFrom = document.getElementById('m-form').value;
 		  	var $_mailTo = document.getElementById('m-to').value;
 
-		  	var $_mailCC = document.getElementById('m-cc').value;
 		  	var $_mailAttachment = document.getElementById('mail_File_attachment');
 		  	var $_mailSubject = document.getElementById('m-subject').value;
 		  	var $_mailDescriptionText = quill.getText();
@@ -648,7 +584,7 @@ $(document).ready(function() {
                                                   '<span class="new-control-indicator"></span>' +
                                                 '</label>' +
                                             '</div>' +
-                                            '<div class="f-body" data-mailFrom="'+$_mailFrom+'" data-mailTo="'+$_mailTo+'" data-mailCC="'+$_mailCC+'" >' +
+                                            '<div class="f-body" data-mailTo="'+$_mailTo+'"  >' +
                                                 '<div class="meta-mail-time">' +
                                                     '<p class="user-email" data-mailTo="'+$_mailTo+'">'+$_mailTo+'</p>' +
                                                 '</div>' +
@@ -672,14 +608,13 @@ $(document).ready(function() {
                     '</div>';
 
 			$html2 = '<div id="'+randomAlphaNumeric+'" class="collapse" aria-labelledby="'+randomAlphaNumeric+'" data-parent="#mailbox-inbox">'+
-		                '<div class="mail-content-container sentmail" data-mailFrom="'+$_mailFrom+'" data-mailTo="'+$_mailTo+'" data-mailCC="'+$_mailCC+'" >'+
+		                '<div class="mail-content-container sentmail" data-mailTo="'+$_mailTo+'" >'+
 		                    '<div class="d-flex justify-content-between mb-3">'+
 		                    	'<div class="d-flex user-info">'+
 	                                '<div class="f-body">'+
 	                                    '<div class="meta-mail-time">'+
 	                                        '<div class="">'+
                                                 '<p class="user-email" data-mailto="'+$_mailTo+'"><span>To - </span>'+$_mailTo+'</p>, '+
-                                                '<p class="user-cc-mail" data-mailcc="'+$_mailCC+'"><span>CC - </span>'+$_mailCC+'</p>'+
                                             '</div>'+
 	                                        '<p class="mail-content-meta-date">'+today+' -</p>'+
 	                                        '<p class="meta-time align-self-center">'+formatAMPM(new Date)+'</p>'+
@@ -732,9 +667,7 @@ $(document).ready(function() {
 		event.preventDefault();
 		/* Act on the event */
 
-	  	var $_mailFrom = document.getElementById('m-form').value;
 	  	var $_mailTo = document.getElementById('m-to').value;
-	  	var $_mailCC = document.getElementById('m-cc').value;
 	  	var $_mailAttachment = document.getElementById('mail_File_attachment');
 	  	var $_mailSubject = document.getElementById('m-subject').value;
 	  	var $_mailDescription = quill.getText();
@@ -766,7 +699,7 @@ $(document).ready(function() {
                                                   '<span class="new-control-indicator"></span>' +
                                                 '</label>' +
                                             '</div>' +
-                                            '<div class="f-body" data-mailFrom="'+$_mailFrom+'" data-mailTo="'+$_mailTo+'" data-mailCC="'+$_mailCC+'" >' +
+                                            '<div class="f-body" data-mailTo="'+$_mailTo+'" >' +
                                                 '<div class="meta-mail-time">' +
                                                     '<p class="user-email" data-mailTo="'+$_mailTo+'">'+$_mailTo+'</p>' +
                                                 '</div>' +
@@ -810,9 +743,7 @@ $(document).ready(function() {
 		event.preventDefault();
 		/* Act on the event */
 
-	  	var $_mailFrom = document.getElementById('m-form').value;
 	  	var $_mailTo = document.getElementById('m-to').value;
-	  	var $_mailCC = document.getElementById('m-cc').value;
 	  	var $_mailAttachment = document.getElementById('mail_File_attachment');
 	  	var $_mailSubject = document.getElementById('m-subject').value;
 	  	var $_mailDescriptionText = quill.getText();
@@ -868,7 +799,7 @@ $(document).ready(function() {
                                       '<span class="new-control-indicator"></span>' +
                                     '</label>' +
                                 '</div>' +
-                                '<div class="f-body" data-mailFrom="'+$_mailFrom+'" data-mailTo="'+$_mailTo+'" data-mailCC="'+$_mailCC+'" >' +
+                                '<div class="f-body" data-mailTo="'+$_mailTo+'" >' +
                                     '<div class="meta-mail-time">' +
                                         '<p class="user-email" data-mailTo="'+$_mailTo+'">'+$_mailTo+'</p>' +
                                     '</div>' +
@@ -892,7 +823,7 @@ $(document).ready(function() {
         '</div>';
 
 		$html2 = '<div id="'+randomAlphaNumeric+'" class="collapse" aria-labelledby="sdfsdaf" data-parent="#mailbox-inbox">'+
-	                '<div class="mail-content-container sentmail" data-mailFrom="'+$_mailFrom+'" data-mailTo="'+$_mailTo+'" data-mailCC="'+$_mailCC+'" >'+
+	                '<div class="mail-content-container sentmail" data-mailTo="'+$_mailTo+'" >'+
 
 	                    '<div class="d-flex justify-content-between mb-5">'+
 		                    '<div class="d-flex user-info">'+
@@ -900,7 +831,6 @@ $(document).ready(function() {
                                     '<div class="meta-mail-time">'+
                                     '<div class="">'+
                                             '<p class="user-email" data-mailto="'+$_mailTo+'"><span>To - </span>'+$_mailTo+'</p>, '+
-                                            '<p class="user-cc-mail" data-mailcc="'+$_mailCC+'"><span>CC - </span>'+$_mailCC+'</p>'+
                                         '</div>'+
                                         '<p class="mail-content-meta-date">'+today+' -</p>'+
                                         '<p class="meta-time align-self-center">'+formatAMPM(new Date)+'</p>'+
@@ -948,9 +878,7 @@ $(document).ready(function() {
 		event.preventDefault();
 		/* Act on the event */
 
-	  	var $_mailFrom = document.getElementById('m-form').value;
 	  	var $_mailTo = document.getElementById('m-to').value;
-	  	var $_mailCC = document.getElementById('m-cc').value;
 	  	var $_mailAttachment = document.getElementById('mail_File_attachment');
 	  	var $_mailSubject = document.getElementById('m-subject').value;
 	  	var $_mailDescription = quill.getText();
@@ -982,7 +910,7 @@ $(document).ready(function() {
                                                   '<span class="new-control-indicator"></span>' +
                                                 '</label>' +
                                             '</div>' +
-                                            '<div class="f-body" data-mailFrom="'+$_mailFrom+'" data-mailTo="'+$_mailTo+'" data-mailCC="'+$_mailCC+'" >' +
+                                            '<div class="f-body" data-mailTo="'+$_mailTo+'" >' +
                                                 '<div class="meta-mail-time">' +
                                                     '<p class="user-email" data-mailTo="'+$_mailTo+'">'+$_mailTo+'</p>' +
                                                 '</div>' +
@@ -1025,9 +953,7 @@ $(document).ready(function() {
 	$("#btn-fwd").on('click', function(event) {
 		event.preventDefault();
 		/* Act on the event */
-	  	var $_mailFrom = document.getElementById('m-form').value;
 	  	var $_mailTo = document.getElementById('m-to').value;
-	  	var $_mailCC = document.getElementById('m-cc').value;
 	  	var $_mailAttachment = document.getElementById('mail_File_attachment');
 	  	var $_mailSubject = document.getElementById('m-subject').value;
 	  	var $_mailDescriptionText = quill.getText();
@@ -1082,7 +1008,7 @@ $(document).ready(function() {
                                                   '<span class="new-control-indicator"></span>' +
                                                 '</label>' +
                                             '</div>' +
-                                            '<div class="f-body" data-mailFrom="'+$_mailFrom+'" data-mailTo="'+$_mailTo+'" data-mailCC="'+$_mailCC+'" >' +
+                                            '<div class="f-body" data-mailTo="'+$_mailTo+'" >' +
                                                 '<div class="meta-mail-time">' +
                                                     '<p class="user-email" data-mailTo="'+$_mailTo+'">'+$_mailTo+'</p>' +
                                                 '</div>' +
@@ -1106,7 +1032,7 @@ $(document).ready(function() {
                     '</div>';
 
 		$html2 = '<div id="'+randomAlphaNumeric+'" class="collapse" aria-labelledby="sdfsdaf" data-parent="#mailbox-inbox">'+
-	                '<div class="mail-content-container sentmail" data-mailFrom="'+$_mailFrom+'" data-mailTo="'+$_mailTo+'" data-mailCC="'+$_mailCC+'" >'+
+	                '<div class="mail-content-container sentmail" data-mailTo="'+$_mailTo+'" >'+
 
 	                    '<div class="d-flex justify-content-between mb-5">'+
 
@@ -1115,7 +1041,6 @@ $(document).ready(function() {
                                     '<div class="meta-mail-time">'+
                                     	'<div class="">'+
                                             '<p class="user-email" data-mailto="'+$_mailTo+'"><span>To - </span>'+$_mailTo+'</p>, '+
-                                            '<p class="user-cc-mail" data-mailcc="'+$_mailCC+'"><span>CC - </span>'+$_mailCC+'</p>'+
                                         '</div>'+
                                         '<p class="mail-content-meta-date">'+today+' -</p>'+
                                         '<p class="meta-time align-self-center">'+formatAMPM(new Date)+'</p>'+
@@ -1163,9 +1088,7 @@ $(document).ready(function() {
 	$("#btn-fwd-save").on('click', function(event) {
 			event.preventDefault();
 			/* Act on the event */
-		  	var $_mailFrom = document.getElementById('m-form').value;
 		  	var $_mailTo = document.getElementById('m-to').value;
-		  	var $_mailCC = document.getElementById('m-cc').value;
 		  	var $_mailAttachment = document.getElementById('mail_File_attachment');
 		  	var $_mailSubject = document.getElementById('m-subject').value;
 		  	var $_mailDescription = quill.getText();
@@ -1196,7 +1119,7 @@ $(document).ready(function() {
                                                   '<span class="new-control-indicator"></span>' +
                                                 '</label>' +
                                             '</div>' +
-                                            '<div class="f-body" data-mailFrom="'+$_mailFrom+'" data-mailTo="'+$_mailTo+'" data-mailCC="'+$_mailCC+'" >' +
+                                            '<div class="f-body" data-mailTo="'+$_mailTo+'" >' +
                                                 '<div class="meta-mail-time">' +
                                                     '<p class="user-email" data-mailTo="'+$_mailTo+'">'+$_mailTo+'</p>' +
                                                 '</div>' +
@@ -1248,17 +1171,13 @@ $(document).ready(function() {
 			$('#btn-reply-save').hide();
 			$('#btn-fwd-save').hide();
 			
-		    var $_mailFrom =  $(this).find('.f-body').attr('data-mailFrom');
 		    var $_mailTo =  $(this).find('.f-body').attr('data-mailTo');
-		    var $_mailCC =  $(this).find('.f-body').attr('data-mailCC');
 		    var $_mailSubject =  $(this).find('.mail-title').attr('data-mailtitle');
 		    var $_mailDataTarget =  $(this).find('.mail-item-heading').attr('data-target');
 		    $_sendMail($_mailDataTarget);
 		    var $_mailDescription =  JSON.parse($(this).find('.mail-content-excerpt').attr('data-maildescription'));
 
-		    $('#m-form').val($_mailFrom);
 		    $('#m-to').val($_mailTo);
-		    $('#m-cc').val($_mailCC);
 		    $('#m-subject').val($_mailSubject);
 		    quill.setContents($_mailDescription);
 		    $('#composeMailModal').modal('show');
@@ -1281,15 +1200,11 @@ $(document).ready(function() {
 			$('#btn-fwd-save').hide();
 			$('#btn-save').hide();		
 
-			var $_mailFrom =  $(this).parents('.mail-content-container').attr('data-mailFrom');
 		    var $_mailTo =  $(this).parents('.mail-content-container').attr('data-mailTo');
-		    var $_mailCC =  $(this).parents('.mail-content-container').attr('data-mailCC');
 			var $_mailSubject = $(this).parents('.mail-content-container').find('.mail-content').attr('data-mailtitle');
 		    var $_mailDescription =  JSON.parse($(this).parents('.mail-content-container').find('.mail-content').attr('data-maildescription'));
 
-		    $('#m-form').val($_mailFrom);
 		    $('#m-to').val($_mailTo);
-		    $('#m-cc').val($_mailCC);
 		    $('#m-subject').val('Re: ' + $_mailSubject);
 			quill.setContents($_mailDescription);
 			$('#composeMailModal').modal('show');
@@ -1310,15 +1225,11 @@ $(document).ready(function() {
 			$('#btn-reply-save').hide();
 			$('#btn-save').hide();
 
-			var $_mailFrom =  $(this).parents('.mail-content-container').attr('data-mailFrom');
 		    var $_mailTo =  $(this).parents('.mail-content-container').attr('data-mailTo');
-		    var $_mailCC =  $(this).parents('.mail-content-container').attr('data-mailCC');
 			var $_mailSubject = $(this).parents('.mail-content-container').find('.mail-content').attr('data-mailtitle');
 		    var $_mailDescription =  JSON.parse($(this).parents('.mail-content-container').find('.mail-content').attr('data-maildescription'));
 
-		    $('#m-form').val($_mailFrom);
 		    $('#m-to').val($_mailTo);
-		    $('#m-cc').val($_mailCC);
 		    $('#m-subject').val('Fwd: ' + $_mailSubject);
 			quill.setContents($_mailDescription);
 			$('#composeMailModal').modal('show');
