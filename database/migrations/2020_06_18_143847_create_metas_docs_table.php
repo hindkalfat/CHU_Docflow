@@ -18,7 +18,7 @@ class CreateMetasDocsTable extends Migration
             $table->unsignedInteger('_idM');
             $table->unsignedInteger('_idD');
             $table->unsignedInteger('_idUT')->nullable();
-            $table->string('valeur');
+            $table->string('valeur')->nullable();
             $table->timestamps();
 
             //FK

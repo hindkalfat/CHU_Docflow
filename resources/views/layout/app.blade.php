@@ -25,8 +25,6 @@
 	<link rel="stylesheet" href="{{asset('https://use.fontawesome.com/releases/v5.13.0/css/all.css')}}" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">
     <link href="{{asset('plugins/apex/apexcharts.css')}}" rel="stylesheet" type="text/css">
     <link href="{{asset('assets/css/dashboard/dash_1.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{asset('plugins/fullcalendar/fullcalendar.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{asset('plugins/fullcalendar/custom-fullcalendar.advance.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('plugins/flatpickr/flatpickr.css')}}" rel="stylesheet" type="text/css">
     <link href="{{asset('plugins/flatpickr/custom-flatpickr.css')}}" rel="stylesheet" type="text/css">
     <link href="{{asset('assets/css/forms/theme-checkbox-radio.css')}}" rel="stylesheet" type="text/css" />
@@ -109,10 +107,7 @@
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
     <script src="{{asset('plugins/apex/apexcharts.min.js')}}"></script>
     <script src="{{asset('assets/js/dashboard/dash_1.js')}}"></script>
-    <script src="{{asset('plugins/fullcalendar/moment.min.js')}}"></script>
     <script src="{{asset('plugins/flatpickr/flatpickr.js')}}"></script>
-    <script src="{{asset('plugins/fullcalendar/fullcalendar.min.js')}}"></script>
-    <script src="{{asset('plugins/fullcalendar/custom-fullcalendar.advance.js')}}"></script>
     <script src="{{asset('assets/js/scrollspyNav.js')}}"></script>
     <script src="{{asset('plugins/bootstrap-select/bootstrap-select.min.js')}}"></script>
     <script src="{{asset('plugins/drag-and-drop/dragula/dragula.min.js')}}"></script>
@@ -127,8 +122,8 @@
     <script src="{{asset('plugins/flatpickr/custom-flatpickr.js')}}"></script>
     <script src="{{asset('plugins/noUiSlider/custom-nouiSlider.js')}}"></script>
     <script src="{{asset('plugins/bootstrap-range-Slider/bootstrap-rangeSlider.js')}}"></script>
-	<script src="{{asset('plugins/bootstrap-select/bootstrap-select.min.js')}}"></script>
-	<script src="{{asset('assets/js/authentication/form-2.js')}}"></script>
+	<script src="{{asset('plugins/bootstrap-select/bootstrap-select.min.js')}}"></script>{{-- 
+	<script src="{{asset('assets/js/authentication/form-2.js')}}"></script> --}}
 
 
 

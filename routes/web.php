@@ -44,13 +44,24 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/action', 'DocController@actions');
 Route::get('/nextActions/{id}/{doc}/{idT}', 'DocController@nextActions');
-Route::get('/mailbox', 'MailboxController@index');
-Route::post('/envoyer', 'MailboxController@envoyer');
+
 
 
 Route::group(['middleware' => ['auth']], function () {
 
+    //profil
     Route::get('/profil','UserController@profil');
+    Route::get('edit/profil','UserController@edit_profil');
+    Route::post('/edit','UserController@update_profil')->name('edit');;
+
+    //mailbox
+    Route::get('/mailbox', 'MailboxController@index');
+    Route::post('/envoyer', 'MailboxController@envoyer');
+    Route::post('/enregister', 'MailboxController@enregister');
+    Route::post('/supprimer', 'MailboxController@supprimer');
+
+    //filter search
+    Route::get('/search','DocController@search');
     
     /*******ADMIN****** */
     Route::group(['middleware' => ['admin']], function () {
@@ -70,6 +81,7 @@ Route::group(['middleware' => ['auth']], function () {
         //document
         Route::get('/admin/documents','TdocController@index');
         Route::post('/admin/documents','TdocController@store');
+        Route::get('/admin/document/{id}','DocController@details');
 
         //WF
         Route::get('/admin/test','WfController@index');

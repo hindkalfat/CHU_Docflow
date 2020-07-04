@@ -22,4 +22,9 @@ class Metadonnee extends Model
     {
         return $this->belongsToMany(Action::class,'actions_metas', '_idM', '_idA');
     }
+
+    public function documents()
+    {
+        return $this->belongsToMany(Document::class, 'metas_docs' , '_idM', '_idD');
+    }
 }

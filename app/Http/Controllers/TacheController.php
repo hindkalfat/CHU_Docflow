@@ -23,7 +23,7 @@ class TacheController extends Controller
         $id = Auth::user()->id;
         $user = User::find($id);
         $groupes = $user->groupes->unique()->pluck('idG');
-        $actions = $user->actions->where('couranteA',1)->pluck('idA'); 
+        $actions = $user->actions->where('couranteA',1)->pluck('idA'); return $actions;
 
         $tachesEnCours = Tache::whereIn('t_idA',$actions)->where('etatT',1)->get();
 

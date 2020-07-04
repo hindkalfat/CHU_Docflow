@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use App\Rules\MatchOldPassword;
 
 use App\User;
 use App\RoleUser;
@@ -29,8 +31,37 @@ class UserController extends Controller
 
     public function profil()
     {
-        return Auth::user();
-        return view('user_admin.profil');
+        $user = Auth::user();
+        return view('user_admin.profil',['user' => $user]);
+    }
+
+    public function edit_profil()
+    {
+        $user = Auth::user();
+        return view('user_admin.editProfil',['user' => $user]);
+    }
+
+    public function update_profil(Request $request)
+    {
+        $request->validate([
+            'current_password' => ['required', new MatchOldPassword],
+            'new_password' => ['required'],
+            'new_confirm_password' => ['same:new_password'],
+        ]);
+   
+        $user = User::find(auth()->user()->id)->update(['password'=> Hash::make($request->new_password),
+                                                'email'=> $request->input('email'),
+                                                'nomU'=> $request->input('nomU'),
+                                                'prenomU'=> $request->input('prenomU'),
+                                                'professionU'=> $request->input('professionU'),
+                                                'numTelU'=> $request->input('numTelU'),
+                                                'adresseU'=> $request->input('adresseU'),
+                                                'villeU'=> $request->input('villeU'),
+                                                'serviceU'=> $request->input('serviceU'),
+                                                'centreU'=> $request->input('centreU'),
+                                                ]);
+
+        return Redirect::to('/profil');
     }
 
     /**

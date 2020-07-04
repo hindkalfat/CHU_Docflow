@@ -2,9 +2,12 @@
 
 @section('link')
 <link href="{{asset('plugins/notification/snackbar/snackbar.min.css')}}" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="{{asset('plugins/select2/select2.min.css')}}">
 @endsection
 
 @section('script')
+    <script src="{{asset('plugins/select2/select2.min.js')}}"></script>
+    <script src="{{asset('plugins/select2/custom-select2.js')}}"></script>
     <script>
         $('.bottom-right').click(function() {
             Snackbar.show({
@@ -15,6 +18,116 @@
     </script>
     <script src="{{asset('plugins/notification/snackbar/snackbar.min.js')}}"></script>
 
+    
+    <script type="text/javascript"> //SEARCH
+        $('#search').on('keyup',function(){
+            $valueT=$('#typeD').val();
+            $value=$(this).val();
+            $valueE = $('#etatD').val();
+            $.ajax({
+            type : 'get',
+            url : '{{URL::to('search')}}',
+            data:{'search':$value , 'typeD':$valueT, 'etatD':$valueE},
+            success:function(data){
+
+                $('#bodyDoc').empty();
+                $.each(data.docs, function (i, item) {
+                    var dateC = new Date(item.created_at);
+                    var datecreated_at = dateC.getDate() + "/" +(dateC.getMonth() + 1) + "/" + dateC.getFullYear();
+
+                    $('#bodyDoc').append(
+                                        '<tr role="row">'+
+                                            '<td>'+ item.nomD+'</td>'+
+                                            '<td>'+ item.nomU+' '+ item.prenomU+' </td>'+
+                                            '<td>'+ datecreated_at +'</td>'+
+                                            '<td>  </td>'+
+                                            '<td> '+ item.etatD+' </td>'+
+                                            '<td>  </td>'+
+                                            '<td style="width:114px;">'+
+                                                '<a  href=" {!! asset("admin/document/'+item.idD+'") !!} "> '+                                          
+                                                    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'+
+                                                '</a>'+                                         
+                                            '</td>'+
+                                        '</tr>'
+                                    );
+                });
+            }
+            });
+        })
+
+        $('#typeD').on('change',function(){
+            $value=$(this).val();
+            $valueM=$('#search').val();
+            $valueE = $('#etatD').val();
+            $.ajax({
+            type : 'get',
+            url : '{{URL::to('search')}}',
+            data:{'typeD':$value , 'search':$valueM, 'etatD':$valueE},
+            success:function(data){
+                $('#bodyDoc').empty();
+                $.each(data.docs, function (i, item) {
+                    var dateC = new Date(item.created_at);
+                    var datecreated_at = dateC.getDate() + "/" +(dateC.getMonth() + 1) + "/" + dateC.getFullYear();
+
+                    $('#bodyDoc').append(
+                                        '<tr role="row">'+
+                                            '<td>'+ item.nomD+'</td>'+
+                                            '<td>'+ item.nomU+' '+ item.prenomU+' </td>'+
+                                            '<td>'+ datecreated_at +'</td>'+
+                                            '<td>  </td>'+
+                                            '<td> '+ item.etatD+' </td>'+
+                                            '<td>  </td>'+
+                                            '<td style="width:114px;">'+
+                                                '<a  href=" {!! asset("admin/document/'+item.idD+'") !!} "> '+                                          
+                                                    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'+
+                                                '</a>'+                                         
+                                            '</td>'+
+                                        '</tr>'
+                                    );
+                });
+            }
+            });
+        })
+
+        $('#etatD').on('change',function(){
+            $value=$(this).val();
+            $valueM=$('#search').val();
+            $valueT=$('#typeD').val();
+            $.ajax({
+            type : 'get',
+            url : '{{URL::to('search')}}',
+            data:{'etatD':$value,'typeD':$valueT , 'search':$valueM},
+            success:function(data){
+                $('#bodyDoc').empty();
+                $.each(data.docs, function (i, item) {
+                    var dateC = new Date(item.created_at);
+                    var datecreated_at = dateC.getDate() + "/" +(dateC.getMonth() + 1) + "/" + dateC.getFullYear();
+
+                    $('#bodyDoc').append(
+                                        '<tr role="row">'+
+                                            '<td>'+ item.nomD+'</td>'+
+                                            '<td>'+ item.nomU+' '+ item.prenomU+' </td>'+
+                                            '<td>'+ datecreated_at +'</td>'+
+                                            '<td>  </td>'+
+                                            '<td> '+ item.etatD+' </td>'+
+                                            '<td>  </td>'+
+                                            '<td style="width:114px;">'+
+                                                '<a  href=" {!! asset("admin/document/'+item.idD+'") !!} "> '+                                          
+                                                    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'+
+                                                '</a>'+                                         
+                                            '</td>'+
+                                        '</tr>'
+                                    );
+                });
+            }
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
+        $.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
+    //END SEARCH
+    </script> 
     
 @endsection
 
@@ -49,6 +162,19 @@
 
 <script>
         $(document).ready(function () {
+            //select2
+            var ss = $(".basic").select2({
+                tags: true,
+            });
+            $(".placeholder").select2({
+                placeholder: "Type du document",
+                allowClear: true
+            });
+            $(".placeholde").select2({
+                placeholder: "Etat du document ",
+                allowClear: true
+            });
+            //
             $('.addinput').click(function(){
                 var cpt = $('#cpt').val()*1;
                 $(this).after( '<hr/>'+
@@ -274,28 +400,24 @@
                                     <div class="row" id="cancel-row">
                                         <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
                                             <div class="widget-content widget-content-area br-6">
-                                                
-                                                <select class="selectpicker mb-4" data-width="fit">
-                                                    <option>Type document</option>
-                                                    <option>Ketchup</option>
-                                                    <option>Relish</option>
-                                                    <option>Onions</option>
-                                                </select>
-                                                <div class="input-group mb-4">
-                                                    <div class="form-group mb-0">
-                                                        <input id="basicFlatpickr" value="2019-09-04" class="macl form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">
+                                                <div class="form-row mb-4">
+                                                    <div class="col">
+                                                        <select id="typeD" name="typeD" class="form-control tagging placeholder " multiple="multiple">
+                                                            @foreach ($typesDoc as $typeDoc)
+                                                                <option value="{{$typeDoc->idTd}}">{{$typeDoc->intituleTd}}</option>
+                                                            @endforeach
+                                                        </select>
                                                     </div>
-                                                    <div class="form-group mb-0">
-                                                        <input id="basicFlatpickr" value="2019-09-04" class=" macl form-control flatpickr flatpickr-input " type="text" placeholder="Select Date..">
-                                                    </div>  
-                                                    
-                                                </div> 
-                                                    <div class="">                                                
-                                                        <label class="switch s-primary  mb-4 mr-2">
-                                                            <input type="checkbox" checked>
-                                                            <span class="slider"></span>
-                                                        </label>
+                                                    <div class="col">
+                                                        <input id="search" name="search" type="text" class="form-control" id="exampleFormControlInput1" value="" placeholder="Recherche métadonnée">
                                                     </div>
+                                                    <div class="col">
+                                                        <select id="etatD" name="etatD" class="form-control tagging placeholde" multiple="multiple">
+                                                            <option value="actif">actif</option>
+                                                            <option value="archive">archivé</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
                                                 
                                                 <div class="table-responsive mb-4 mt-4">
                                                     <table id="zero-config" class="table table-hover" style="width:100%">
@@ -310,16 +432,20 @@
                                                                 <th class="no-content"></th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody>
+                                                        <tbody id="bodyDoc">
                                                             @foreach ($docs as $doc)
                                                             <tr>
                                                                 <td> {{$doc->nomD}} </td>
-                                                                <td> {{$doc->user->nomU}} </td>
+                                                                <td> {{$doc->user->nomU}} {{$doc->user->prenomU}} </td>
                                                                 <td> {{$doc->created_at->format('d/m/Y')}} </td>
                                                                 <td> {{$doc->versions->count()}} </td>
                                                                 <td> {{$doc->etatD}}  </td>
                                                                 <td>  </td>
-                                                                <td><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle table-cancel"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg></td>
+                                                                <td>
+                                                                    <a  href=" {{url('admin/document/'.$doc->idD)}} ">                                            
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                                                    </a>                                                                
+                                                                </td>
                                                             </tr>
                                                             @endforeach
                                                         </tbody>

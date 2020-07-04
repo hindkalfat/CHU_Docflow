@@ -10,7 +10,7 @@ class Action extends Model
     protected $primaryKey = 'idA';
 
     protected $fillable = [
-        'nomA',   'titreA', 'directiveA',  'date_limiteA', 'opt_limiteA', 'date_rappelA', 'opt_rappelA', 'prioriteA',
+        'idA', 'nomA',   'titreA', 'directiveA',  'date_limiteA', 'opt_limiteA', 'date_rappelA', 'opt_rappelA', 'prioriteA','a_idU'
     ];
 
     public function workflow()
@@ -30,7 +30,7 @@ class Action extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'a_idU');
+        return $this->belongsTo(User::class, 'a_idU', 'id');
     }
 
     public function predecesseurs()

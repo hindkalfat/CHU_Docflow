@@ -90,14 +90,16 @@ class DocController extends Controller
 
         foreach ($metas as $meta ) {
             $a = $meta->idM;
-            if ($request->input("".$a)) {
-                $metaDoc = new MetaDoc;
-                $metaDoc->_idM = $meta->idM;
-                $metaDoc->_idD = $document->idD;
-                $metaDoc->_idUT = null;
+            $metaDoc = new MetaDoc;
+            $metaDoc->_idM = $meta->idM;
+            $metaDoc->_idD = $document->idD;
+            $metaDoc->_idUT = null;
+            if ($request->input("".$a)) 
                 $metaDoc->valeur = $request->input("".$a);
-                $metaDoc->save();
-            }
+            else
+                $metaDoc->valeur = null;
+            $metaDoc->save();
+            
 
         }
 
@@ -494,18 +496,56 @@ class DocController extends Controller
 
         foreach ($metas as $meta ) {
             $a = $meta->idM;
-            if ($request->input("".$a)) {
-                $metaDoc = new MetaDoc;
-                $metaDoc->_idM = $meta->idM;
-                $metaDoc->_idD = $document->idD;
-                $metaDoc->_idUT = $user_tache->idUT;
-                $metaDoc->valeur = $request->input("".$a);
-                $metaDoc->save();
-            }
-
+            $metaDoc = new MetaDoc;
+            $metaDoc->_idM = $meta->idM;
+            $metaDoc->_idD = $document->idD;
+            $metaDoc->_idUT = $user_tache->idUT;
+                if ($request->input("".$a)) 
+                    $metaDoc->valeur = $request->input("".$a);
+                else
+                    $metaDoc->valeur = null;
+            $metaDoc->save();
         }
 
         return $this->nextActions($tache->action->idA,$document->idD,$tache->idT);
     }
+
+    public function search(Request $request)
+    {
+        if($request->ajax())
+        {
+            if ($request->search == '' ) {
+                $metas = Document::all();
+                $productsM = $metas->pluck('idD');
+
+            } else {
+                $productsM= Metadonnee::join('metas_docs','metas_docs._idM','=','metadonnees.idM')
+                            ->where('libelleM','LIKE','%'.$request->search."%")
+                            ->orwhere('valeur','LIKE','%'.$request->search."%")
+                            ->pluck('_idD');
+            }
+
+            if ($request->input('typeD') == '' ) {
+                $types = TypeDoc::all()->pluck('idTd');
+            } else {
+                $types = $request->input('typeD'); 
+            }
+
+            if ($request->input('etatD') == '' ) {
+                $etat = ['actif' , 'archive'];
+            } else {
+                $etat = $request->input('etatD'); 
+            }
+
+            $docs = Document::join('users','users.id','=','documents.d_idU')
+                    ->join('versions','versions.v_idD','=','documents.idD')
+                    ->whereIn('idD',$productsM)->whereIn('d_idTd',$types)
+                    ->whereIn('etatD',$etat)
+                    ->get()
+                    ->keyBy('idD');;       
+            return response()->json(['success' => "deleted", 'docs' => $docs, 'p'=> $productsM, 't' =>$types]);;
+        }
+    }
+
 
 }

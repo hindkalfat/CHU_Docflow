@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'nomU','prenomU','serviceU', 'villeU','numTelU','emailPersoU','adresseU','professionU','centreU', 'email', 'password',
+        'id','nomU','prenomU','serviceU', 'villeU','numTelU','emailPersoU','adresseU','professionU','centreU', 'email', 'password',
     ];
 
     /**
@@ -44,7 +44,7 @@ class User extends Authenticatable
 
     public function actions()
     {
-        return $this->hasMany(Action::class, 'a_idU');
+        return $this->hasMany(Action::class, 'a_idU', 'id');
     }
 
     public function documents()

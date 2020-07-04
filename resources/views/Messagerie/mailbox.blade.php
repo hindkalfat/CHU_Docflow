@@ -66,7 +66,7 @@
                                     <div class="message-box-scroll" id="ct">                                            
 
                                         @foreach ($messages as $message)
-                                            <div class="mail-item mailInbox">
+                                            <div class="mail-item mailInbox supp{{$message->idM}}">
                                                 <div class="animated animatedFadeInUp fadeInUp" id="mailHeadingTwelve">
                                                     <div class="mb-0">
                                                         <div class="mail-item-heading private collapsed"  data-toggle="collapse" role="navigation" data-target="#mailCollapseTwo{{$message->idM}}" aria-expanded="false">
@@ -80,10 +80,10 @@
                                                                     </div>
                                                                     <div class="f-body">
                                                                         <div class="meta-mail-time">
-                                                                            <p class="user-email" data-mailTo="{{$message->receiver->email}}">{{$message->receiver->nomU}} {{$message->receiver->prenomU}}</p>
+                                                                            <p class="user-email" data-mailTo="{{$message->receiver->id}}">{{$message->receiver->nomU}} {{$message->receiver->prenomU}}</p>
                                                                         </div>
                                                                         <div class="meta-title-tag">
-                                                                            <p class="mail-content-excerpt" data-mailDescription='{"ops":[{"insert":"{{$message->message}}"}]}'>
+                                                                            <p class="mail-content-excerpt" data-mailDescription='{"ops":[{"insert":"{{$message->content}}"}]}'>
                                                                                 @if ($message->medias->count()>0)
                                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-paperclip attachment-indicator"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
                                                                                 @endif
@@ -120,7 +120,7 @@
                                                                     </div>
                                                                     <div class="f-body">
                                                                         <div class="meta-mail-time">
-                                                                            <p class="user-email" data-mailTo="justincross@mail.com">{{$message->receiver->nomU}} {{$message->receiver->prenomU}}</p>
+                                                                            <p class="user-email" data-mailTo="{{$message->receiver->id}}">{{$message->receiver->nomU}} {{$message->receiver->prenomU}}</p>
                                                                         </div>
                                                                         <div class="meta-title-tag">
                                                                             <p class="mail-content-excerpt" data-mailDescription='{"ops":[{"insert":"{{$message->content}}"}]}'><span class="mail-title" data-mailTitle="{{$message->sujet}}">{{$message->sujet}} - </span>{{$message->content}}.</p>
@@ -150,7 +150,7 @@
                                                                     </div>
                                                                     <div class="f-body">
                                                                         <div class="meta-mail-time">
-                                                                            <p class="user-email" data-mailTo="ryanMCkillop@mail.com">{{$message->receiver->nomU}} {{$message->receiver->prenomU}}</p>
+                                                                            <p class="user-email" data-mailTo="{{$message->receiver->id}}">{{$message->receiver->nomU}} {{$message->receiver->prenomU}}</p>
                                                                         </div>
                                                                         <div class="meta-title-tag">
                                                                             <p class="mail-content-excerpt" data-mailDescription='{"ops":[{"insert":"{{$message->content}}"}]}'><span class="mail-title" data-mailTitle="{{$message->sujet}}">{{$message->sujet}} - </span>{{$message->content}}.</p>
@@ -175,9 +175,9 @@
                                                                 <div class="d-flex">
                                                                     <div class="n-chk text-center">
                                                                     </div>
-                                                                    <div class="f-body" data-mailfrom="info@mail.com" data-mailto="amDiaz@mail.com" data-mailcc="">
+                                                                    <div class="f-body" data-mailfrom="info@mail.com" data-mailto="{{$message->receiver->id}}" data-mailcc="">
                                                                         <div class="meta-mail-time">
-                                                                            <p class="user-email" data-mailTo="amDiaz@mail.com">{{$message->receiver->nomU}} {{$message->receiver->prenomU}}</p>
+                                                                            <p class="user-email" data-mailTo="{{$message->receiver->id}}">{{$message->receiver->nomU}} {{$message->receiver->prenomU}}</p>
                                                                         </div>
                                                                         <div class="meta-title-tag">
                                                                             <p class="mail-content-excerpt" data-maildescription='{"ops":[{"insert":"{{$message->content}}"}]}'><span class="mail-title" data-mailTitle="{{$message->sujet}}">{{$message->sujet}} - </span>{{$message->content}}.</p>
@@ -200,163 +200,99 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left close-message"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
                                         <h2 class="mail-title" data-selectedMailTitle=""></h2>
                                     </div>
+
                                     @foreach ($messages as $message)
-                                        <div id="mailCollapseTwo{{$message->idM}}" class="collapse" aria-labelledby="mailHeadingThree" data-parent="#mailbox-inbox">
-                                            <div class="mail-content-container mailInbox" data-mailfrom="{{$message->sender->email}}" data-mailto="{{$message->receiver->email}}" data-mailcc="">
-
-                                                <div class="d-flex justify-content-between">
-
-                                                    <div class="d-flex user-info">
-                                                        <div class="f-head">
-                                                            <img src="assets/img/profile-16.jpg" class="user-profile" alt="avatar">
-                                                        </div>
-                                                        <div class="f-body">
-                                                            <div class="meta-title-tag">
-                                                                <h4 class="mail-usr-name" data-mailtitle="{{$message->sujet}}">{{$message->receiver->nom}} {{$message->receiver->prenom}}</h4>
-                                                            </div>
-                                                            <div class="meta-mail-time">
-                                                                <p class="user-email" data-mailto="laurieFox@mail.com">{{$message->receiver->email}}</p>
-                                                                <p class="mail-content-meta-date current-recent-mail">{{$message->created_at->format('d/m/Y')}}</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-
-                                                <p class="mail-content" data-mailTitle="{{$message->sujet}}" data-maildescription='{"ops":[{"insert":"{{$message->content}}"}]}'> {!!  $message->message    !!}. </p>
-
-                                                @if ($message->medias->count()>0)
-                                                    <div class="attachments">
-                                                        <h6 class="attachments-section-title">Attachments</h6>
-                                                        @foreach ($message->medias as $media)
-                                                            <div class="attachment file-pdf">
-                                                                <div class="media">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                                                                    <div class="media-body">
-                                                                        <p class="file-name">{{$media->fileName}}</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        @endforeach
-    
-                                                    </div>
-                                                @endif
-                                                
-
-                                            </div>
-                                        </div>
-                                    @endforeach
-
-                                    @foreach ($msgEnvoyés as $message)
-                                        <div id="mailCollapseThree{{$message->idM}}" class="collapse" aria-labelledby="mailHeadingThree" data-parent="#mailbox-inbox">
-                                            <div class="mail-content-container sentmail" data-mailfrom="{{$message->sender->email}}" data-mailto="{{$message->receiver->email}}" data-mailcc="">
-
-                                                <div class="d-flex justify-content-between">
-
-                                                    <div class="d-flex user-info">
-                                                        <div class="f-head">
-                                                            <img src="assets/img/profile-16.jpg" class="user-profile" alt="avatar">
-                                                        </div>
-                                                        <div class="f-body">
-                                                            <div class="meta-title-tag">
-                                                                <h4 class="mail-usr-name" data-mailtitle="{{$message->sujet}}">{{$message->receiver->nom}} {{$message->receiver->prenom}}</h4>
-                                                            </div>
-                                                            <div class="meta-mail-time">
-                                                                <p class="user-email" data-mailto="laurieFox@mail.com">{{$message->receiver->email}}</p>
-                                                                <p class="mail-content-meta-date current-recent-mail">{{$message->created_at->format('d/m/Y')}}</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-
-                                                <p class="mail-content" data-mailTitle="{{$message->sujet}}" data-maildescription='{"ops":[{"insert":"{{$message->content}}"}]}'> {!!  $message->message    !!}. </p>
-
-                                                @if ($message->medias->count()>0)
-                                                    <div class="attachments">
-                                                        <h6 class="attachments-section-title">Attachments</h6>
-                                                        @foreach ($message->medias as $media)
-                                                            <div class="attachment file-pdf">
-                                                                <div class="media">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                                                                    <div class="media-body">
-                                                                        <p class="file-name">{{$media->fileName}}</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        @endforeach
-    
-                                                    </div>
-                                                @endif
-                                                
-
-                                            </div>
-                                        </div>
-                                        <div id="mailCollapseThree{{$message->idM}}" class="collapse" aria-labelledby="mailHeadingTwo" data-parent="#mailbox-inbox">
+                                        <div id="mailCollapseTwo{{$message->idM}}" class="collapse" type="mailInbox" aria-labelledby="mailHeadingTwo" data-parent="#mailbox-inbox">
                                             <div class="mail-content-container sentmail" data-mailfrom="info@mail.com" data-mailto="alan@mail.com" data-mailcc="">
-
+                                                <input type="hidden" id="type{{$message->idM}}" value="mailInbox">
                                                 <div class="d-flex justify-content-between mb-3">
                                                     <div class="d-flex user-info">
                                                         <div class="f-body">
+                                                            <div class="meta-title-tag">
+                                                                <h4 class="mail-usr-name" data-mailtitle="{{$message->sujet}}">{{$message->receiver->nom}} {{$message->receiver->prenom}}</h4>
+                                                            </div>
                                                             <div class="meta-mail-time">
-                                                                <div class="">
-                                                                    <p class="user-email" data-mailto="alan@mail.com"><span>To,</span> alan@mail.com</p>
-                                                                </div>
-                                                                <p class="mail-content-meta-date current-recent-mail">12/14/2019 -</p>
-                                                                <p class="meta-time align-self-center">8:45 AM</p>
+                                                                <p class="user-email" data-mailto="{{$message->receiver->id}}">{{$message->receiver->email}}</p>
+                                                                <p class="mail-content-meta-date current-recent-mail">{{$message->created_at->format('d/m/Y')}}</p>
                                                             </div>
                                                         </div>
                                                     </div>
 
                                                     <div class="action-btns">
-                                                        <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" data-original-title="Reply">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-corner-up-left reply"><polyline points="9 14 4 9 9 4"></polyline><path d="M20 20v-7a4 4 0 0 0-4-4H4"></path></svg>
-                                                        </a>
-                                                        <a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" data-original-title="Forward">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-corner-up-right forward"><polyline points="15 14 20 9 15 4"></polyline><path d="M4 20v-7a4 4 0 0 1 4-4h12"></path></svg>
+                                                        <form action="{{url('supprimer')}}" method="post" id="deleteF{{$message->idM}}">
+                                                            {!! csrf_field() !!}
+                                                            <input type="hidden" value="{{$message->idM}}" name="msg_dlt">
+                                                        </form>
+                                                        <a href="javascript:void(0);" id="{{$message->idM}}" class="dropdown-item action-delete" data-toggle="tooltip" data-placement="top" data-original-title="Supprimer">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-toggle="tooltip" data-placement="top" data-original-title="Delete" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
                                                         </a>
                                                     </div>
                                                 </div>
-                                                <p class="mail-content" data-mailTitle="Mozilla Update" data-maildescription='{"ops":[{"insert":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi pulvinar feugiat consequat. Duis lacus nibh, sagittis id varius vel, aliquet non augue. Vivamus sem ante, ultrices at ex a, rhoncus ullamcorper tellus. Nunc iaculis eu ligula ac consequat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum mattis urna neque, eget posuere lorem tempus non. Suspendisse ac turpis dictum, convallis est ut, posuere sem. Etiam imperdiet aliquam risus, eu commodo urna vestibulum at. Suspendisse malesuada lorem eu sodales aliquam.\n"}]}'> Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS. </p>
+                                                <p class="mail-content" data-mailTitle="{{$message->sujet}}" data-maildescription='{"ops":[{"insert":"{{$message->content}}"}]}'> {!!  $message->message    !!}. </p>
 
-                                                <p>Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.</p>
-
-                                                <p>Best Regards,</p>
-                                                <p>Shaun Park</p>
-
-                                                <div class="attachments">
-                                                    <h6 class="attachments-section-title">Attachments</h6>
-                                                    <div class="attachment file-pdf">
-                                                        <div class="media">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                                                            <div class="media-body">
-                                                                <p class="file-name">Confirm File</p>
-                                                                <p class="file-size">450kb</p>
+                                                @if ($message->medias->count()>0)
+                                                    <div class="attachments">
+                                                        <h6 class="attachments-section-title">Attachments</h6>
+                                                        @foreach ($message->medias as $media)
+                                                            <div class="attachment file-pdf">
+                                                                <div class="media">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                                                    <div class="media-body">
+                                                                        <p class="file-name">{{$media->fileName}}</p>
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                        </div>
+                                                        @endforeach
+    
                                                     </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endforeach 
 
-                                                    <div class="attachment file-folder">
-                                                        <div class="media">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-folder"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
-                                                            <div class="media-body">
-                                                                <p class="file-name">Important Docs</p>
-                                                                <p class="file-size">2.1MB</p>
+                                    @foreach ($msgEnvoyés as $message)
+                                        <div id="mailCollapseThree{{$message->idM}}" class="collapse" aria-labelledby="mailHeadingThree" data-parent="#mailbox-inbox">
+                                            <div class="mail-content-container sentmail" data-mailfrom="{{$message->sender->email}}" data-mailto="{{$message->receiver->id}}" data-mailcc="">
+
+                                                <div class="d-flex justify-content-between">
+
+                                                    <div class="d-flex user-info">
+                                                        <div class="f-head">
+                                                            <img src="assets/img/profile-16.jpg" class="user-profile" alt="avatar">
+                                                        </div>
+                                                        <div class="f-body">
+                                                            <div class="meta-title-tag">
+                                                                <h4 class="mail-usr-name" data-mailtitle="{{$message->sujet}}">{{$message->receiver->nom}} {{$message->receiver->prenom}}</h4>
                                                             </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="attachment file-img">
-                                                        <div class="media">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-image"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                                                            <div class="media-body">
-                                                                <p class="file-name">Photo.png</p>
-                                                                <p class="file-size">50kb</p>
+                                                            <div class="meta-mail-time">
+                                                                <p class="user-email" data-mailto="{{$message->receiver->id}}">{{$message->receiver->email}}</p>
+                                                                <p class="mail-content-meta-date current-recent-mail">{{$message->created_at->format('d/m/Y')}}</p>
                                                             </div>
                                                         </div>
                                                     </div>
 
                                                 </div>
+
+                                                <p class="mail-content" data-mailTitle="{{$message->sujet}}" data-maildescription='{"ops":[{"insert":"{{$message->content}}"}]}'> {!!  $message->message    !!}. </p>
+
+                                                @if ($message->medias->count()>0)
+                                                    <div class="attachments">
+                                                        <h6 class="attachments-section-title">Attachments</h6>
+                                                        @foreach ($message->medias as $media)
+                                                            <div class="attachment file-pdf">
+                                                                <div class="media">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                                                    <div class="media-body">
+                                                                        <p class="file-name">{{$media->fileName}}</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
+    
+                                                    </div>
+                                                @endif
+                                                
+
                                             </div>
                                         </div>
                                     @endforeach
@@ -416,15 +352,11 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button id="btn-save" class="btn float-left"> Save</button>
-                                        <button id="btn-reply-save" class="btn float-left"> Save Reply</button>
-                                        <button id="btn-fwd-save" class="btn float-left"> Save Fwd</button>
+                                        <button id="btn-save" class="btn float-left"> Enregistrer</button>
 
                                         <button class="btn" data-dismiss="modal"> <i class="flaticon-delete-1"></i> Discard</button>
 
-                                        <button id="btn-reply" class="btn"> Reply</button>
-                                        <button id="btn-fwd" class="btn"> Forward</button>
-                                        <button id="btn-send" class="btn"> Send</button>
+                                        <button id="btn-send" class="btn"> Envoyer</button>
                                     </div>
                                 </div>
                             </div>

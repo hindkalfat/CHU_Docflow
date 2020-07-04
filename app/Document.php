@@ -32,4 +32,9 @@ class Document extends Model
     {
         return $this->hasMany(Tache::class, 't_idD');
     }
+
+    public function metadonnees()
+    {
+        return $this->belongsToMany(Metadonnee::class)->using('App\MetaDoc');
+    }
 }

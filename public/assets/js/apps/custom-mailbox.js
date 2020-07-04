@@ -407,36 +407,41 @@ $(document).ready(function() {
 
 	// Delete a mail
 	$(".action-delete").on("click", function() {
-		var inboxCheckboxParents = $(".inbox-chkbox:checked").parents('.mail-item');
-		var inboxMailItemClass = inboxCheckboxParents.attr('class');
-        var getFirstClass = inboxMailItemClass.split(' ')[1];
-        var getSecondClass = inboxMailItemClass.split(' ')[2];
-        var getThirdClass = inboxMailItemClass.split(' ')[3];
-        var getFourthClass = inboxMailItemClass.split(' ')[4];
-        var getFifthClass = inboxMailItemClass.split(' ')[5];
+		event.preventDefault();
+		var id = $(this).attr("id");
+		var data = $('#deleteF'+id).serialize(); 
+		$.ajax({
+            type:'POST',
+			data:data,
+			url:'/supprimer',
+            success:function(data){
+				var inboxCheckboxParents = $("#mailCollapseTwo"+id);
+				var todelete = $(".supp"+id);
 
-        var notificationText = '';
-		var getCheckedItemlength = $(".inbox-chkbox:checked").length;
+				var getFirstClass = $('#type'+id).val();
+				console.log(getFirstClass)
 
-		var notificationText = getCheckedItemlength < 2 ? getCheckedItemlength + ' Mail Deleted' : getCheckedItemlength + ' Mails Deleted';
+				var notificationText = '';
+				var getCheckedItemlength = $("#mailCollapseTwo"+id).length;
 
-        if (getFirstClass === 'mailInbox' || getFirstClass === 'sentmail' || getFirstClass === 'draft' || getFirstClass === 'spam') {
-          inboxCheckboxParents.removeClass(getFirstClass);
-        }
-        if (getSecondClass === 'mailInbox' || getSecondClass === 'important') {
-          inboxCheckboxParents.removeClass(getSecondClass);
-        }
-	  	inboxCheckboxParents.addClass('trashed');
- 		$(".inbox-chkbox:checked").prop('checked',false);
- 		$(".list-actions#trashed").trigger('click');
+				var notificationText = getCheckedItemlength < 2 ? getCheckedItemlength + ' Mail Deleted' : getCheckedItemlength + ' Mails Deleted';
 
- 		Snackbar.show({
-	        text: notificationText,
-	        width: 'auto',
-	        pos: 'top-center',
-	        actionTextColor: '#bfc9d4',
-	        backgroundColor: '#515365'
-	    });
+				if (getFirstClass === 'mailInbox' || getFirstClass === 'sentmail' || getFirstClass === 'draft' || getFirstClass === 'spam') {
+				todelete.removeClass(getFirstClass);
+				}
+				todelete.addClass('trashed');
+				$(".list-actions#trashed").trigger('click');
+
+				Snackbar.show({
+					text: notificationText,
+					width: 'auto',
+					pos: 'top-center',
+					actionTextColor: '#bfc9d4',
+					backgroundColor: '#515365'
+				});
+			}
+		});
+		
 	});
 
 	// Revive Mail from Tash
@@ -666,6 +671,11 @@ $(document).ready(function() {
 	$("#btn-save").on('click', function(event) {
 		event.preventDefault();
 		/* Act on the event */
+
+		$('#msgTxt').val($('.ql-editor').text())
+		$('#msg').val($('.ql-editor').html())
+		$('#sendForm').attr('action','/enregister');
+		$('#sendForm').submit();
 
 	  	var $_mailTo = document.getElementById('m-to').value;
 	  	var $_mailAttachment = document.getElementById('mail_File_attachment');
