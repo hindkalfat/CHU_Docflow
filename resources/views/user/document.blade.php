@@ -1,4 +1,14 @@
-@extends('layout.app1')
+@if (Auth::user()->roles->pluck('nomR')->contains("user") )
+    @php
+    $ext = 'app1';
+    @endphp   
+@elseif (Auth::user()->roles->pluck('nomR')->contains("admin") )
+    @php
+    $ext = 'app';
+    @endphp
+@endif
+
+@extends('layout.'.$ext)
 
 @section('link')
     <link href="{{asset('assets/css/apps/invoice.css')}}" rel="stylesheet" type="text/css" />

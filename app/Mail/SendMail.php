@@ -11,15 +11,17 @@ class SendMail extends Mailable
 {
     use Queueable, SerializesModels;
     public $details;
+    public $subject;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($details)
+    public function __construct($details,$subject)
     {
         $this->details = $details;
+        $this->subject = $subject;
     }
 
     /**
@@ -29,7 +31,6 @@ class SendMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Mail from Real Programmer')
-        ->view('emails.sendmail');
+        return $this->from('chudocflow@gmail.com', 'CHUDocflow')->subject($this->subject)->view('emails.sendMail')->with('details', $this->details);
     }
 }

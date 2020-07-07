@@ -301,6 +301,24 @@
             </div>
             <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
                 <div class="widget-content widget-content-area br-6">
+                    <div class="form-row mb-4">
+                        <div class="col">
+                            <select id="typeD" name="typeD" class="form-control tagging placeholder " multiple="multiple">
+                                @foreach ($typesDoc as $typeDoc)
+                                    <option value="{{$typeDoc->idTd}}">{{$typeDoc->intituleTd}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col">
+                            <input id="search" name="search" type="text" class="form-control" id="exampleFormControlInput1" value="" placeholder="Recherche métadonnée">
+                        </div>
+                        <div class="col">
+                            <select id="etatD" name="etatD" class="form-control tagging placeholde" multiple="multiple">
+                                <option value="actif">actif</option>
+                                <option value="archive">archivé</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="table-responsive mb-4 mt-4">
                         <table id="zero-config" class="table table-hover" style="width:100%">
                             <thead>

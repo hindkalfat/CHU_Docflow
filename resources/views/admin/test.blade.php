@@ -117,8 +117,15 @@
 								<div class="row">
 									<div class="col-md-12 col-sm-12 col-12">
 										<div class="search container layout-top-spacing">
+											<button class="btn btn-primary  mb-2 mr-2 rounded-circle">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-help-circle"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+											</button>
+											<button class="btn btn-danger mb-2 mr-2 rounded-circle">
 												<svg id="supp" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2 delete_selected_button"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+											</button>
+											<button class="btn btn-success  mb-2 mr-2 rounded-circle">
 												<svg data-toggle="modal" data-target="#exampleModalCenter" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+											</button>
 										</div>
 										<ul class="nav nav-pills inv-list-container d-block" id="pills-tab" role="tablist">
 											<li class=" container nav-item layout-top-spacing">
@@ -243,7 +250,22 @@
 											<div class="custom-file mb-4">
 													<input id="nomAct" type="text" class="form-control" placeholder="Nom action">
 											</div>
-											<div class="custom-file mb-4">
+											<div class="row mb-4">
+												<p class="">Affecter la tâche à un: </p>
+												<div class="col-sm-12 col-12 input-fields">
+													<div class="n-chk">
+														<label class="new-control new-radio radio-primary">
+															<input type="radio" class="new-control-input radio" name="custom-radio-1-user" value="User" checked="checked">
+															<span class="new-control-indicator"></span>Utilisateur
+														</label>
+														<label class="new-control new-radio radio-primary">
+															<input type="radio" class="new-control-input radio" name="custom-radio-1-user" value="Grp">
+															<span class="new-control-indicator"></span>Groupe
+														</label>
+													</div>
+												</div>
+											</div>
+											<div id="usr_chk" class="custom-file mb-4">
 												<select id="act_idU" name="responsableA" class="selectpicker" data-live-search="true" data-width="100%">
 													<option value="" disabled selected >Responsable</option>
 													@foreach ($users as $user)
@@ -251,7 +273,7 @@
 													@endforeach
 												</select>
 											</div>
-											<div class="custom-file mb-4">
+											<div id="grp_chk" class="custom-file mb-4" style="display:none;">
 												<select id="act_idG" name="groupeA" class="selectpicker" data-live-search="true" data-width="100%">
 													<option value="" disabled selected >Groupe</option>
 													@foreach ($groupes as $groupe)
@@ -772,6 +794,18 @@
 			//--- end
 			//--- delete operator / link button
 			//-----------------------------------------
+
+			// act user/groupe
+			$('input[type=radio][name=custom-radio-1-user]').change(function() {
+				if (this.value == 'User') {
+					$('#usr_chk').css("display","block");
+					$('#grp_chk').css("display","none");
+				}
+				else if (this.value == 'Grp') {
+					$('#usr_chk').css("display","none");
+					$('#grp_chk').css("display","block");
+				}
+			});
 
 			//type act -version-
 			$('input[type=radio][name=custom-radio-1-version]').change(function() {

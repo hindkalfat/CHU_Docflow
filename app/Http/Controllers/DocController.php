@@ -194,20 +194,20 @@ class DocController extends Controller
             {
                 $myEmail = $action->destinataireIA;
    
-                $details = [
-                    'title' => $action->objetA,
-                    'body' => $action->messageA
-                ];
-        
+                $details = array('body' => "bonjour");
                // Mail::to($myEmail)->send(new SendMail($details));
-                $data =  array('message' => $action->messageA);
+              /*  Mail::to($myEmail)->send(new SendMail($details)); */
+                /* $data =  response()->json(['message' => $action->messageA]);
                 $obj = $action->objetA;
                 Mail::send('emails.sendMail', $data, function($message) use ($myEmail,$obj) {
                     $message->to($myEmail, 'A ')
                             ->subject($obj);
                     $message->from('chudocflow@gmail.com','CHUDocflow');
-                  });
+                  }); */
 
+                $details = array('body' => $action->messageA);
+                $obj = $action->objetA;
+                Mail::to($myEmail)->send(new SendMail($details,$obj));
                  static::nextActions($action->idA,$id,null);
 
             }
@@ -312,7 +312,7 @@ class DocController extends Controller
                 {
                     $myEmail = $act->destinataireIA;
     
-                    $details = [
+                    /* $details = [
                         'title' => $act->objetA,
                         'body' => $act->messageA
                     ];
@@ -324,8 +324,15 @@ class DocController extends Controller
                         $message->to($myEmail, 'A ')
                                 ->subject($obj);
                         $message->from('chudocflow@gmail.com','CHUDocflow');
-                    });
-
+                    }); */
+                   /*  $details = array('body' => "bonjour");
+                    Mail::to($myEmail)->send(new SendMail($details));
+                    
+ */
+                    
+                    $details = array('body' => $act->messageA);
+                    $obj = $act->objetA;
+                    Mail::to($myEmail)->send(new SendMail($details,$obj));   
                     static::nextActions($act->idA,$doc,null);
 
                 }
@@ -395,19 +402,10 @@ class DocController extends Controller
             {
                 $myEmail = $act->destinataireIA;
 
-                $details = [
-                    'title' => $act->objetA,
-                    'body' => $act->messageA
-                ];
-        
-                // Mail::to($myEmail)->send(new SendMail($details));
-                $data =  array('message' => $act->messageA);
+                $details = array('body' => $act->messageA);
                 $obj = $act->objetA;
-                Mail::send('emails.sendMail', $data, function($message) use ($myEmail,$obj) {
-                    $message->to($myEmail, 'A ')
-                            ->subject($obj);
-                    $message->from('chudocflow@gmail.com','CHUDocflow');
-                });
+                Mail::to($myEmail)->send(new SendMail($details,$obj));
+
 
                 static::nextActions($act->idA,$doc,null);
 
