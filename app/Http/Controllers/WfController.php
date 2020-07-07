@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\support\Facades\DB;
 use App\TypeDoc;
 use App\User;
 use App\Workflow;
@@ -13,6 +14,7 @@ use App\Groupe;
 use App\Condition;
 use App\CondSuccesseur;
 use App\ActionMeta;
+use App\MetaDoc;
 
 class WfController extends Controller
 {
@@ -322,4 +324,14 @@ class WfController extends Controller
         else 
             return response()->json(['success' => "duplicated"]);
     }
+
+    public function test(Request $request)
+    {
+        $rq = $request->input('formule');
+        $metas=DB::select("SELECT  M._idM
+                                    FROM metas_docs M
+                                    WHERE $rq");
+        return $metas;
+    }
+
 }

@@ -25,7 +25,19 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/admin/users';
+
+    protected function redirectTo()
+    {
+        $userRoles = Auth::user()->roles->pluck('nomR');
+        if($userRoles->contains('admin')){
+            return 'admin/documents';
+        }else if($userRoles->contains('user')){
+            return 'user/documents';
+        }else{
+            return '/accesrefuse';
+        }
+
+    }
 
     /**
      * Create a new controller instance.

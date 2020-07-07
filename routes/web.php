@@ -91,6 +91,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/admin/unique','WfController@checkUniqueWf');
         Route::post('/admin/successeurs','WfController@successeurs');
         Route::get('my-demo-mail','Controller@myDemoMail');
+        Route::post('/test','WfController@test');
 
     });
 

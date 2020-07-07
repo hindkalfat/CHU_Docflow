@@ -21,7 +21,7 @@ class MailBoxController extends Controller
     public function index()
     {
         $users = User::all();
-        $messages = Message::where('save',0)->where('delete',0)->get();
+        $messages = Message::where('save',0)->where('delete',0)->where('to_id',Auth::user()->id)->get();
         $msgEnvoyés = Message::where('from_id',Auth::user()->id)->where('delete',0)->where('save',0)->get();
         $brouillons = Message::where('save',1)->where('delete',0)->get();
         $corbeilles = Message::where('delete',1)->get();

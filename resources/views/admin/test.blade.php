@@ -16,7 +16,7 @@
     <link rel="stylesheet" type="text/css" href="{{asset('assets/css/forms/theme-checkbox-radio.css')}}">
     <link href="{{asset('assets/css/apps/contacts.css')}}" rel="stylesheet" type="text/css" />
 	<link rel="stylesheet" href="{{asset('https://use.fontawesome.com/releases/v5.13.0/css/all.css')}}" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">
-    <link href="{{asset('plugins/flatpickr/flatpickr.css')}}" rel="stylesheet" type="text/css">
+	<link href="{{asset('plugins/flatpickr/flatpickr.css')}}" rel="stylesheet" type="text/css">
 
 	<!-- jQuery & jQuery UI are required -->
 	<script src="{{asset('https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js')}}"></script>
@@ -32,6 +32,8 @@
 	<link rel="stylesheet" type="text/css" href="{{asset('plugins/editors/quill/quill.snow.css')}}">
 	<link href="{{asset('plugins/notification/snackbar/snackbar.min.css')}}" rel="stylesheet" type="text/css" />
 	<link rel="stylesheet" type="text/css" href="{{asset('plugins/jquery-step/jquery.steps.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{asset('plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css')}}">
+
 
 	<style>
 		.flowchart-example-container {
@@ -470,7 +472,7 @@
 
 		<!-- Modal choix metas -->
 		<div class="modal fade" id="modalMetas" tabindex="-1" role="dialog" aria-labelledby="addContactModalTitle" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-dialog modal-dialog-centered" role="document" style="max-width:800px;">
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title" id="exampleModalCenterTitle">Condition sur les métadonnées</h5>
@@ -494,18 +496,34 @@
 								<label for="inputZip">Valeur</label>
 								<input type="text" class="form-control val" id="inputZip" disabled>
 							</div>
-							<div class="form-group col-md-3">
+							<div class="form-group col-md-4">
 								<label for="inputState">Operateur logique</label>
 								<select id="opComparLog" class="form-control" disabled>
-									<option value="et">ET</option>
-									<option value="ou">OU</option>
+									<option value="" disabled selected>choisissez</option>
+									<option value="and">ET</option>
+									<option value="or">OU</option>
 								</select>
 							</div>
+							<div class="form-group col-md-3">
+								<label for="inputState">Réinitialiser</label> <br>
+								<a href="#" style="margin-left:30px;" id="reinitialiser" onClick="reinitialiser();">
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+								</a>
+							</div>
 						</div>	 
+						<form action="/test" method="post">
+							{{ csrf_field() }}
+							<div class="form-row">
+								<textarea name="" id="condF" cols="30" rows="10" readonly style="margin-top: 0px; margin-bottom: 10px; margin-left:100px; height: 100px; width:500px"></textarea>
+								<textarea id="condFormule" name="formule" cols="30" rows="10" readonly></textarea>
+							</div>
+							
+							<div class="modal-footer">
+								<button class="btn" data-dismiss="modal"> <i class="flaticon-delete-1"></i> Annuler</button>
+								<button type="submit" id="btn-add" class="btn btn-success" disabled>Valider</button>
+							</div>
+						</form>
 						
-						<div class="form-row">
-							<textarea name="" id="condF" cols="30" rows="10" readonly></textarea>
-						</div>
 					</div>
 				</div>
 			</div>
@@ -514,6 +532,59 @@
 
 		{{-- <button id="bt">data</button>
 		<input type="text" name="" id="tt"> --}}
+
+		<script>
+			function dateP(params) {
+				var date = $('#basicFlatpickr1').val()
+				$('#basicFlatpickr1').val(date)
+				$('#condF').val($('#condF').val()+" "+date);
+				$('#condFormule').val($('#condFormule').val()+" '"+date+"')");
+				$('#basicFlatpickr1').prop("disabled", true);
+				$('#opComparLog').removeAttr("disabled");
+				$('#btn-add').removeAttr("disabled");
+			}
+			function reinitialiser() {
+				$('#condF').val("");
+				$('#condFormule').val("");
+				$('#btn-add').prop("disabled", true);
+				$('#metasSelect').removeAttr("disabled");
+				$('#opComparLog').prop("disabled", true);
+				$('#opCompar').prop("disabled", true);
+				$('#basicFlatpickr1').prop("disabled", true);
+				$('#valText').val("");
+				$('#valText').prop("disabled", true);
+			}
+			function textV() {
+				var textV = $('#valText').val()
+				$('#condF').val($('#condF').val()+" "+textV);
+				$('#condFormule').val($('#condFormule').val()+" '"+textV+"')");
+				$('#valText').prop("disabled", true);
+				$('#opComparLog').removeAttr("disabled");
+				$('#btn-add').removeAttr("disabled");
+			}
+			var ts = 0;
+			function numV() {
+				ts++;
+				if(ts == 2){
+					var textV = $('#demo2').val();
+					$('#condF').val($('#condF').val()+" "+textV);
+					$('#condFormule').val( $('#condFormule').val()+" '"+textV+"')");
+					$('#demo2').prop("disabled", true);
+					$('#opComparLog').removeAttr("disabled");
+					$('#btn-add').removeAttr("disabled");
+					ts=0;
+				}
+			}
+
+			function timeV() {
+				var textV = $('#example-time-input').val();
+				$('#condF').val($('#condF').val()+" "+textV);
+				$('#condFormule').val( $('#condFormule').val()+" '"+textV+"')");
+				$('#example-time-input').prop("disabled", true);
+				$('#opComparLog').removeAttr("disabled");
+				$('#btn-add').removeAttr("disabled");
+			}
+		</script>
 	<script type="text/javascript">
 		/* global $ */
 		$(document).ready(function() {
@@ -734,21 +805,20 @@
 					$('#prioriteA'+opId).val(this.value);
 				}
 			});
-					 $('#bt').click(function(){
-						var data = $flowchart.flowchart('getData');
-						var data1 = JSON.stringify(data, null, 2);
-						$('#tt').val(data1)
-					}); 
+
+			$('#bt').click(function(){
+				var data = $flowchart.flowchart('getData');
+				var data1 = JSON.stringify(data, null, 2);
+				$('#tt').val(data1)
+			}); 
 			
 			
 			$('.metasA').on('changed.bs.select', function (e) {
 				var selected = e.target.value; 
 				var optA = ''
 				$.each( e.target.selectedOptions , function( index, obj ){
-					alert(obj.value);
 					optA = obj.value + ',' + optA
 				});
-				alert(optA)
 				$('#metasA'+opId).val(optA);
 			});
 
@@ -816,7 +886,7 @@
 									value: item.idM,
 									text : item.libelleM 
 								}));
-								$('#metasSelect').append('<input type="hidden" id="typeMeta'+item.idM+'" value="'+item.typeM+'">');
+								$('#metasSelect').after('<input type="hidden" id="typeMeta'+item.idM+'" value="'+item.typeM+'">');
 
 							});
 							$("#metasAct").selectpicker("refresh");
@@ -944,70 +1014,7 @@
 					$('#modalMetas').modal('show');
 				}
 			});
-
-			//metas condition
-			/* $('#metasSelect').change(function(){
-				var valS = this.value;
-				
-				var typeM = $('#typeMeta'+valS).val()
-				
-				$('#metashow').empty();
-				if(typeM == 'Date'){
-					$('#opCompar').removeAttr("disabled");
-					$('#opCompar').append($('<option>', {
-						value: 's',
-						text: 'supérieur à'
-					}));
-
-					$('#opCompar').append($('<option>', {
-						value: 's',
-						text: 'inférieur à'
-					}));
-
-					$('#opCompar').append($('<option>', {
-						value: 's',
-						text: 'égale à'
-					}));
-
-					$('#metashow').append(
-						'<label for="inputZip">Valeur</label>'+
-						'<input id="basicFlatpickr" value="2019-09-04" class="form-control val flatpickr flatpickr-input active" type="text" placeholder="Select Date..">'
-					);
-					var f1 = flatpickr(document.getElementById('basicFlatpickr'));
-				}else if(typeM == 'Heure'){
-					$('#metashow').append(
-						'<label for="inputZip">Valeur</label>'+
-						'<input id="timeFlatpickr" class="form-control val flatpickr flatpickr-input active" type="text" placeholder="Select Date..">'
-					);
-					var f4 = flatpickr(document.getElementById('timeFlatpickr'), {
-						enableTime: true,
-						noCalendar: true,
-						dateFormat: "H:i",
-						defaultDate: "00:00"
-					});
-				}else if(typeM == 'Numérique'){
-					$('#metashow').append(
-						
-						'<label for="inputZip">Valeur</label>'+
-						'<input id="demo2" type="text" value="0" name="demo2" class="form-control val">'
-					);
-					$("input[name='demo2']").TouchSpin({
-						min: 0,
-						max: 1000000,
-						step: 0.1,
-						decimals: 2,
-						boostat: 5,
-						maxboostedstep: 10,
-						buttondown_class: "btn btn-outline-dark",
-						buttonup_class: "btn btn-outline-dark"
-					});
-				}else{
-					$('#metashow').append(
-						'<label for="inputZip">Valeur</label>'+
-						'<input type="text" class="form-control val" placeholder="...">'
-					);
-				}
-			}); */
+			
 
 			var valS;
 				
@@ -1019,61 +1026,63 @@
 				typeM = $('#typeMeta'+valS).val()
 				$('#opCompar').removeAttr("disabled");
 				$('#opCompar').empty();
+				$('#opCompar').append('<option value="" disabled selected>choisissez</option>');
 				$('#metasSelect').prop("disabled", true);
-				$('#condF').val($("#metasSelect option:selected").text());
+				$('#condF').val($('#condF').val()+" "+ $("#metasSelect option:selected").text());
+				$('#condFormule').val($('#condFormule').val()+" "+'(_idM = '+$("#metasSelect option:selected").val());
+				$('#metasSelect option[value=""]').prop('selected', true);
 				
 				if(typeM == 'Date' || typeM == 'Heure' || typeM == 'Numérique'){
 					$('#opCompar').append($('<option>', {
-						value: 's',
+						value: '>',
 						text: 'supérieur à'
 					}));
 
 					$('#opCompar').append($('<option>', {
-						value: 's',
+						value: '<',
 						text: 'inférieur à'
 					}));
 
 					$('#opCompar').append($('<option>', {
-						value: 's',
+						value: '=',
 						text: 'égale à'
 					}));
 				}else{
 					$('#opCompar').append($('<option>', {
-						value: 'c',
+						value: 'LIKE',
 						text: 'contient'
 					}));
 					$('#opCompar').append($('<option>', {
-						value: 'ncp',
+						value: 'NOT LIKE',
 						text: 'ne contient pas'
 					}));
 				}
 			});
+			
+			var ts = 0;
+
 			$('#opCompar').change(function(){
 				$('#opCompar').prop("disabled", true);
 				$('#condF').val($('#condF').val()+" "+$("#opCompar option:selected").text());
+				$('#condFormule').val($('#condFormule').val()+" and valeur "+$("#opCompar option:selected").val());
+				$('#opCompar option[value=""]').prop('selected', true);
 				$('#metashow').empty();
 				if(typeM == 'Date'){
 					$('#metashow').append(
 						'<label for="inputZip">Valeur</label>'+
-						'<input id="basicFlatpickr" value="2019-09-04" class="form-control val flatpickr flatpickr-input active" type="text" placeholder="Select Date..">'
+						'<input id="basicFlatpickr1" onchange="dateP()" class="form-control val flatpickr flatpickr-input active" type="text" placeholder="Select Date..">'
 					);
-					var f1 = flatpickr(document.getElementById('basicFlatpickr'));
+					var f1 = flatpickr(document.getElementById('basicFlatpickr1'));
 				}else if(typeM == 'Heure'){
 					$('#metashow').append(
 						'<label for="inputZip">Valeur</label>'+
-						'<input id="timeFlatpickr" class="form-control val flatpickr flatpickr-input active" type="text" placeholder="Select Date..">'
+						'<input class="form-control" type="time" value="13:45:00" onblur="timeV()" id="example-time-input">'
 					);
-					var f4 = flatpickr(document.getElementById('timeFlatpickr'), {
-						enableTime: true,
-						noCalendar: true,
-						dateFormat: "H:i",
-						defaultDate: "00:00"
-					});
 				}else if(typeM == 'Numérique'){
 					$('#metashow').append(
 						
 						'<label for="inputZip">Valeur</label>'+
-						'<input id="demo2" type="text" value="0" name="demo2" class="form-control val">'
+						'<input id="demo2" type="text" onchange="numV()" name="demo2" class="form-control val">'
 					);
 					$("input[name='demo2']").TouchSpin({
 						min: 0,
@@ -1088,15 +1097,25 @@
 				}else{
 					$('#metashow').append(
 						'<label for="inputZip">Valeur</label>'+
-						'<input type="text" class="form-control val" placeholder="...">'
+						'<input type="text" id="valText" onchange="textV()" class="form-control val" placeholder="...">'
 					);
 				}
 			});
-			$('.val').datepicker({
-				endDate: new Date(),
-				autoclose: true,
-			}).on('changeDate', function(ev){
-				alert("ch")
+			
+			$('#opComparLog').change(function(){
+				$('#opComparLog').prop("disabled", true);
+				$('#metasSelect').removeAttr("disabled");
+				$('#condF').val($('#condF').val()+" "+$("#opComparLog option:selected").text());
+				$('#condFormule').val($('#condFormule').val()+" "+$("#opComparLog option:selected").val());
+				$('#opComparLog option[value=""]').prop('selected', true);
+				$('#btn-add').prop("disabled", true);
+			});
+
+			$('#demo2').on('touchspin.on.startspin', function () {alert("HI");});
+
+			//conditionModal
+			$('#modalMetas').on('hidden.bs.modal',function(){
+                reinitialiser();
 			});
 
 			//-----------------------------------------
@@ -1312,6 +1331,7 @@
 	<script src="{{asset('plugins/notification/snackbar/snackbar.min.js')}}"></script>
 	<script src="{{asset('plugins/jquery-step/jquery.steps.min.js')}}"></script>
 	<script src="{{asset('plugins/flatpickr/flatpickr.js')}}"></script>
+	<script src="{{asset('plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js')}}"></script>
 
 	<script>
 		$('.bottom-right').click(function() {
