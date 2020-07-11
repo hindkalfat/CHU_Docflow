@@ -4,9 +4,25 @@
     <link rel="stylesheet" type="text/css" href="{{asset('plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css')}}">
     <link href="{{asset('plugins/file-upload/file-upload-with-preview.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('plugins/notification/snackbar/snackbar.min.css')}}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="{{asset('plugins/select2/select2.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('assets/css/forms/theme-checkbox-radio.css')}}">
 
     <script>
         $(document).ready(function () {
+
+            //select2
+            var ss = $(".basic").select2({
+                tags: true,
+            });
+            $(".placeholder").select2({
+                placeholder: "Type du document",
+                allowClear: true
+            });
+            $(".placeholde").select2({
+                placeholder: "Etat du document ",
+                allowClear: true
+            });
+            //
 
             $("#deleteConformation").on('show.bs.modal', function(event) {
                 var a = $(event.relatedTarget).data('nom');
@@ -16,8 +32,14 @@
                 m.find("#idD").val(b);
             });
 
+            $('#deleteConformation').on('hidden.bs.modal', function (e) {
+                $('#password').val('');
+                $('#mdp').css("display","none");
+            });
+
             $("#dlt").on('click', function(event) {
                 event.preventDefault();
+                $('#inp_password').val($('#password').val())
                 var table = $('#zero-config').DataTable();
                 var data = $('#deleteF').serialize(); 
                 $.ajax({
@@ -25,12 +47,16 @@
                     data:data,
                     url:'/user/delete/document',
                     success:function(data){
-                       // $('#items'+data.id).remove().draw();
-                       table
-                  .row( $('#items'+data.id) )
-                  .remove()
-                  .draw();
-                        $('#deleteConformation').modal('hide');
+                       if(data.success == "deleted"){
+                            table
+                            .row( $('#items'+data.id) )
+                            .remove()
+                            .draw();
+                            $('#deleteConformation').modal('hide');
+                       }else{
+                            $('#mdp').css("display","block");
+                       }
+                       
                     }
                     }); 
                 
@@ -217,6 +243,8 @@
 @endsection
 
 @section('script')
+    <script src="{{asset('plugins/select2/select2.min.js')}}"></script>
+    <script src="{{asset('plugins/select2/custom-select2.js')}}"></script>
     <script src="{{asset('plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js')}}"></script>
     <script src="{{asset('plugins/file-upload/file-upload-with-preview.min.js')}}"></script>
     <script>
@@ -231,7 +259,116 @@
     </script>
     <script src="{{asset('plugins/notification/snackbar/snackbar.min.js')}}"></script>
 
-    
+    <script type="text/javascript"> //SEARCH
+        $('#search').on('keyup',function(){
+            $valueT=$('#typeD').val();
+            $value=$(this).val();
+            $valueE = $('#etatD').val();
+            $.ajax({
+            type : 'get',
+            url : '{{URL::to('search')}}',
+            data:{'search':$value , 'typeD':$valueT, 'etatD':$valueE},
+            success:function(data){
+
+                $('#bodyDoc').empty();
+                $.each(data.docs, function (i, item) {
+                    var dateC = new Date(item.created_at);
+                    var datecreated_at = dateC.getDate() + "/" +(dateC.getMonth() + 1) + "/" + dateC.getFullYear();
+
+                    $('#bodyDoc').append(
+                                        '<tr role="row">'+
+                                            '<td>'+ item.nomD+'</td>'+
+                                            '<td>'+ item.nomU+' '+ item.prenomU+' </td>'+
+                                            '<td>'+ datecreated_at +'</td>'+
+                                            '<td>  </td>'+
+                                            '<td> '+ item.etatD+' </td>'+
+                                            '<td>  </td>'+
+                                            '<td style="width:114px;">'+
+                                                '<a  href=" {!! asset("user/document/'+item.idD+'") !!} "> '+                                          
+                                                    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'+
+                                                '</a>'+                                         
+                                            '</td>'+
+                                        '</tr>'
+                                    );
+                });
+            }
+            });
+        })
+
+        $('#typeD').on('change',function(){
+            $value=$(this).val();
+            $valueM=$('#search').val();
+            $valueE = $('#etatD').val();
+            $.ajax({
+            type : 'get',
+            url : '{{URL::to('search')}}',
+            data:{'typeD':$value , 'search':$valueM, 'etatD':$valueE},
+            success:function(data){
+                $('#bodyDoc').empty();
+                $.each(data.docs, function (i, item) {
+                    var dateC = new Date(item.created_at);
+                    var datecreated_at = dateC.getDate() + "/" +(dateC.getMonth() + 1) + "/" + dateC.getFullYear();
+
+                    $('#bodyDoc').append(
+                                        '<tr role="row">'+
+                                            '<td>'+ item.nomD+'</td>'+
+                                            '<td>'+ item.nomU+' '+ item.prenomU+' </td>'+
+                                            '<td>'+ datecreated_at +'</td>'+
+                                            '<td>  </td>'+
+                                            '<td> '+ item.etatD+' </td>'+
+                                            '<td>  </td>'+
+                                            '<td style="width:114px;">'+
+                                                '<a  href=" {!! asset("user/document/'+item.idD+'") !!} "> '+                                          
+                                                    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'+
+                                                '</a>'+                                         
+                                            '</td>'+
+                                        '</tr>'
+                                    );
+                });
+            }
+            });
+        })
+
+        $('#etatD').on('change',function(){
+            $value=$(this).val();
+            $valueM=$('#search').val();
+            $valueT=$('#typeD').val();
+            $.ajax({
+            type : 'get',
+            url : '{{URL::to('search')}}',
+            data:{'etatD':$value,'typeD':$valueT , 'search':$valueM},
+            success:function(data){
+                $('#bodyDoc').empty();
+                $.each(data.docs, function (i, item) {
+                    var dateC = new Date(item.created_at);
+                    var datecreated_at = dateC.getDate() + "/" +(dateC.getMonth() + 1) + "/" + dateC.getFullYear();
+
+                    $('#bodyDoc').append(
+                                        '<tr role="row">'+
+                                            '<td>'+ item.nomD+'</td>'+
+                                            '<td>'+ item.nomU+' '+ item.prenomU+' </td>'+
+                                            '<td>'+ datecreated_at +'</td>'+
+                                            '<td>  </td>'+
+                                            '<td> '+ item.etatD+' </td>'+
+                                            '<td>  </td>'+
+                                            '<td style="width:114px;">'+
+                                                '<a  href=" {!! asset("user/document/'+item.idD+'") !!} "> '+                                          
+                                                    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'+
+                                                '</a>'+                                         
+                                            '</td>'+
+                                        '</tr>'
+                                    );
+                });
+            }
+            });
+        })
+    </script>
+
+    <script type="text/javascript">
+        $.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
+    //END SEARCH
+    </script>
+
 @endsection
 
 @section('content')
@@ -259,8 +396,17 @@
                             {{ csrf_field() }}
                             <div class="modal-body">
                                 <div class="form-group">
+                                    <p>Droit d'accés</p>
+                                    <select id="grp" name="grp" class="selectpicker form-control" multiple data-live-search="true" data-actions-box="true">
+                                        <option value="" disabled selected>choisissez</option>
+                                        @foreach ($groupes as $groupe)
+                                            <option value="{{$groupe->idG}}"> {{$groupe->nomG}} </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
                                     <p>Type document</p>
-                                    <select id="typeDoc" name="typeDoc" class="selectpicker" data-live-search="true" data-width="100%">
+                                    <select id="typeDoc" name="typeDoc" class="selectpicker" data-live-search="true" data-width="100%" required>
                                         <option value="" disabled selected>choisissez</option>
                                         @foreach ($typesDoc as $typeDoc)
                                             <option value="{{$typeDoc->idTd}}"> {{$typeDoc->intituleTd}} </option>
@@ -284,7 +430,7 @@
                                 <div class="custom-file-container" data-upload-id="myFirstImage">
                                     <label>Supprimer le fichier <a href="javascript:void(0)" class="custom-file-container__image-clear" title="Clear Image">x</a></label>
                                     <label class="custom-file-container__custom-file" >
-                                        <input id="file" name="file" type="file" class="custom-file-container__custom-file__custom-file-input" accept="file/*">
+                                        <input required id="file" name="file" type="file" class="custom-file-container__custom-file__custom-file-input" accept="file/*">
                                         <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
                                         <span class="custom-file-container__custom-file__custom-file-control"></span>
                                     </label>
@@ -381,13 +527,22 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <p class="">Voulez vous vraiment supprimer le document: <b id="nomD"></b>?</p>
+                                        <p class="">Pour supprimer le document: <b id="nomD"></b>, vous devez confirmer votre mot de passe.</p>
+                                        
+                                        <div class="col">
+                                            <div class="input-group ">
+                                                <input placeholder="Mot de passe" id="password" type="password" class="form-control" name="password" autocomplete="current-password">
+                                            </div>
+                                        </div>
+                                        <h6 class="container" id="mdp" style="display: none; color:red;">Mot de passe incorrect</h6>
+                                        <code class="container">Attention! Cette action annule tout le workflow</code> 
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn" data-dismiss="modal">Annuler</button>
                                         <form id="deleteF">
                                             {{ csrf_field() }}
                                             <input name="idD" type="hidden" id="idD">
+                                            <input id="inp_password" type="hidden" name="inp_password">
                                             <button type="button" class="btn btn-danger dlt" id="dlt">Confirmer</button>
                                         </form>
                                     </div>

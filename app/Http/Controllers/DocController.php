@@ -38,11 +38,12 @@ class DocController extends Controller
         $id = Auth::user()->id; //Auth
         $user = User::find($id);
         $docs = $user->documents;
+        $groupes = $user->groupes; 
 
         $workflow = Workflow::pluck('w_idTd');
         $typesDoc = TypeDoc::wherein('idTD',$workflow)->get();
 
-        return view('user.documents',['docs' => $docs], ['typesDoc' => $typesDoc]);
+        return view('user.documents',['docs' => $docs, 'typesDoc' => $typesDoc, 'groupes' => $groupes]);
     }
 
 
@@ -148,10 +149,17 @@ class DocController extends Controller
      */
     public function destroy(Request $request)
     {
-        $id = $request->idD;
-        $doc = Document::find($id);
-        $doc->delete();
-        return response()->json(['success' => "deleted", 'id' => $id]);;
+        $user = Auth::user();
+        $hasher = app('hash');
+        if ($hasher->check($request->input("inp_password"), $user->password)) {
+            $id = $request->idD;
+            $doc = Document::find($id);
+            $doc->delete();
+            return response()->json(['success' => "deleted", 'id' => $id]);;
+        }
+        else
+            return response()->json(['success' => "not deleted"]);
+        
     }
 
 
@@ -174,7 +182,23 @@ class DocController extends Controller
         $document = Document::find($id); 
         $versions = $document->versions;
         $actionC = $document->type_doc->workflow->actions->where('couranteA',1);
-        return view('user.document',['doc' => $document,'versions' => $versions, 'actionC' => $actionC]);
+        $workflow = $document->type_doc->workflow;
+        $contributeursU = User::join('actions','actions.a_idU','=','users.id')
+                                ->where('a_idW',$workflow->idWf)
+                                ->select('users.*')
+                                ->distinct('users.id')
+                                ->get(); 
+        $contributeursG = Groupe::join('actions','actions.a_idG','=','groupes.idG')
+                                ->where('a_idW',$workflow->idWf)
+                                ->select('groupes.*')
+                                ->distinct('groupes.id')
+                                ->get();
+        $contributeursUG = null; 
+        foreach ($contributeursG as $grp) {
+            $contributeursUG = $grp->users;
+        }   
+        //return $contributeursUG;                  
+        return view('user.document',['doc' => $document,'versions' => $versions, 'actionC' => $actionC, 'contributeursU' => $contributeursU, 'contributeursUG' => $contributeursUG]);
     }
 
     public static function actions($id,$document,$version) //$id
@@ -512,8 +536,19 @@ class DocController extends Controller
     {
         if($request->ajax())
         {
+            $userRoles = Auth::user()->roles->pluck('nomR');
+            $id = Auth::user()->id; //Auth
+            $user = User::find($id);
+
+            //METAS
+
             if ($request->search == '' ) {
-                $metas = Document::all();
+                if($userRoles->contains('admin'))
+                    $metas = Document::all();
+                else if($userRoles->contains('user'))
+                    $metas = $user->documents;
+
+                //$metas = Document::all();
                 $productsM = $metas->pluck('idD');
 
             } else {
@@ -523,11 +558,18 @@ class DocController extends Controller
                             ->pluck('_idD');
             }
 
+            //TYPE
+
             if ($request->input('typeD') == '' ) {
-                $types = TypeDoc::all()->pluck('idTd');
+                if($userRoles->contains('admin'))
+                    $types = TypeDoc::all()->pluck('idTd');
+                else if($userRoles->contains('user'))
+                    $types = Document::where('d_idU',Auth::user()->id)->distinct()->pluck('d_idTd');
             } else {
                 $types = $request->input('typeD'); 
             }
+
+            //ETAT
 
             if ($request->input('etatD') == '' ) {
                 $etat = ['actif' , 'archive'];
@@ -535,12 +577,25 @@ class DocController extends Controller
                 $etat = $request->input('etatD'); 
             }
 
-            $docs = Document::join('users','users.id','=','documents.d_idU')
-                    ->join('versions','versions.v_idD','=','documents.idD')
-                    ->whereIn('idD',$productsM)->whereIn('d_idTd',$types)
-                    ->whereIn('etatD',$etat)
-                    ->get()
-                    ->keyBy('idD');;       
+            if($userRoles->contains('admin'))
+            {
+                $docs = Document::join('users','users.id','=','documents.d_idU')
+                        ->join('versions','versions.v_idD','=','documents.idD')
+                        ->whereIn('idD',$productsM)->whereIn('d_idTd',$types)
+                        ->whereIn('etatD',$etat)
+                        ->get()
+                        ->keyBy('idD');; 
+            } else if($userRoles->contains('user'))
+            {
+                $docs = Document::join('users','users.id','=','documents.d_idU')
+                        ->join('versions','versions.v_idD','=','documents.idD')
+                        ->where('d_idU',Auth::user()->id)
+                        ->whereIn('idD',$productsM)->whereIn('d_idTd',$types)
+                        ->whereIn('etatD',$etat)
+                        ->get()
+                        ->keyBy('idD');;
+            }
+                
             return response()->json(['success' => "deleted", 'docs' => $docs, 'p'=> $productsM, 't' =>$types]);;
         }
     }

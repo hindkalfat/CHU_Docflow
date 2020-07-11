@@ -856,7 +856,7 @@
 				$('#metasA'+opId).val(optA);
 			});
 
-			$('.vld').click(function() {
+			$('.finish').click(function() {
 				$('#nomA'+opId).val($('#nomAct').val());
 				$('#directiveA'+opId).val($('#exampleFormControlTextarea1').val());
 				$('#date_limiteA'+opId).val($('#date_limiteAct').val());
@@ -865,6 +865,24 @@
 				$('#opt_rappelA'+opId).val($('#opt_rappelAct').val());
 				$('#a_idG'+opId).val($('#act_idG').val());
 				$('#a_idU'+opId).val($('#act_idU').val());				
+			});
+
+			$('#addAction').on('hidden.bs.modal', function (e) {
+				alert("closed")
+				$('#circle-basic-t-0').removeClass("done");
+				$('#circle-basic-t-0').addClass("current")._aria("selected", "true");
+				$('#circle-basic-t-1').removeClass("current");
+				$('#circle-basic-t-1').removeClass("done")._aria("selected", "false")._aria("disabled", "true");
+				$('#circle-basic-t-1').addClass("disabled");
+				$('#circle-basic-t-2').removeClass("done");
+				$('#circle-basic-t-2').removeClass("current")._aria("selected", "false")._aria("disabled", "true");
+				$('#circle-basic-t-2').addClass("disabled");
+
+				//bt
+				$('#li_previous').addClass('disabled')._aria('disabled','true');
+				$('#li_next').removeClass('disabled')._aria('disabled','false')._aria('hidden','false').css('display', 'block');
+				$('#li_finish').css('display', 'none')._aria('hidden','true');
+
 			});
 
 			//Email

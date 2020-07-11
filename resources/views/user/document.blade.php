@@ -121,8 +121,8 @@
                                                                 <td>{{$version->created_at}}</td>
                                                                 <td ></td>
                                                                 <td >    
-                                                                    <a href="{{asset('pdf/'.$version->doc)}}" download="{{$version->document->nomD}}_V{{$version->numV}}"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></a>
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye" id="eye{{$version->idV}}"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                                                    <a class="container" onMouseOver="this.style.color='#e7515a'" onMouseOut="this.style.color='#515365'" href="{{asset('pdf/'.$version->doc)}}" download="{{$version->document->nomD}}_V{{$version->numV}}"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></a>
+                                                                    <a class="container" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye" id="eye{{$version->idV}}"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></a>
                                                                     <input type="hidden" id="lienpdf{{$version->idV}}" value="{{$version->doc}}">
                                                                 </td>
                                                             </tr> 
@@ -143,18 +143,15 @@
                                                     </div>
                                                     <div style="margin-left:50px;">
                                                         <div class="avatar--group">
-                                                            @foreach ($doc->type_doc->workflow->actions as $action)
-                                                                @if (App\Action::find($action->idA)->user)
-                                                                    <div class="avatar">
-                                                                        <img alt="avatar" src="{{asset('assets/img/profile-12.jpg')}}" class="rounded-circle  bs-tooltip" data-original-title="{{App\Action::find($action->idA)->user->nomU }} {{App\Action::find($action->idA)->user->prenomU }}" />
-                                                                    </div>
-                                                                @elseif(App\Action::find($action->idA)->groupe)
-                                                                    @foreach (App\Action::find($action->idA)->groupe->users as $user)
-                                                                        <div class="avatar">
-                                                                            <img alt="avatar" src="{{asset('assets/img/profile-12.jpg')}}" class="rounded-circle  bs-tooltip" data-original-title="{{$user->nomU}} {{$user->prenomU}}" />
-                                                                        </div>
-                                                                    @endforeach
-                                                                @endif
+                                                            @foreach ($contributeursU as $usr)
+                                                                <div class="avatar">
+                                                                    <img alt="avatar" src="{{asset('assets/img/profile-12.jpg')}}" class="rounded-circle  bs-tooltip" data-original-title="{{$usr->nomU }} {{$usr->prenomU }}" />
+                                                                </div>            
+                                                            @endforeach
+                                                            @foreach ($contributeursUG as $usr)
+                                                                <div class="avatar">
+                                                                    <img alt="avatar" src="{{asset('assets/img/profile-12.jpg')}}" class="rounded-circle  bs-tooltip" data-original-title="{{$usr->nomU }} {{$usr->prenomU }}" />
+                                                                </div>            
                                                             @endforeach
                                                             {{-- <div class="avatar">
                                                                 <span class="avatar-title rounded-circle  bs-tooltip" data-original-title="Alan Green">AG</span>
