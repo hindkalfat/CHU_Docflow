@@ -554,6 +554,7 @@
 
 		{{-- <button id="bt">data</button>
 		<input type="text" name="" id="tt"> --}}
+		<input type="text" id="count" value="0">
 
 		<script>
 			function dateP(params) {
@@ -704,6 +705,7 @@
 								default:
 									$("input[name=custom-radio-5-priorite][value='Haute']").prop("checked",true);
 							}
+							$('#count').val(0)
 							$("#addAction").modal("show");
 						  }
 						else if($flowchart.flowchart('getOperatorTitle', opId).includes("Email"))
@@ -856,7 +858,7 @@
 				$('#metasA'+opId).val(optA);
 			});
 
-			$('.finish').click(function() {
+			$('#finish').click(function() {
 				$('#nomA'+opId).val($('#nomAct').val());
 				$('#directiveA'+opId).val($('#exampleFormControlTextarea1').val());
 				$('#date_limiteA'+opId).val($('#date_limiteAct').val());
@@ -867,21 +869,32 @@
 				$('#a_idU'+opId).val($('#act_idU').val());				
 			});
 
-			$('#addAction').on('hidden.bs.modal', function (e) {
-				alert("closed")
-				$('#circle-basic-t-0').removeClass("done");
-				$('#circle-basic-t-0').addClass("current")._aria("selected", "true");
-				$('#circle-basic-t-1').removeClass("current");
-				$('#circle-basic-t-1').removeClass("done")._aria("selected", "false")._aria("disabled", "true");
-				$('#circle-basic-t-1').addClass("disabled");
-				$('#circle-basic-t-2').removeClass("done");
-				$('#circle-basic-t-2').removeClass("current")._aria("selected", "false")._aria("disabled", "true");
-				$('#circle-basic-t-2').addClass("disabled");
+			$('#next').click(function() {
+				alert("+1")
+				var count = $('#count').val()*1
+				$('#count').val(count*1+1)
+			});
 
-				//bt
-				$('#li_previous').addClass('disabled')._aria('disabled','true');
-				$('#li_next').removeClass('disabled')._aria('disabled','false')._aria('hidden','false').css('display', 'block');
-				$('#li_finish').css('display', 'none')._aria('hidden','true');
+			$( "#addAction" ).on('shown', function(){
+				$('#count').val(0);
+			});
+
+			$('#addAction').on('hidden.bs.modal', function (e) {
+				var getCount = $('#count').val();
+				if(getCount == 1)
+					$("#circle-basic").steps("previous");
+				else if(getCount == 2){
+					$("#circle-basic").steps("previous");
+					$("#circle-basic").steps("previous");
+				}
+				$('#li_circle-basic-t-0').removeClass("done");
+				$('#li_circle-basic-t-0').addClass("current")._aria("selected", "true");
+				$('#li_circle-basic-t-1').removeClass("current");
+				$('#li_circle-basic-t-1').removeClass("done")._aria("selected", "false")._aria("disabled", "true");
+				$('#li_circle-basic-t-1').addClass("disabled");
+				$('#li_circle-basic-t-2').removeClass("done");
+				$('#li_circle-basic-t-2').removeClass("current")._aria("selected", "false")._aria("disabled", "true");
+				$('#li_circle-basic-t-2').addClass("disabled");
 
 			});
 

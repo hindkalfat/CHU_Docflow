@@ -181,8 +181,11 @@ class DocController extends Controller
     {
         $document = Document::find($id); 
         $versions = $document->versions;
-        $actionC = $document->type_doc->workflow->actions->where('couranteA',1);
         $workflow = $document->type_doc->workflow;
+        $metas = $document->type_doc->metadonnees;
+        $metasV = Metadonnee::join('metas_docs','metas_docs._idM','=','metadonnees.idM')
+                                ->whereIn('metadonnees.idM',$metas)
+                                ->get(); 
         $contributeursU = User::join('actions','actions.a_idU','=','users.id')
                                 ->where('a_idW',$workflow->idWf)
                                 ->select('users.*')
@@ -193,12 +196,14 @@ class DocController extends Controller
                                 ->select('groupes.*')
                                 ->distinct('groupes.id')
                                 ->get();
+        $actionsDoc = $workflow->actions->pluck('idA');  
+        $encours = Tache::whereIn('t_idA',$actionsDoc)->where('etatT',1)->get(); 
         $contributeursUG = null; 
         foreach ($contributeursG as $grp) {
             $contributeursUG = $grp->users;
         }   
-        //return $contributeursUG;                  
-        return view('user.document',['doc' => $document,'versions' => $versions, 'actionC' => $actionC, 'contributeursU' => $contributeursU, 'contributeursUG' => $contributeursUG]);
+                        
+        return view('user.document',['doc' => $document,'versions' => $versions, 'contributeursU' => $contributeursU, 'contributeursUG' => $contributeursUG, 'encours' => $encours, 'metas' => $metas]);
     }
 
     public static function actions($id,$document,$version) //$id

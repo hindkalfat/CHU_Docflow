@@ -37,9 +37,10 @@ class WfController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function liste()
     {
-        //
+        $workflows = Workflow::all();
+        return view('admin.workflows', ['workflows' => $workflows ]);
     }
 
     /**
@@ -100,9 +101,12 @@ class WfController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $id = $request->idD;
+        $wf = Workflow::find($id);
+        $wf->delete();
+        return response()->json(['success' => "deleted", 'id' => $id]);;
     }
 
     public function addAction(Request $request)

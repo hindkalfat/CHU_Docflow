@@ -6,6 +6,7 @@
     <link href="{{asset('plugins/notification/snackbar/snackbar.min.css')}}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" type="text/css" href="{{asset('plugins/select2/select2.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('assets/css/forms/theme-checkbox-radio.css')}}">
+    <link href="{{asset('assets/css/apps/scrumboard.css')}}" rel="stylesheet" type="text/css" />
 
     <script>
         $(document).ready(function () {
@@ -529,7 +530,7 @@
                                     <div class="modal-body">
                                         <p class="">Pour supprimer le document: <b id="nomD"></b>, vous devez confirmer votre mot de passe.</p>
                                         
-                                        <div class="col">
+                                        <div class="col layout-top-spacing">
                                             <div class="input-group ">
                                                 <input placeholder="Mot de passe" id="password" type="password" class="form-control" name="password" autocomplete="current-password">
                                             </div>

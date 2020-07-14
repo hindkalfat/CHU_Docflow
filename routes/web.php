@@ -92,6 +92,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/admin/successeurs','WfController@successeurs');
         Route::get('my-demo-mail','Controller@myDemoMail');
         Route::post('/test','WfController@test');
+        Route::get('/admin/workflows','WfController@liste');
+        Route::post('/admin/delete/workflow','WfController@destroy');
 
     });
 
