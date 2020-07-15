@@ -25,8 +25,9 @@ class Tache extends Model
 
     public function versions_recentes()
     {
-        $mondoc= $this->document; 
-        $predecesseurs = $this->action->predecesseurs()->pluck('_idFrom');
+        $mondoc= $this->document->versions; 
+        return $mondoc;
+        /* $predecesseurs = $this->action->predecesseurs()->pluck('_idFrom');
         $i=0;
         $mesTaches = null;
         if($predecesseurs)
@@ -48,6 +49,6 @@ class Tache extends Model
            }
         }
         else
-            return null;
+            return null; */
     }
 }

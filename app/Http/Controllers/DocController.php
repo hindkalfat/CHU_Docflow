@@ -283,7 +283,7 @@ class DocController extends Controller
                 }
                 
             }
-                
+            //cond comp    
             
             return response()->json(['success' => "created", 'document' => $document, 'version' => $version]);
         }

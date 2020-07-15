@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\support\Facades\DB;
+use App\Notifications\NewTask;
+use Illuminate\Notifications\DatabaseNotification;
 use App\User;
 use App\Tache;
 use App\Action;
 use Auth;
+use Notification;
 
 class TacheController extends Controller
 {
@@ -69,11 +72,13 @@ class TacheController extends Controller
         $actions = $user->actions->pluck('idA');
         $action_grp=Action::whereIn('a_idG',$groupes)->pluck('idA');
         
-        $encours = Tache::whereIn('t_idA',$actions)->where('etatT',1)->get();
-        $terminées = Tache::whereIn('t_idA',$actions)->where('etatT',0)->get();
-        $Tgroupes = Tache::whereIn('t_idA',$action_grp)->where('etatT',1)->get();
+        $encours = Tache::whereIn('t_idA',$actions)->where('etatT',1)->get();//where(t_idU,auth)
+        $encoursA = Tache::where('t_idU',$id)->where('etatT',1)->get();
         
-        return view('user.taches1',['taches' => $encours, 'tachesT' => $terminées, 'tachesG' => $Tgroupes ]);
+        $terminées = Tache::whereIn('t_idA',$actions)->where('etatT',0)->get();
+        $Tgroupes = Tache::whereIn('t_idA',$action_grp)->whereNULL('t_idU')->where('etatT',1)->get();
+        
+        return view('user.taches1',['taches' => $encours, 'tachesAff' => $encoursA, 'tachesT' => $terminées, 'tachesG' => $Tgroupes ]);
 
     }
 
@@ -127,9 +132,18 @@ class TacheController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function affecter(Request $request)
     {
-        //
+        $tache = Tache::find($request->input('tache'));
+        $user = User::find($request->input('idG'));
+        $tache->t_idU = $request->input('idG');
+        $tache->save();
+        Notification::send($user, new NewTask(Action::find($tache->action->idA)));
+        if($request->input('idG') == Auth::user()->id)
+            $to = "mine";
+        else
+            $to = "not_mine";
+        return response()->json(['success' => "deleted", 'tache' => $request->input('tache'), 'user' => $to ]);
     }
 
     /**

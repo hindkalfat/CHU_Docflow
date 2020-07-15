@@ -64,7 +64,7 @@
                         <a href="{{url('admin/test')}}"> Nouveau </a>
                     </li>
                     <li>
-                        <a href="{{url('admin/users')}}"> Mes workflow </a>
+                        <a href="{{url('admin/workflows')}}"> Mes workflow </a>
                     </li>
                 </ul>
             </li>
