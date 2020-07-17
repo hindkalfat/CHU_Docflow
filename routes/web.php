@@ -42,7 +42,7 @@ Route::get('admin/pdf', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/action', 'DocController@actions');
+Route::get('/action/{id}', 'DocController@actions');
 Route::get('/nextActions/{id}/{doc}/{idT}', 'DocController@nextActions');
 
 

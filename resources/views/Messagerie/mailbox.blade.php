@@ -202,6 +202,7 @@
                                     </div>
 
                                     @foreach ($messages as $message)
+                                        {{Auth::user()->unreadNotifications->where('type','App\Notifications\MsgNotification')->markAsRead()}}
                                         <div id="mailCollapseTwo{{$message->idM}}" class="collapse" type="mailInbox" aria-labelledby="mailHeadingTwo" data-parent="#mailbox-inbox">
                                             <div class="mail-content-container sentmail" data-mailfrom="info@mail.com" data-mailto="alan@mail.com" data-mailcc="">
                                                 <input type="hidden" id="type{{$message->idM}}" value="mailInbox">

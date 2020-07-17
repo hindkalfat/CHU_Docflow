@@ -522,8 +522,8 @@
 								<label for="inputState">Operateur logique</label>
 								<select id="opComparLog" class="form-control" disabled>
 									<option value="" disabled selected>choisissez</option>
-									<option value="and">ET</option>
-									<option value="or">OU</option>
+									<option value="intersect">ET</option>
+									<option value="union">OU</option>
 								</select>
 							</div>
 							<div class="form-group col-md-3">
@@ -555,15 +555,17 @@
 		{{-- <button id="bt">data</button>
 		<input type="text" name="" id="tt"> --}}
 		<input type="text" id="count" value="0">
+		<input type="text" id="actMeta">
 
 		<script>
 			function dateP(params) {
 				var date = $('#basicFlatpickr1').val()
 				$('#basicFlatpickr1').val(date)
 				$('#condF').val($('#condF').val()+" "+date);
-				$('#condFormule').val($('#condFormule').val()+" '"+date+"')");
+				$('#condFormule').val($('#condFormule').val()+" '"+date+"'");
 				$('#basicFlatpickr1').prop("disabled", true);
 				$('#opComparLog').removeAttr("disabled");
+				$('#condFormule').val($('#condFormule').val()+" and _idD = $doc and created_at IN (select max(created_at) FROM metas_docs md WHERE md._idM ="+$("#actMeta").val()+"))");
 				$('#btn-add').removeAttr("disabled");
 			}
 			function reinitialiser() {
@@ -580,9 +582,10 @@
 			function textV() {
 				var textV = $('#valText').val()
 				$('#condF').val($('#condF').val()+" "+textV);
-				$('#condFormule').val($('#condFormule').val()+" '"+textV+"')");
+				$('#condFormule').val($('#condFormule').val()+" '"+textV+"'");
 				$('#valText').prop("disabled", true);
 				$('#opComparLog').removeAttr("disabled");
+				$('#condFormule').val($('#condFormule').val()+" and _idD = $doc and created_at IN (select max(created_at) FROM metas_docs md WHERE md._idM ="+$("#actMeta").val()+"))");
 				$('#btn-add').removeAttr("disabled");
 			}
 			var ts = 0;
@@ -591,9 +594,10 @@
 				if(ts == 2){
 					var textV = $('#demo2').val();
 					$('#condF').val($('#condF').val()+" "+textV);
-					$('#condFormule').val( $('#condFormule').val()+" '"+textV+"')");
+					$('#condFormule').val( $('#condFormule').val()+" '"+textV+"'");
 					$('#demo2').prop("disabled", true);
 					$('#opComparLog').removeAttr("disabled");
+					$('#condFormule').val($('#condFormule').val()+" and _idD = $doc and created_at IN (select max(created_at) FROM metas_docs md WHERE md._idM ="+$("#actMeta").val()+"))");
 					$('#btn-add').removeAttr("disabled");
 					ts=0;
 				}
@@ -602,9 +606,10 @@
 			function timeV() {
 				var textV = $('#example-time-input').val();
 				$('#condF').val($('#condF').val()+" "+textV);
-				$('#condFormule').val( $('#condFormule').val()+" '"+textV+"')");
+				$('#condFormule').val( $('#condFormule').val()+" '"+textV+"'");
 				$('#example-time-input').prop("disabled", true);
 				$('#opComparLog').removeAttr("disabled");
+				$('#condFormule').val($('#condFormule').val()+" and _idD = $doc and created_at IN (select max(created_at) FROM metas_docs md WHERE md._idM ="+$("#actMeta").val()+"))");
 				$('#btn-add').removeAttr("disabled");
 			}
 		</script>
@@ -870,7 +875,6 @@
 			});
 
 			$('#next').click(function() {
-				alert("+1")
 				var count = $('#count').val()*1
 				$('#count').val(count*1+1)
 			});
@@ -924,7 +928,14 @@
 
 			$('#btn-add-approbation').click(function() {
 				$('#Tappro'+opId).val($('#mySelect').val());
+				$('#typeC'+opId).val("condApp");
 				$("#modalChoice").modal("hide");
+			});
+			
+			$('#btn-add').click(function() {
+				$('#formule'+opId).val($('#condFormule').val());
+				$('#typeC'+opId).val("metas");
+				$("#modalMetas").modal("hide");
 			});
 
 			$("#form-addWF").submit(function(e){
@@ -1087,14 +1098,14 @@
 
 			$('#metasSelect').change(function(){
 				valS = this.value;
-				
+				$('#actMeta').val(valS);
 				typeM = $('#typeMeta'+valS).val()
 				$('#opCompar').removeAttr("disabled");
 				$('#opCompar').empty();
 				$('#opCompar').append('<option value="" disabled selected>choisissez</option>');
 				$('#metasSelect').prop("disabled", true);
 				$('#condF').val($('#condF').val()+" "+ $("#metasSelect option:selected").text());
-				$('#condFormule').val($('#condFormule').val()+" "+'(_idM = '+$("#metasSelect option:selected").val());
+				$('#condFormule').val($('#condFormule').val()+" "+'(SELECT count(*) as \'cpt\' FROM metas_docs M WHERE _idM = '+$("#metasSelect option:selected").val());
 				$('#metasSelect option[value=""]').prop('selected', true);
 				
 				if(typeM == 'Date' || typeM == 'Heure' || typeM == 'Numérique'){

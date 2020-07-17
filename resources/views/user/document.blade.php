@@ -171,7 +171,7 @@
                                                             <div style="margin-left:50px;">
                                                                 <div class="row align-self-center">
                                                                     @foreach ($metas as $meta)
-                                                                        <a href="#" data-toggle="modal" data-target="#exampleModalCenter"  data-valeur="{{App\MetaDoc::join('users_taches','metas_docs._idUT','users_taches.idUT')->join('users','users_taches._idU','users.id')->where('_idM',$meta->idM)->get()}}">
+                                                                        <a href="#" data-toggle="modal" @if(App\MetaDoc::join('users_taches','metas_docs._idUT','users_taches.idUT')->join('users','users_taches._idU','users.id')->where('_idM',$meta->idM)->count()>0) data-target="#exampleModalCenter" @endif  data-valeur="{{App\MetaDoc::join('users_taches','metas_docs._idUT','users_taches.idUT')->join('users','users_taches._idU','users.id')->where('_idM',$meta->idM)->get()}}">
                                                                             <h6 class="inv-list-number"> {{$meta->libelleM}}:  <span class="inv-title">{{App\MetaDoc::where('_idM',$meta->idM)->latest()->first()->valeur}} </span> | </h6>
                                                                         </a>
                                                                     @endforeach
@@ -191,11 +191,13 @@
                                                                     <img alt="avatar" src="{{asset('assets/img/profile-12.jpg')}}" class="rounded-circle  bs-tooltip" data-original-title="{{$usr->nomU }} {{$usr->prenomU }}" />
                                                                 </div>            
                                                             @endforeach
-                                                            @foreach ($contributeursUG as $usr)
-                                                                <div class="avatar">
-                                                                    <img alt="avatar" src="{{asset('assets/img/profile-12.jpg')}}" class="rounded-circle  bs-tooltip" data-original-title="{{$usr->nomU }} {{$usr->prenomU }}" />
-                                                                </div>            
-                                                            @endforeach
+                                                            @if ($contributeursUG)
+                                                                @foreach ($contributeursUG as $usr)
+                                                                    <div class="avatar">
+                                                                        <img alt="avatar" src="{{asset('assets/img/profile-12.jpg')}}" class="rounded-circle  bs-tooltip" data-original-title="{{$usr->nomU }} {{$usr->prenomU }}" />
+                                                                    </div>            
+                                                                @endforeach
+                                                            @endif
                                                             {{-- <div class="avatar">
                                                                 <span class="avatar-title rounded-circle  bs-tooltip" data-original-title="Alan Green">AG</span>
                                                             </div> --}}

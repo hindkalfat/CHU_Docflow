@@ -111,8 +111,9 @@ class WfController extends Controller
 
     public function addAction(Request $request)
     { 
-        if($request->input('typeC') == "condApp" )
+        if($request->input('typeC') == "condApp" || $request->input('typeC') == "metas" )
             return $this->addCond($request);
+        
         else{
             $action = new Action;
 
@@ -179,7 +180,10 @@ class WfController extends Controller
         
         $condition->typeC = $request->input('typeC');
         $condition->idop = $request->input('idoperator');
-        $condition->formuleC = "pas de formule";
+        if($request->input('formule'))
+            $condition->formuleC = $request->input('formule');
+        else
+            $condition->formuleC = "pas de formule";
         $condition->c_idW = $request->input('a_idW');
 
         $condition->save();
@@ -315,7 +319,7 @@ class WfController extends Controller
 
         }
 
-        return Redirect::to('/admin/users');
+        return Redirect::to('/admin/workflows');
     }
 
     public function checkUniqueWf(Request $request)
@@ -332,10 +336,51 @@ class WfController extends Controller
     public function test(Request $request)
     {
         $rq = $request->input('formule');
-        $metas=DB::select("SELECT  M._idM
-                                    FROM metas_docs M
-                                    WHERE $rq");
-        return $metas;
+        $doc = 158;
+        $rq =str_replace('$doc',$doc,$rq);
+        
+        $metas=DB::select("$rq");
+        //intersect = && // union = ||
+       /*  $metas=DB::select("SELECT  count(*) as 'cpt'
+        FROM metas_docs M
+        WHERE _idM = 11 and valeur='02:00'
+        and _idD = {{$doc}}
+        and created_at IN (select max(created_at) FROM metas_docs md WHERE md._idM = 11)
+        intersect  SELECT  count(*) as 'cpt'
+        FROM metas_docs M
+        WHERE _idM = 13 and valeur='0.170'
+        and _idD = $doc
+        and created_at IN (select max(created_at) FROM metas_docs md WHERE md._idM = 13)
+        union SELECT  count(*) as 'cpt'
+        FROM metas_docs M
+        WHERE _idM = 12 and valeur='01'
+        and _idD = $doc
+        and created_at IN (select max(created_at) FROM metas_docs md WHERE md._idM = 12)
+        intersect  SELECT  count(*) as 'cpt'
+        FROM metas_docs M
+        WHERE _idM = 6 and valeur='05'
+        and _idD = $doc
+        and created_at IN (select max(created_at) FROM metas_docs md WHERE md._idM = 6)"); */
+        
+        
+        if (count($metas)>1) {
+            $r = 1;
+            foreach ($metas as $meta) {
+                if($r || $meta)
+                    $x=1;
+                else
+                    $x=0;
+            }
+            return $x;  
+        }else if(count($metas) == 0){
+            return 0;
+        }else{
+            if($metas[0]->cpt == 1)
+                return 1;
+            else
+                return 0;
+        }
+        
     }
 
 }

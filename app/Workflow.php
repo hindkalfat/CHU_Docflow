@@ -15,7 +15,7 @@ class Workflow extends Model
 
     public function conditions()
     {
-        return $this->hasMany(Condition::class);
+        return $this->hasMany(Condition::class,'c_idW');
     }
 
     public function actions()

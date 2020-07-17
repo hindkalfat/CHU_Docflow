@@ -19,72 +19,42 @@
                         class="feather feather-mail">
                         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                         <polyline points="22,6 12,13 2,6"></polyline>
-                    </svg><span class="badge badge-primary">3</span>
+                    </svg>
+                    @if(Auth::user()->unreadNotifications->where('type','App\Notifications\MsgNotification')->count()>0)
+                        <span id="unreadMsg" class="badge badge-primary">
+                            {{Auth::user()->unreadNotifications->where('type','App\Notifications\MsgNotification')->count()}}
+                        </span>
+                    @endif
                 </a>
-                <div class="dropdown-menu position-absolute e-animated e-fadeInUp" aria-labelledby="messageDropdown">
+                <div class="dropdown-menu position-absolute e-animated e-fadeInUp notif1" aria-labelledby="messageDropdown" style="height:300px; overflow:auto">
                     <div class="">
-                        <a class="dropdown-item">
-                            <div class="">
-                                <div class="media notification-new">
-                                    <div class="notification-icon">
-                                        <div class="icon-svg mr-3">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                                stroke-linecap="round" stroke-linejoin="round"
-                                                class="feather feather-message-square">
-                                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z">
-                                                </path>
-                                            </svg>
+                        @foreach(Auth::user()->unreadNotifications->where('type','App\Notifications\MsgNotification') as $notification)
+                            <a class="dropdown-item" href="{{url('mailbox')}}">
+                                <div class="">
+                                    <div class="media notification-new">
+                                        <div class="notification-icon">
+                                            <div class="icon-svg mr-3">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                    stroke-linecap="round" stroke-linejoin="round"
+                                                    class="feather feather-mail">
+                                                    <path
+                                                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                                    </path>
+                                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <div class="media-body">
+                                            <p class="meta-title mr-3">1 nouvel email</p>
+                                            <p class="message-text">{{Auth::user()::find($notification->data['sender'])->email}}</p>
+                                            <p class="meta-time align-self-center mb-0">{{$notification->created_at->diffForHumans()}}</p>
                                         </div>
                                     </div>
-                                    <div class="media-body">
-                                        <p class="meta-title mr-3">5 messages for group</p>
-                                        <p class="message-text">Kelly, Amy, Shaun</p>
-                                        <p class="meta-time align-self-center mb-0">Yesterday</p>
-                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                        <a class="dropdown-item">
-                            <div class="">
-                                <div class="media notification-new">
-                                    <div class="usr-profile-img mr-3">
-                                        <div class="user-profile">
-                                            <div class="">KY</div>
-                                        </div>
-                                    </div>
-                                    <div class="media-body">
-                                        <p class="meta-user-name mr-3">Kara Young</p>
-                                        <p class="message-text">Some quick example text to build the notification ..</p>
-                                        <p class="meta-time align-self-center mb-0">2 hours ago</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                        <a class="dropdown-item">
-                            <div class="">
-                                <div class="media notification-new">
-                                    <div class="notification-icon">
-                                        <div class="icon-svg mr-3">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                                stroke-linecap="round" stroke-linejoin="round"
-                                                class="feather feather-mail">
-                                                <path
-                                                    d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
-                                                </path>
-                                                <polyline points="22,6 12,13 2,6"></polyline>
-                                            </svg>
-                                        </div>
-                                    </div>
-                                    <div class="media-body">
-                                        <p class="meta-title mr-3">1 new email</p>
-                                        <p class="message-text">Anderson.Daisy@mail.com</p>
-                                        <p class="meta-time align-self-center mb-0">Yesterday</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
+                            </a>
+                        @endforeach
+                        {{Auth::user()->unreadNotifications->where('type','App\Notifications\MsgNotification')->markAsRead()}}
                     </div>
                 </div>
             </li>
@@ -99,16 +69,16 @@
                         <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
                     </svg>
                     @if(Auth::user()->unreadNotifications->where('type','App\Notifications\NewTask')->count()>0)
-                        <span class="badge badge-success"></span>
+                        <span id="unread" class="badge badge-success"></span>
                     @endif
                 </a>
-                <div class="dropdown-menu position-absolute e-animated e-fadeInUp"
-                    aria-labelledby="notificationDropdown">
+                <div class="dropdown-menu position-absolute notif e-animated e-fadeInUp"
+                    aria-labelledby="notificationDropdown" style="height:300px; overflow:auto">
                     <div class="notification-scroll">
-                        @if(Auth::user()->unreadNotifications->where('type','App\Notifications\NewTask')->count() > 0)
-                            @foreach(Auth::user()->unreadNotifications->where('type','App\Notifications\NewTask') as $notification)
-                                <div class="dropdown-item">
-                                    <div class="media">
+                        @foreach(Auth::user()->unreadNotifications->where('type','App\Notifications\NewTask') as $notification)
+                            <div class="dropdown-item">
+                                <div class="media">
+                                    <a class="row" href="{{url('user/taches')}}"> 
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                             stroke-linejoin="round" class="feather feather-send">
@@ -121,13 +91,14 @@
                                             </div>
                                             <div class="notification-meta-time"> {{$notification->created_at->diffForHumans()}} </div>
                                         </div>
-                                    </div>
+                                    </a>
                                 </div>
-                            @endforeach
-                        @else
-                            @foreach(Auth::user()->readNotifications->where('type','App\Notifications\NewTask')->take(10) as $notification)
-                                <div class="dropdown-item">
-                                    <div class="media">
+                            </div>
+                        @endforeach
+                        @foreach(Auth::user()->readNotifications->where('type','App\Notifications\NewTask')->take(10) as $notification)
+                            <div class="dropdown-item">
+                                <div class="media">
+                                    <a class="row" href="{{url('user/taches')}}">   
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                             stroke-linejoin="round" class="feather feather-send">
@@ -140,10 +111,10 @@
                                             </div>
                                             <div class="notification-meta-time"> {{$notification->created_at->diffForHumans()}} </div>
                                         </div>
-                                    </div>
+                                    </a> 
                                 </div>
-                            @endforeach
-                        @endif
+                            </div>
+                        @endforeach
                         {{Auth::user()->unreadNotifications->where('type','App\Notifications\NewTask')->markAsRead()}}
                     </div>
                 </div>

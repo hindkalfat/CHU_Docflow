@@ -111,6 +111,7 @@
                     new dynamicBadgeNotification('completedList')
                     new dynamicBadgeNotification('allList');
                     $('#exampleModal'+data['idT']).modal('hide');
+                    $('#task'+data['idT']).removeAttr('data-target');
                 }
             });
         });

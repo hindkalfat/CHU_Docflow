@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\support\Facades\DB;
 use App\Notifications\NewTask;
 use Illuminate\Notifications\DatabaseNotification;
+use App\Notifications\MsgNotification;
+use DateTime;
 use App\Document;
 use App\User;
 use App\Groupe;
@@ -25,6 +27,12 @@ use File;
 use Auth;
 use Notification;
 use Mail;
+use App\Message;
+use App\Media;
+
+
+
+
 class DocController extends Controller
 {
     /**
@@ -206,37 +214,50 @@ class DocController extends Controller
         return view('user.document',['doc' => $document,'versions' => $versions, 'contributeursU' => $contributeursU, 'contributeursUG' => $contributeursUG, 'encours' => $encours, 'metas' => $metas]);
     }
 
-    public static function actions($id,$document,$version) //$id
+    public static function actions($id/* ,$document,$version */) //$id
     {
         $doc = Document::find($id);
 
         $workflow = $doc->type_doc->workflow;
         $actionWf = $workflow->actions->pluck('idA');
+        $conditionWf = $workflow->conditions->pluck('idC'); 
+
         $actionsS = Successeur::where('_idFrom','=',NULL)
                             ->wherein('_idTo',$actionWf)
                             ->pluck('_idTo');
+        $conditionsS = CondSuccesseur::where('_idFrom','=',NULL)
+                            ->wherein('_idTo',$conditionWf)
+                            ->pluck('_idTo'); return $conditionsS;
 
         foreach ($actionsS as $actionS ) {
             $action = Action::find($actionS);
 
             if($action->typeA == "Email")
             {
-                $myEmail = $action->destinataireIA;
-   
-                $details = array('body' => "bonjour");
-               // Mail::to($myEmail)->send(new SendMail($details));
-              /*  Mail::to($myEmail)->send(new SendMail($details)); */
-                /* $data =  response()->json(['message' => $action->messageA]);
-                $obj = $action->objetA;
-                Mail::send('emails.sendMail', $data, function($message) use ($myEmail,$obj) {
-                    $message->to($myEmail, 'A ')
-                            ->subject($obj);
-                    $message->from('chudocflow@gmail.com','CHUDocflow');
-                  }); */
+                if ($action->destinataireIA) {
+                    $myEmail = $action->destinataireIA;
 
-                $details = array('body' => $action->messageA);
-                $obj = $action->objetA;
-                Mail::to($myEmail)->send(new SendMail($details,$obj));
+                    $details = array('body' => $action->messageA);
+                    $obj = $action->objetA;
+                    Mail::to($myEmail)->send(new SendMail($details,$obj));
+                }elseif($action->a_destinataireU){
+                    $recepteur  =  $action->a_destinataireU;
+                    $emetteur =  $doc->user->id;
+                    
+                    $message=Message::create(['message'=>$action->messageA,'content'=>strip_tags($action->messageA),'sujet'=>$action->objetA,'from_id'=>$emetteur,'to_id'=>$recepteur]);
+
+
+                    $details = [
+                        'id_msg' => $message->idM ,
+                        'message' => $message->message,
+                        'sujet' => $message->sujet,
+                        'sender' => $doc->user->id
+                    ];
+
+                    $user = User::find($recepteur);
+
+                    Notification::send($user, new MsgNotification($details));
+                }
                  static::nextActions($action->idA,$id,null);
 
             }
@@ -250,23 +271,25 @@ class DocController extends Controller
                         $a = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$action->date_limiteA.' days'));
                         break;
                     case 'h':
-                        $b = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$action->date_limiteA.' hours'));
+                        $a = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$action->date_limiteA.' hours'));
                         break;
                     case 'm':
-                        $c = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$action->date_limiteA.' minutes'));
+                        $a = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$action->date_limiteA.' minutes'));
                         break;
                 } 
+                $b = DateTime::createFromFormat('d/m/Y H:i:s', $a);
                 switch ($action->opt_rappelA) {
                     case 'j':
-                        $tache->date_rappelT = Date($a, strtotime('-'.$action->date_rappelA.' days')) ;
-                        break;
+                       $rappel = date_sub($b,date_interval_create_from_date_string($action->date_rappelA.' days')); 
+                       break;
                     case 'h':
-                        $tache->date_rappelT = Date($b, strtotime('-'.$action->date_rappelA.' hours')) ;
+                        $rappel = date_sub($b,date_interval_create_from_date_string($action->date_rappelA.' hours'));
                         break;
                     case 'm':
-                        $tache->date_rappelT = Date($c, strtotime('-'.$action->date_rappelA.' minutes'));
+                        $rappel = date_sub($b,date_interval_create_from_date_string($action->date_rappelA.' minutes'));
                         break;
                 } 
+                $tache->date_rappelT = date_format($rappel,"d/m/Y H:i:s");
                 $tache->save();
 
                 if($action->a_idU)
@@ -283,10 +306,33 @@ class DocController extends Controller
                 }
                 
             }
-            //cond comp    
+            //cond comp foreach   
             
             return response()->json(['success' => "created", 'document' => $document, 'version' => $version]);
         }
+
+        /* foreach ($conditionsS as $conditionS) {
+            $cond = Condition::find($conditionS);
+
+
+                //call method
+                $nextA_oui = $cond->_idAo;
+                $nextA_non = $cond->_idAn;
+                $nextC_oui = $cond->_idCo;
+                $nextC_non = $cond->_idCn;
+                if(//result)
+                {
+                    if($nextA_oui)
+                        static::nextCondition($nextA_oui,$doc,$action);
+                    else if($nextC_oui)
+                        static::nextCondition($nextC_oui,$doc,$action);//faux
+                }
+                else if(//result)
+                    if($nextA_non)
+                        static::nextCondition($nextA_non,$doc,$action);
+                    else if($nextC_non)
+                        static::nextCondition($nextC_non,$doc,$action);//faux
+        } */
          
 
     }
@@ -316,14 +362,14 @@ class DocController extends Controller
                     if($nextA_oui)
                         static::nextCondition($nextA_oui,$doc,$action);
                     else if($nextC_oui)
-                        static::nextCondition($nextC_oui,$doc,$action);
+                        static::nextCondition($nextC_oui,$doc,$action);//faux
                 }
                 else if($tacheApp->Etat_avcT == 'Rejeter')
                     if($nextA_non)
                         static::nextCondition($nextA_non,$doc,$action);
                     else if($nextC_non)
-                        static::nextCondition($nextC_non,$doc,$action);
-            }
+                        static::nextCondition($nextC_non,$doc,$action);//faux
+            }//else cond comp
         }
 
         foreach ($actionsS as $actionS) {
@@ -339,29 +385,30 @@ class DocController extends Controller
             {
                 if($act->typeA == "Email")
                 {
-                    $myEmail = $act->destinataireIA;
+                    if ($action->destinataireIA) {
+                        $myEmail = $act->destinataireIA;
+                        
+                        $details = array('body' => $act->messageA);
+                        $obj = $act->objetA;
+                        Mail::to($myEmail)->send(new SendMail($details,$obj)); 
+                    }elseif($action->a_destinataireU){
+                        $recepteur  =  $action->a_destinataireU;
+                        $emetteur =  $doc->user->id;
+                        
+                        $message=Message::create(['message'=>$action->messageA,'content'=>strip_tags($action->messageA),'sujet'=>$action->objetA,'from_id'=>$emetteur,'to_id'=>$recepteur]);
     
-                    /* $details = [
-                        'title' => $act->objetA,
-                        'body' => $act->messageA
-                    ];
-            
-                    // Mail::to($myEmail)->send(new SendMail($details));
-                    $data =  array('message' => $act->messageA);
-                    $obj = $act->objetA;
-                    Mail::send('emails.sendMail', $data, function($message) use ($myEmail,$obj) {
-                        $message->to($myEmail, 'A ')
-                                ->subject($obj);
-                        $message->from('chudocflow@gmail.com','CHUDocflow');
-                    }); */
-                   /*  $details = array('body' => "bonjour");
-                    Mail::to($myEmail)->send(new SendMail($details));
-                    
- */
-                    
-                    $details = array('body' => $act->messageA);
-                    $obj = $act->objetA;
-                    Mail::to($myEmail)->send(new SendMail($details,$obj));   
+    
+                        $details = [
+                            'id_msg' => $message->idM ,
+                            'message' => $message->message,
+                            'sujet' => $message->sujet,
+                            'sender' => $doc->user->id
+                        ];
+    
+                        $user = User::find($recepteur);
+    
+                        Notification::send($user, new MsgNotification($details));
+                    }  
                     static::nextActions($act->idA,$doc,null);
 
                 }
@@ -429,11 +476,31 @@ class DocController extends Controller
         {
             if($act->typeA == "Email")
             {
-                $myEmail = $act->destinataireIA;
+                if ($act->destinataireIA) {
+                    $myEmail = $act->destinataireIA;
 
-                $details = array('body' => $act->messageA);
-                $obj = $act->objetA;
-                Mail::to($myEmail)->send(new SendMail($details,$obj));
+                    $details = array('body' => $act->messageA);
+                    $obj = $act->objetA;
+                    Mail::to($myEmail)->send(new SendMail($details,$obj));
+                }elseif($act->a_destinataireU){
+                    $recepteur  =  $act->a_destinataireU;
+                    $emetteur =  $doc->user->id;
+                    
+                    $message=Message::create(['message'=>$act->messageA,'content'=>strip_tags($act->messageA),'sujet'=>$act->objetA,'from_id'=>$emetteur,'to_id'=>$recepteur]);
+
+
+                    $details = [
+                        'id_msg' => $message->idM ,
+                        'message' => $message->message,
+                        'sujet' => $message->sujet,
+                        'sender' => $doc->user->id
+                    ];
+
+                    $user = User::find($recepteur);
+
+                    Notification::send($user, new MsgNotification($details));
+                }
+                
 
 
                 static::nextActions($act->idA,$doc,null);
@@ -494,7 +561,11 @@ class DocController extends Controller
 
         $user_tache = new UserTache;
         $user_tache->_idT = $tache->idT;
-        $user_tache->_idU = $tache->action->user->id;
+
+        if($tache->action->a_idU)
+            $user_tache->_idU = $tache->action->user->id;
+        else if($tache->action->a_idG)
+            $user_tache->_idU = $tache->t_idU;
 
         $document = $tache->document;
 

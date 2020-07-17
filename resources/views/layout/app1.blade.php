@@ -38,6 +38,8 @@
 	<link href="{{asset('assets/css/apps/todolist.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/css/elements/popover.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('plugins/bootstrap-range-Slider/bootstrap-slider.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{asset('plugins/perfect-scrollbar/perfect-scrollbar.css')}}" rel="stylesheet" type="text/css" />
+
     <script src="{{asset('plugins/perfect-scrollbar/perfect-scrollbar.min.js')}}"></script>
 
 
@@ -112,7 +114,21 @@
 	<script src="{{asset('assets/js/elements/popovers.js')}}"></script>
     <script src="{{asset('plugins/bootstrap-range-Slider/bootstrap-rangeSlider.js')}}"></script>
 
-	@yield('script')
+    <script>
+        $(document).on("click","#notificationDropdown",function(){
+            $('#unread').remove();
+        });
+        $(document).on("click","#messageDropdown",function(){
+			$('#unreadMsg').remove();
+		});
+    </script>
+
+    @yield('script')
+    
+    <script>
+        const psn = new PerfectScrollbar('.notif');
+        const psm = new PerfectScrollbar('.notif1');
+    </script>
 	
     <script>
         $('#zero-config').DataTable({

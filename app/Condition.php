@@ -15,6 +15,6 @@ class Condition extends Model
 
     public function workflow()
     {
-        return $this->belongsTo(Workflow::class);
+        return $this->belongsTo(Workflow::class, 'c_idW');
     }
 }

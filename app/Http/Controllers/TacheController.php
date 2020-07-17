@@ -23,6 +23,7 @@ class TacheController extends Controller
 
     public function index1()
     {
+        Auth::user()->unreadNotifications->where('type','App\Notifications\NewTask')->markAsRead();
         $id = Auth::user()->id;
         $user = User::find($id);
         $groupes = $user->groupes->unique()->pluck('idG');
