@@ -333,54 +333,5 @@ class WfController extends Controller
             return response()->json(['success' => "duplicated"]);
     }
 
-    public function test(Request $request)
-    {
-        $rq = $request->input('formule');
-        $doc = 158;
-        $rq =str_replace('$doc',$doc,$rq);
-        
-        $metas=DB::select("$rq");
-        //intersect = && // union = ||
-       /*  $metas=DB::select("SELECT  count(*) as 'cpt'
-        FROM metas_docs M
-        WHERE _idM = 11 and valeur='02:00'
-        and _idD = {{$doc}}
-        and created_at IN (select max(created_at) FROM metas_docs md WHERE md._idM = 11)
-        intersect  SELECT  count(*) as 'cpt'
-        FROM metas_docs M
-        WHERE _idM = 13 and valeur='0.170'
-        and _idD = $doc
-        and created_at IN (select max(created_at) FROM metas_docs md WHERE md._idM = 13)
-        union SELECT  count(*) as 'cpt'
-        FROM metas_docs M
-        WHERE _idM = 12 and valeur='01'
-        and _idD = $doc
-        and created_at IN (select max(created_at) FROM metas_docs md WHERE md._idM = 12)
-        intersect  SELECT  count(*) as 'cpt'
-        FROM metas_docs M
-        WHERE _idM = 6 and valeur='05'
-        and _idD = $doc
-        and created_at IN (select max(created_at) FROM metas_docs md WHERE md._idM = 6)"); */
-        
-        
-        if (count($metas)>1) {
-            $r = 1;
-            foreach ($metas as $meta) {
-                if($r || $meta)
-                    $x=1;
-                else
-                    $x=0;
-            }
-            return $x;  
-        }else if(count($metas) == 0){
-            return 0;
-        }else{
-            if($metas[0]->cpt == 1)
-                return 1;
-            else
-                return 0;
-        }
-        
-    }
 
 }

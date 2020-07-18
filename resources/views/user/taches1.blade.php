@@ -430,7 +430,7 @@
                                                                 @if ($tache->action->versionA==1)
                                                                     <div class="custom-file mb-4">
                                                                         <input required type="file" class="custom-file-input" id="customFile" name="versionTache">
-                                                                        <label class="custom-file-label" for="customFile">Choose file</label>
+                                                                        <label required class="custom-file-label" for="customFile">Choose file</label>
                                                                     </div>
                                                                 @endif
                                                             </div>

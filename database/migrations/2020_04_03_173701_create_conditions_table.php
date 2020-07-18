@@ -15,7 +15,7 @@ class CreateConditionsTable extends Migration
     {
         Schema::create('conditions', function (Blueprint $table) {
             $table->increments('idC');
-            $table->string('formuleC');
+            $table->text('formuleC'); //string
             $table->unsignedInteger('c_idW');
             $table->timestamps();
 

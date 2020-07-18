@@ -214,7 +214,7 @@ class DocController extends Controller
         return view('user.document',['doc' => $document,'versions' => $versions, 'contributeursU' => $contributeursU, 'contributeursUG' => $contributeursUG, 'encours' => $encours, 'metas' => $metas]);
     }
 
-    public static function actions($id/* ,$document,$version */) //$id
+    public static function actions($id,$document,$version) //$id
     {
         $doc = Document::find($id);
 
@@ -227,7 +227,7 @@ class DocController extends Controller
                             ->pluck('_idTo');
         $conditionsS = CondSuccesseur::where('_idFrom','=',NULL)
                             ->wherein('_idTo',$conditionWf)
-                            ->pluck('_idTo'); return $conditionsS;
+                            ->pluck('_idTo'); 
 
         foreach ($actionsS as $actionS ) {
             $action = Action::find($actionS);
@@ -308,36 +308,35 @@ class DocController extends Controller
             }
             //cond comp foreach   
             
-            return response()->json(['success' => "created", 'document' => $document, 'version' => $version]);
         }
 
-        /* foreach ($conditionsS as $conditionS) {
+        foreach ($conditionsS as $conditionS) {
             $cond = Condition::find($conditionS);
 
 
-                //call method
+                $result= static::testCondition($cond,$doc);
                 $nextA_oui = $cond->_idAo;
                 $nextA_non = $cond->_idAn;
                 $nextC_oui = $cond->_idCo;
                 $nextC_non = $cond->_idCn;
-                if(//result)
+                if($result == 1)
                 {
                     if($nextA_oui)
-                        static::nextCondition($nextA_oui,$doc,$action);
+                        static::nextCondition($nextA_oui,$id,NUll);
                     else if($nextC_oui)
-                        static::nextCondition($nextC_oui,$doc,$action);//faux
+                        static::nextConditionCond($nextC_oui,$doc);
                 }
-                else if(//result)
+                else if($result == 0)
                     if($nextA_non)
-                        static::nextCondition($nextA_non,$doc,$action);
+                        static::nextCondition($nextA_non,$id,NULL);
                     else if($nextC_non)
-                        static::nextCondition($nextC_non,$doc,$action);//faux
-        } */
-         
+                        static::nextConditionCond($nextC_non,$doc);
+        }
+        return response()->json(['success' => "created", 'document' => $document, 'version' => $version]);
 
     }
 
-    public static function nextActions($id,$doc,$idT) 
+    public static function nextActions($id,$doc,$idT) //$doc = idD
     {
         $action = Action::find($id); 
          
@@ -346,6 +345,7 @@ class DocController extends Controller
                                 ->pluck('_idTo');
         $conditionsS = CondSuccesseur::where('_idFrom','=',$id) 
                                 ->pluck('_idTo');
+        $document = Document::find($doc);
 
         foreach ($conditionsS as $conditionS) {
             $cond = Condition::find($conditionS);
@@ -362,14 +362,33 @@ class DocController extends Controller
                     if($nextA_oui)
                         static::nextCondition($nextA_oui,$doc,$action);
                     else if($nextC_oui)
-                        static::nextCondition($nextC_oui,$doc,$action);//faux
+                        static::nextConditionCond($nextC_oui,$document);
                 }
                 else if($tacheApp->Etat_avcT == 'Rejeter')
                     if($nextA_non)
                         static::nextCondition($nextA_non,$doc,$action);
                     else if($nextC_non)
-                        static::nextCondition($nextC_non,$doc,$action);//faux
-            }//else cond comp
+                        static::nextConditionCond($nextC_non,$document);
+            }else{
+                $document = Document::find($doc);
+                $result= static::testCondition($cond,$document);
+                $nextA_oui = $cond->_idAo;
+                $nextA_non = $cond->_idAn;
+                $nextC_oui = $cond->_idCo;
+                $nextC_non = $cond->_idCn;
+                if($result == 1)
+                {
+                    if($nextA_oui)
+                        static::nextCondition($nextA_oui,$doc,NUll);
+                    else if($nextC_oui)
+                        static::nextConditionCond($nextC_oui,$document);
+                }
+                else if($result == 0)
+                    if($nextA_non)
+                        static::nextCondition($nextA_non,$doc,NULL);
+                    else if($nextC_non)
+                        static::nextConditionCond($nextC_non,$document);
+            }
         }
 
         foreach ($actionsS as $actionS) {
@@ -385,24 +404,25 @@ class DocController extends Controller
             {
                 if($act->typeA == "Email")
                 {
-                    if ($action->destinataireIA) {
+                    $document = Document::find($doc);
+                    if ($act->destinataireIA) {
                         $myEmail = $act->destinataireIA;
                         
                         $details = array('body' => $act->messageA);
                         $obj = $act->objetA;
                         Mail::to($myEmail)->send(new SendMail($details,$obj)); 
-                    }elseif($action->a_destinataireU){
-                        $recepteur  =  $action->a_destinataireU;
-                        $emetteur =  $doc->user->id;
+                    }elseif($act->a_destinataireU){
+                        $recepteur  =  $act->a_destinataireU;
+                        $emetteur =  $document->user->id;
                         
-                        $message=Message::create(['message'=>$action->messageA,'content'=>strip_tags($action->messageA),'sujet'=>$action->objetA,'from_id'=>$emetteur,'to_id'=>$recepteur]);
+                        $message=Message::create(['message'=>$act->messageA,'content'=>strip_tags($act->messageA),'sujet'=>$act->objetA,'from_id'=>$emetteur,'to_id'=>$recepteur]);
     
     
                         $details = [
                             'id_msg' => $message->idM ,
                             'message' => $message->message,
                             'sujet' => $message->sujet,
-                            'sender' => $doc->user->id
+                            'sender' => $document->user->id
                         ];
     
                         $user = User::find($recepteur);
@@ -417,28 +437,30 @@ class DocController extends Controller
                     $tache = new Tache;
                     $tache->t_idA = $actionS;
                     $tache->t_idD = $doc;
-                    switch ($action->opt_limiteA) {
+                    switch ($act->opt_limiteA) {
                         case 'j':
-                            $a = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$action->date_limiteA.' days'));
+                            $a = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$act->date_limiteA.' days'));
                             break;
                         case 'h':
-                            $a = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$action->date_limiteA.' hours'));
+                            $a = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$act->date_limiteA.' hours'));
                             break;
                         case 'm':
-                            $a = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$action->date_limiteA.' minutes'));
+                            $a = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$act->date_limiteA.' minutes'));
                             break;
                     } 
-                    switch ($action->opt_rappelA) {
+                    $b = DateTime::createFromFormat('d/m/Y H:i:s', $a);
+                    switch ($act->opt_rappelA) {
                         case 'j':
-                            $tache->date_rappelT = Date($a, strtotime('-'.$action->date_rappelA.' days')) ;
-                            break;
+                        $rappel = date_sub($b,date_interval_create_from_date_string($act->date_rappelA.' days')); 
+                        break;
                         case 'h':
-                            $tache->date_rappelT = Date($a, strtotime('-'.$action->date_rappelA.' hours')) ;
+                            $rappel = date_sub($b,date_interval_create_from_date_string($act->date_rappelA.' hours'));
                             break;
                         case 'm':
-                            $tache->date_rappelT = Date($a, strtotime('-'.$action->date_rappelA.' minutes'));
+                            $rappel = date_sub($b,date_interval_create_from_date_string($act->date_rappelA.' minutes'));
                             break;
                     } 
+                    $tache->date_rappelT = date_format($rappel,"d/m/Y H:i:s"); 
                     $tache->save();
     
                     if($act->a_idU)
@@ -462,10 +484,10 @@ class DocController extends Controller
             return response()->json(['idT' => $idT]);
     }
 
-    public static function nextCondition($next,$doc,$action) 
+    public static function nextCondition($next,$doc,$action) //$doc=idD
     {
 
-        $act = Action::find($next);
+        $act = Action::find($next); 
 
         $predecesseurs = Successeur::join('taches','successeurs._idFrom','=','taches.t_idA')
                                     ->where('_idTo','=',$next)
@@ -476,6 +498,7 @@ class DocController extends Controller
         {
             if($act->typeA == "Email")
             {
+                $document = Document::find($doc);
                 if ($act->destinataireIA) {
                     $myEmail = $act->destinataireIA;
 
@@ -484,7 +507,7 @@ class DocController extends Controller
                     Mail::to($myEmail)->send(new SendMail($details,$obj));
                 }elseif($act->a_destinataireU){
                     $recepteur  =  $act->a_destinataireU;
-                    $emetteur =  $doc->user->id;
+                    $emetteur =  $document->user->id;
                     
                     $message=Message::create(['message'=>$act->messageA,'content'=>strip_tags($act->messageA),'sujet'=>$act->objetA,'from_id'=>$emetteur,'to_id'=>$recepteur]);
 
@@ -493,7 +516,7 @@ class DocController extends Controller
                         'id_msg' => $message->idM ,
                         'message' => $message->message,
                         'sujet' => $message->sujet,
-                        'sender' => $doc->user->id
+                        'sender' => $document->user->id
                     ];
 
                     $user = User::find($recepteur);
@@ -511,28 +534,30 @@ class DocController extends Controller
                 $tache = new Tache;
                 $tache->t_idA = $next;
                 $tache->t_idD = $doc;
-                switch ($action->opt_limiteA) {
+                switch ($act->opt_limiteA) {
                     case 'j':
-                        $a = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$action->date_limiteA.' days'));
+                        $a = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$act->date_limiteA.' days'));
                         break;
                     case 'h':
-                        $a = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$action->date_limiteA.' hours'));
+                        $a = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$act->date_limiteA.' hours'));
                         break;
                     case 'm':
-                        $a = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$action->date_limiteA.' minutes'));
+                        $a = $tache->date_echeanceT = Date('d/m/Y H:i:s', strtotime('+'.$act->date_limiteA.' minutes'));
                         break;
                 } 
-                switch ($action->opt_rappelA) {
+                $b = DateTime::createFromFormat('d/m/Y H:i:s', $a);
+                switch ($act->opt_rappelA) {
                     case 'j':
-                        $tache->date_rappelT = Date($a, strtotime('-'.$action->date_rappelA.' days')) ;
-                        break;
+                       $rappel = date_sub($b,date_interval_create_from_date_string($act->date_rappelA.' days')); 
+                       break;
                     case 'h':
-                        $tache->date_rappelT = Date($a, strtotime('-'.$action->date_rappelA.' hours')) ;
+                        $rappel = date_sub($b,date_interval_create_from_date_string($act->date_rappelA.' hours'));
                         break;
                     case 'm':
-                        $tache->date_rappelT = Date($a, strtotime('-'.$action->date_rappelA.' minutes'));
+                        $rappel = date_sub($b,date_interval_create_from_date_string($act->date_rappelA.' minutes'));
                         break;
                 } 
+                $tache->date_rappelT = date_format($rappel,"d/m/Y H:i:s");
                 $tache->save();
 
                 if($act->a_idU)
@@ -550,6 +575,101 @@ class DocController extends Controller
 
             }
         }
+    }
+
+    public static function nextConditionCond($next,$doc)  //$doc=Document
+    {
+        $cond = Condition::find($next);
+
+        if($cond->typeC == "condApp")
+        {
+            $actApp = Action::find($cond->c_idA);
+            $tacheApp = Tache::where('t_idA',$cond->c_idA)->where('t_idD',$doc->idD)->whereNotNull('Etat_avcT')->orderBy('updated_at', 'desc')->first();;
+            $nextA_oui = $cond->_idAo;
+            $nextA_non = $cond->_idAn;
+            $nextC_oui = $cond->_idCo;
+            $nextC_non = $cond->_idCn;
+            if($tacheApp->Etat_avcT == 'Accepter')
+            {
+                if($nextA_oui)
+                    static::nextCondition($nextA_oui,$doc->idD,$action);
+                else if($nextC_oui)
+                    static::nextConditionCond($nextC_oui,$doc);//faux
+            }
+            else if($tacheApp->Etat_avcT == 'Rejeter')
+                if($nextA_non)
+                    static::nextCondition($nextA_non,$doc->idD,$action);
+                else if($nextC_non)
+                    static::nextConditionCond($nextC_non,$doc);//faux
+        }else{
+            $result= static::testCondition($cond,$doc);
+            $nextA_oui = $cond->_idAo;
+            $nextA_non = $cond->_idAn;
+            $nextC_oui = $cond->_idCo;
+            $nextC_non = $cond->_idCn;
+            if($result == 1)
+            {
+                if($nextA_oui)
+                    static::nextCondition($nextA_oui,$doc->idD,NUll);
+                else if($nextC_oui)
+                    static::nextConditionCond($nextC_oui,$doc);
+            }
+            else if($result == 0)
+                if($nextA_non)
+                    static::nextCondition($nextA_non,$doc->idD,NULL);
+                else if($nextC_non)
+                    static::nextConditionCond($nextC_non,$doc);
+        }
+    }
+
+    public static function testCondition($condition,$document) //$document = Document
+    {
+        $rq = $condition->formuleC;
+        $doc = $document->idD;
+        $rq =str_replace('$doc',$doc,$rq);
+        
+        $metas=DB::select("$rq");
+        //intersect = && // union = ||
+       /*  $metas=DB::select("SELECT  count(*) as 'cpt'
+        FROM metas_docs M
+        WHERE _idM = 11 and valeur='02:00'
+        and _idD = {{$doc}}
+        and created_at IN (select max(created_at) FROM metas_docs md WHERE md._idM = 11)
+        intersect  SELECT  count(*) as 'cpt'
+        FROM metas_docs M
+        WHERE _idM = 13 and valeur='0.170'
+        and _idD = $doc
+        and created_at IN (select max(created_at) FROM metas_docs md WHERE md._idM = 13)
+        union SELECT  count(*) as 'cpt'
+        FROM metas_docs M
+        WHERE _idM = 12 and valeur='01'
+        and _idD = $doc
+        and created_at IN (select max(created_at) FROM metas_docs md WHERE md._idM = 12)
+        intersect  SELECT  count(*) as 'cpt'
+        FROM metas_docs M
+        WHERE _idM = 6 and valeur='05'
+        and _idD = $doc
+        and created_at IN (select max(created_at) FROM metas_docs md WHERE md._idM = 6)"); */
+        
+        
+        if (count($metas)>1) {
+            $r = 1;
+            foreach ($metas as $meta) {
+                if($r || $meta)
+                    $x=1;
+                else
+                    $x=0;
+            }
+            return $x;  
+        }else if(count($metas) == 0){
+            return 0;
+        }else{
+            if($metas[0]->cpt == 1)
+                return 1;
+            else
+                return 0;
+        }
+        
     }
 
     public function effectuerTache(Request $request)

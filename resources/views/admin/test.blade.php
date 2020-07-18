@@ -215,7 +215,7 @@
 					<form id="form-addWF" method="POST">
 							{{ csrf_field() }}
 						<div class="form-group">
-							<select id="typeDoc" name="typeDocUnique" class="selectpicker" data-live-search="true" data-width="100%">
+							<select required id="typeDoc" name="typeDocUnique" class="selectpicker" data-live-search="true" data-width="100%">
 								<option value="" disabled selected>Type document</option>
 								@foreach ($typesDoc as $typeDoc)
 									<option value="{{$typeDoc->idTd}}"> {{$typeDoc->intituleTd}} </option>
@@ -223,7 +223,7 @@
 							</select>										
 						</div>
 						<div class="form-group">
-							<input type="text" name="nomWf" class="form-control mb-4" id="nomWf" placeholder="Nom du workflow">
+							<input required type="text" name="nomWf" class="form-control mb-4" id="nomWf" placeholder="Nom du workflow">
 						</div>
 						<div class="form-group">
 							<textarea class="form-control" name="descWf" id="exampleFormControlTextarea" rows="3" placeholder="Description"></textarea>
@@ -533,8 +533,8 @@
 								</a>
 							</div>
 						</div>	 
-						<form action="/test" method="post">
-							{{ csrf_field() }}
+						{{-- <form action="/test" method="post">
+							{{ csrf_field() }} --}}
 							<div class="form-row">
 								<textarea name="" id="condF" cols="30" rows="10" readonly style="margin-top: 0px; margin-bottom: 10px; margin-left:100px; height: 100px; width:500px"></textarea>
 								<textarea id="condFormule" name="formule" cols="30" rows="10" readonly></textarea>
@@ -544,7 +544,7 @@
 								<button class="btn" data-dismiss="modal"> <i class="flaticon-delete-1"></i> Annuler</button>
 								<button type="submit" id="btn-add" class="btn btn-success" disabled>Valider</button>
 							</div>
-						</form>
+						{{-- </form> --}}
 						
 					</div>
 				</div>
@@ -554,8 +554,8 @@
 
 		{{-- <button id="bt">data</button>
 		<input type="text" name="" id="tt"> --}}
-		<input type="text" id="count" value="0">
-		<input type="text" id="actMeta">
+		<input type="hidden" id="count" value="0">
+		<input type="hidden" id="actMeta">
 
 		<script>
 			function dateP(params) {
@@ -582,7 +582,7 @@
 			function textV() {
 				var textV = $('#valText').val()
 				$('#condF').val($('#condF').val()+" "+textV);
-				$('#condFormule').val($('#condFormule').val()+" '"+textV+"'");
+				$('#condFormule').val($('#condFormule').val()+" '%"+textV+"%'");
 				$('#valText').prop("disabled", true);
 				$('#opComparLog').removeAttr("disabled");
 				$('#condFormule').val($('#condFormule').val()+" and _idD = $doc and created_at IN (select max(created_at) FROM metas_docs md WHERE md._idM ="+$("#actMeta").val()+"))");
@@ -594,7 +594,8 @@
 				if(ts == 2){
 					var textV = $('#demo2').val();
 					$('#condF').val($('#condF').val()+" "+textV);
-					$('#condFormule').val( $('#condFormule').val()+" '"+textV+"'");
+					var xx= $('#condFormule').val();
+					$('#condFormule').val( $('#condFormule').val().substring(0, xx.length - 1)+"*1"+ xx[xx.length-1] +"'"+textV+"'*1");
 					$('#demo2').prop("disabled", true);
 					$('#opComparLog').removeAttr("disabled");
 					$('#condFormule').val($('#condFormule').val()+" and _idD = $doc and created_at IN (select max(created_at) FROM metas_docs md WHERE md._idM ="+$("#actMeta").val()+"))");
