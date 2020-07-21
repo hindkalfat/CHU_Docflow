@@ -276,21 +276,39 @@
                     var dateC = new Date(item.created_at);
                     var datecreated_at = dateC.getDate() + "/" +(dateC.getMonth() + 1) + "/" + dateC.getFullYear();
 
+                    var dateU = new Date(item.updated_at);
+                    var dateupdated_at = dateU.getDate() + "/" +(dateU.getMonth() + 1) + "/" + dateU.getFullYear();
+
                     $('#bodyDoc').append(
-                                        '<tr role="row">'+
+                                        '<tr id="items'+item.idD+'" role="row">'+
                                             '<td>'+ item.nomD+'</td>'+
-                                            '<td>'+ item.nomU+' '+ item.prenomU+' </td>'+
-                                            '<td>'+ datecreated_at +'</td>'+
-                                            '<td>  </td>'+
+                                            '<td>'+ datecreated_at+' </td>'+
+                                            '<td>'+ dateupdated_at +'</td>'+
+                                            '<td> '+ item.nomU+' '+ item.prenomU+' </td>'+
                                             '<td> '+ item.etatD+' </td>'+
-                                            '<td>  </td>'+
+                                            '<td id="drt'+item.idD+'">  </td>'+
                                             '<td style="width:114px;">'+
                                                 '<a  href=" {!! asset("user/document/'+item.idD+'") !!} "> '+                                          
                                                     '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'+
-                                                '</a>'+                                         
+                                                '</a>'+  
+                                                '&nbsp;<a  href="#">'+
+                                                    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" title="supprimer" class="feather feather-x-circle table-cancel" data-toggle="modal" data-target="#deleteConformation" data-id="'+ item.idD+'" data-nom="'+ item.nomD+'"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>'+
+                                                '</a>'+                                       
                                             '</td>'+
                                         '</tr>'
                                     );
+                    
+                    if (item.droitD== "privé"){
+                        $('#drt'+item.idD).append(
+                            '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-lock"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>&nbsp;'+
+                            item.droitD
+                        )   
+                    }else{
+                        $('#drt'+item.idD).append(
+                        '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> &nbsp;'+
+                            item.droitD
+                        )
+                    }
                 });
             }
             });
@@ -310,21 +328,38 @@
                     var dateC = new Date(item.created_at);
                     var datecreated_at = dateC.getDate() + "/" +(dateC.getMonth() + 1) + "/" + dateC.getFullYear();
 
+                    var dateU = new Date(item.updated_at);
+                    var dateupdated_at = dateU.getDate() + "/" +(dateU.getMonth() + 1) + "/" + dateU.getFullYear();
+
                     $('#bodyDoc').append(
-                                        '<tr role="row">'+
+                                        '<tr id="items'+ item.idD+'" role="row">'+
                                             '<td>'+ item.nomD+'</td>'+
-                                            '<td>'+ item.nomU+' '+ item.prenomU+' </td>'+
-                                            '<td>'+ datecreated_at +'</td>'+
-                                            '<td>  </td>'+
+                                            '<td>'+ datecreated_at+' </td>'+
+                                            '<td>'+ dateupdated_at +'</td>'+
+                                            '<td> '+ item.nomU+' '+ item.prenomU+' </td>'+
                                             '<td> '+ item.etatD+' </td>'+
-                                            '<td>  </td>'+
+                                            '<td id="drt'+item.idD+'">  </td>'+
                                             '<td style="width:114px;">'+
                                                 '<a  href=" {!! asset("user/document/'+item.idD+'") !!} "> '+                                          
                                                     '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'+
-                                                '</a>'+                                         
+                                                '</a>'+ 
+                                                '&nbsp;<a  href="#">'+
+                                                    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" title="supprimer" class="feather feather-x-circle table-cancel" data-toggle="modal" data-target="#deleteConformation" data-id="'+ item.idD+'" data-nom="'+ item.nomD+'"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>'+
+                                                '</a>'+                                        
                                             '</td>'+
                                         '</tr>'
                                     );
+                    if (item.droitD== "privé"){
+                        $('#drt'+item.idD).append(
+                            '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-lock"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> &nbsp;'+
+                            item.droitD
+                        )   
+                    }else{
+                        $('#drt'+item.idD).append(
+                            '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> &nbsp;'+
+                                item.droitD
+                        )
+                    }
                 });
             }
             });
@@ -343,22 +378,39 @@
                 $.each(data.docs, function (i, item) {
                     var dateC = new Date(item.created_at);
                     var datecreated_at = dateC.getDate() + "/" +(dateC.getMonth() + 1) + "/" + dateC.getFullYear();
+                    
+                    var dateU = new Date(item.updated_at);
+                    var dateupdated_at = dateU.getDate() + "/" +(dateU.getMonth() + 1) + "/" + dateU.getFullYear();
 
                     $('#bodyDoc').append(
-                                        '<tr role="row">'+
+                                        '<tr id="items'+ item.idD+'" role="row">'+
                                             '<td>'+ item.nomD+'</td>'+
-                                            '<td>'+ item.nomU+' '+ item.prenomU+' </td>'+
-                                            '<td>'+ datecreated_at +'</td>'+
-                                            '<td>  </td>'+
+                                            '<td>'+ datecreated_at+' </td>'+
+                                            '<td>'+ dateupdated_at +'</td>'+
+                                            '<td> '+ item.nomU+' '+ item.prenomU+' </td>'+
                                             '<td> '+ item.etatD+' </td>'+
-                                            '<td>  </td>'+
+                                            '<td id="drt'+item.idD+'">  </td>'+
                                             '<td style="width:114px;">'+
                                                 '<a  href=" {!! asset("user/document/'+item.idD+'") !!} "> '+                                          
                                                     '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'+
-                                                '</a>'+                                         
+                                                '</a>'+  
+                                                '&nbsp;<a  href="#">'+
+                                                    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" title="supprimer" class="feather feather-x-circle table-cancel" data-toggle="modal" data-target="#deleteConformation" data-id="'+ item.idD+'" data-nom="'+ item.nomD+'"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>'+
+                                                '</a>'+                                       
                                             '</td>'+
                                         '</tr>'
                                     );
+                    if (item.droitD== "privé"){
+                        $('#drt'+item.idD).append(
+                            '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-lock"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> &nbsp;'+
+                            item.droitD
+                        )   
+                    }else{
+                        $('#drt'+item.idD).append(
+                        '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> &nbsp;'+
+                            item.droitD
+                        )
+                    }
                 });
             }
             });
@@ -398,8 +450,7 @@
                             <div class="modal-body">
                                 <div class="form-group">
                                     <p>Droit d'accés</p>
-                                    <select id="grp" name="grp" class="selectpicker form-control" multiple data-live-search="true" data-actions-box="true">
-                                        <option value="" disabled selected>choisissez</option>
+                                    <select id="grp" name="grp[]" class="selectpicker form-control" multiple data-live-search="true" data-actions-box="true">
                                         @foreach ($groupes as $groupe)
                                             <option value="{{$groupe->idG}}"> {{$groupe->nomG}} </option>
                                         @endforeach
@@ -473,8 +524,8 @@
                                     <th>Nom document</th>
                                     <th>Date création</th>
                                     <th>Date modification</th>
-                                    <th>Action courante</th>
-                                    <th>Nb versions</th>
+                                    <th>Ajouté par</th>
+                                    <th>Etat document</th>
                                     <th>Droit d'accés</th>
                                     <th class="no-content"></th>
                                 </tr>
@@ -485,15 +536,26 @@
                                         <td> {{$doc->nomD}} </td>
                                         <td> {{$doc->created_at->format('d/m/Y')}} </td>
                                         <td> {{$doc->updated_at->format('d/m/Y')}} </td>
-                                        <td>  </td>
-                                        <td> {{$doc->versions->count()}} </td>
-                                        <td>  </td>
+                                        <td> {{$doc->user->nomU}} {{$doc->user->prenomU}} </td>
+                                        <td> {{$doc->etatD}} </td>
+                                        @if ($doc->droitD == "privé")
+                                            <td> 
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-lock"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                                                {{$doc->droitD}}
+                                            </td>
+                                        @else
+                                            <td>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                                                {{$doc->droitD}}
+                                            </td>
+                                        @endif
+                                        
                                         <td>
                                             <a  href=" {{url('user/document/'.$doc->idD)}} ">                                            
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                                             </a>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-                                            <a  href="#">
+{{--                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+ --}}                                            <a  href="#">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" title="supprimer" class="feather feather-x-circle table-cancel" data-toggle="modal" data-target="#deleteConformation" data-id="{{$doc->idD}}" data-nom="{{$doc->nomD}}"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
                                             </a>
                                         </td>
@@ -503,12 +565,12 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                        <th>Nom document</th>
-                                        <th>Date création</th>
-                                        <th>Date modification</th>
-                                        <th>Action courante</th>
-                                        <th>Nb versions</th>
-                                        <th>Droit d'accés</th>
+                                    <th>Nom document</th>
+                                    <th>Date création</th>
+                                    <th>Date modification</th>
+                                    <th>Ajouté par</th>
+                                    <th>Etat document</th>
+                                    <th>Droit d'accés</th>
                                         <th></th>
                                 </tr>
                             </tfoot>

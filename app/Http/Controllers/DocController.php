@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\support\Facades\DB;
 use App\Notifications\NewTask;
+use App\Notifications\archiveNotification;
 use Illuminate\Notifications\DatabaseNotification;
 use App\Notifications\MsgNotification;
 use DateTime;
@@ -13,6 +14,7 @@ use App\User;
 use App\Groupe;
 use App\Metadonnee;
 use App\TypeDoc;
+use App\GroupeDoc;
 use App\Version;
 use App\Successeur;
 use App\CondSuccesseur;
@@ -45,8 +47,12 @@ class DocController extends Controller
     {
         $id = Auth::user()->id; //Auth
         $user = User::find($id);
-        $docs = $user->documents;
+        $docsU = $user->documents->pluck('idD');
         $groupes = $user->groupes; 
+        $groupesID = $user->groupes->pluck('idG'); 
+        $docsG = GroupeDoc::whereIn('_idG',$groupesID)->pluck('_idD'); 
+        
+        $docs = Document::whereIn('idD',$docsG)->orwhereIn('idD',$docsU)->distinct()->get();
 
         $workflow = Workflow::pluck('w_idTd');
         $typesDoc = TypeDoc::wherein('idTD',$workflow)->get();
@@ -75,12 +81,20 @@ class DocController extends Controller
     {
         $document = new Document;
         $typeD = TypeDoc::find($request->input('typeDoc'));
+        $groupes = $request->input('grp');
 
         $document->d_idTd = $request->input('typeDoc');
         $document->nomD = $request->input('nomD');
         $document->titreD = $request->input('titreD');
         $document->etatD = "actif";
         $document->d_idU = Auth::user()->id;
+        if($groupes)
+        {
+            $document->droitD = 'partagé';
+        }
+            
+        else
+            $document->droitD = 'privé';
 
         $document->save(); 
         $version = new Version;
@@ -110,6 +124,14 @@ class DocController extends Controller
             $metaDoc->save();
             
 
+        }
+
+        
+        foreach ($groupes as $groupe) {
+            $grp_doc = new GroupeDoc;
+            $grp_doc->_idD = $document->idD;
+            $grp_doc->_idG = $groupe;
+            $grp_doc->save();
         }
 
         return $this->actions($document->idD,$document,$version);
@@ -209,9 +231,13 @@ class DocController extends Controller
         $contributeursUG = null; 
         foreach ($contributeursG as $grp) {
             $contributeursUG = $grp->users;
-        }   
+        }  
+         
+        $droitsG = GroupeDoc::join('groupes','groupes.idG','=','groupes_docs._idG')
+                            ->where('_idD',$id)
+                            ->get();
                         
-        return view('user.document',['doc' => $document,'versions' => $versions, 'contributeursU' => $contributeursU, 'contributeursUG' => $contributeursUG, 'encours' => $encours, 'metas' => $metas]);
+        return view('user.document',['doc' => $document,'versions' => $versions, 'contributeursU' => $contributeursU, 'contributeursUG' => $contributeursUG, 'encours' => $encours, 'metas' => $metas, 'droitsG' =>$droitsG]);
     }
 
     public static function actions($id,$document,$version) //$id
@@ -346,6 +372,18 @@ class DocController extends Controller
         $conditionsS = CondSuccesseur::where('_idFrom','=',$id) 
                                 ->pluck('_idTo');
         $document = Document::find($doc);
+
+        /* $wf = $document->type_doc->workflow;
+        $wfAct = $wf->actions->pluck('idop')->max();
+        $wfCond = $wf->conditions->pluck('idop')->max();
+        $max = max($wfAct,$wfCond); */
+
+        /* if($actionsS->count()==0 && $conditionsS->count()==0){
+            $document->etatD = 'archivé';
+            $document->save();
+            $user = $document->user;
+            Notification::send($user, new archiveNotification($document));
+        } */
 
         foreach ($conditionsS as $conditionS) {
             $cond = Condition::find($conditionS);
@@ -796,5 +834,11 @@ class DocController extends Controller
         }
     }
 
+    public function archiver(Request $request)
+    {
+        $document=Document::find($request->input('docArchi'));
+        $document->etatD = 'archivé';
+        $document->save();
+    }
 
 }

@@ -68,7 +68,7 @@
                         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
                         <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
                     </svg>
-                    @if(Auth::user()->unreadNotifications->where('type','App\Notifications\NewTask')->count()>0)
+                    @if(Auth::user()->unreadNotifications->where('type','App\Notifications\NewTask')->count()>0 || Auth::user()->unreadNotifications->where('type','App\Notifications\archiveNotification')->count()>0)
                         <span id="unread" class="badge badge-success"></span>
                     @endif
                 </a>
@@ -88,6 +88,26 @@
                                         <div class="media-body">
                                             <div class="notification-para">Vous avez reçu une nouvelle tâche:
                                                 <span class="user-name"> {{$notification->data['nomT']}} </span>
+                                            </div>
+                                            <div class="notification-meta-time"> {{$notification->created_at->diffForHumans()}} </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        @endforeach
+                        @foreach(Auth::user()->unreadNotifications->where('type','App\Notifications\archiveNotification') as $notification)
+                            <div class="dropdown-item">
+                                <div class="media">
+                                    <a class="row" href="{{url('user/taches')}}"> 
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round" class="feather feather-send">
+                                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                                        </svg>
+                                        <div class="media-body">
+                                            <div class="notification-para">Document:
+                                                <span class="user-name"> {{$notification->data['nomD']}} </span> archivé
                                             </div>
                                             <div class="notification-meta-time"> {{$notification->created_at->diffForHumans()}} </div>
                                         </div>
@@ -116,6 +136,27 @@
                             </div>
                         @endforeach
                         {{Auth::user()->unreadNotifications->where('type','App\Notifications\NewTask')->markAsRead()}}
+                        @foreach(Auth::user()->readNotifications->where('type','App\Notifications\archiveNotification')->take(10) as $notification)
+                            <div class="dropdown-item">
+                                <div class="media">
+                                    <a class="row" href="#">   
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round" class="feather feather-send">
+                                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                                        </svg>
+                                        <div class="media-body">
+                                            <div class="notification-para">Document:
+                                                <span class="user-name"> {{$notification->data['nomD']}} </span> archivé
+                                            </div>
+                                            <div class="notification-meta-time"> {{$notification->created_at->diffForHumans()}} </div>
+                                        </div>
+                                    </a> 
+                                </div>
+                            </div>
+                        @endforeach
+                        {{Auth::user()->unreadNotifications->where('type','App\Notifications\archiveNotification')->markAsRead()}}
                     </div>
                 </div>
             </li>

@@ -9,11 +9,12 @@
                     </a>
                 </li>
                 <li class="nav-item theme-text">
-                    <a href="index.html" class="nav-link"> CHU Docflow </a>
+                    <a href="index.html" class="nav-link"> CollabFlow</a>
                 </li>
             </ul>
     
             <ul class="list-unstyled menu-categories" id="accordionExample">
+                <br><br>
                 <li class="menu">
                     <a href="#dashboard" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
                         <div class="">

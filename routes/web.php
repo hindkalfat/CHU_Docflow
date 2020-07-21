@@ -103,6 +103,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/user/documents','DocController@index');
         Route::post('/user/documents','DocController@store');
         Route::get('/user/document/{id}','DocController@details');
+        Route::post('/user/document/archiver','DocController@archiver');
         Route::post('/user/delete/document','DocController@destroy');
         Route::post('/metas','DocController@metas');
 

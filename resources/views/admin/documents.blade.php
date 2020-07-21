@@ -42,7 +42,7 @@
                                             '<td>'+ datecreated_at +'</td>'+
                                             '<td>  </td>'+
                                             '<td> '+ item.etatD+' </td>'+
-                                            '<td>  </td>'+
+                                            '<td id="drt'+item.idD+'">  </td>'+
                                             '<td style="width:114px;">'+
                                                 '<a  href=" {!! asset("admin/document/'+item.idD+'") !!} "> '+                                          
                                                     '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'+
@@ -50,6 +50,17 @@
                                             '</td>'+
                                         '</tr>'
                                     );
+                    if (item.droitD== "privé"){
+                        $('#drt'+item.idD).append(
+                            '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-lock"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>&nbsp;'+
+                            item.droitD
+                        )   
+                    }else{
+                        $('#drt'+item.idD).append(
+                        '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> &nbsp;'+
+                            item.droitD
+                        )
+                    }
                 });
             }
             });
@@ -76,7 +87,7 @@
                                             '<td>'+ datecreated_at +'</td>'+
                                             '<td>  </td>'+
                                             '<td> '+ item.etatD+' </td>'+
-                                            '<td>  </td>'+
+                                            '<td id="drt'+item.idD+'">  </td>'+
                                             '<td style="width:114px;">'+
                                                 '<a  href=" {!! asset("admin/document/'+item.idD+'") !!} "> '+                                          
                                                     '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'+
@@ -84,6 +95,17 @@
                                             '</td>'+
                                         '</tr>'
                                     );
+                    if (item.droitD== "privé"){
+                        $('#drt'+item.idD).append(
+                            '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-lock"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>&nbsp;'+
+                            item.droitD
+                        )   
+                    }else{
+                        $('#drt'+item.idD).append(
+                        '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> &nbsp;'+
+                            item.droitD
+                        )
+                    }
                 });
             }
             });
@@ -110,7 +132,7 @@
                                             '<td>'+ datecreated_at +'</td>'+
                                             '<td>  </td>'+
                                             '<td> '+ item.etatD+' </td>'+
-                                            '<td>  </td>'+
+                                            '<td id="drt'+item.idD+'">  </td>'+
                                             '<td style="width:114px;">'+
                                                 '<a  href=" {!! asset("admin/document/'+item.idD+'") !!} "> '+                                          
                                                     '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'+
@@ -118,6 +140,17 @@
                                             '</td>'+
                                         '</tr>'
                                     );
+                    if (item.droitD== "privé"){
+                        $('#drt'+item.idD).append(
+                            '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-lock"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>&nbsp;'+
+                            item.droitD
+                        )   
+                    }else{
+                        $('#drt'+item.idD).append(
+                        '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> &nbsp;'+
+                            item.droitD
+                        )
+                    }
                 });
             }
             });
@@ -177,7 +210,7 @@
             //
             $('.addinput').click(function(){
                 var cpt = $('#cpt').val()*1;
-                $(this).after( '<hr/>'+
+                $(this).after( 
                                 '<div class="metaslist addmeta'+cpt+' row mb-4">'+
                                     '<div class="col-lg-6">'+
                                         '<input id="TlibelleM" type="text" class=" TlibelleM form-control" placeholder="Intitulé">'+
@@ -440,7 +473,17 @@
                                                                 <td> {{$doc->created_at->format('d/m/Y')}} </td>
                                                                 <td> {{$doc->versions->count()}} </td>
                                                                 <td> {{$doc->etatD}}  </td>
-                                                                <td>  </td>
+                                                                @if ($doc->droitD == "privé")
+                                                                    <td> 
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-lock"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                                                                        {{$doc->droitD}}
+                                                                    </td>
+                                                                @else
+                                                                    <td>
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                                                                        {{$doc->droitD}}
+                                                                    </td>
+                                                                @endif
                                                                 <td>
                                                                     <a  href=" {{url('admin/document/'.$doc->idD)}} ">                                            
                                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
@@ -455,7 +498,7 @@
                                                                 <th>Ajouté par</th>
                                                                 <th>Date création</th>
                                                                 <th>Nb versions</th>
-                                                                <th>Date création</th>
+                                                                <th>Etat document</th>
                                                                 <th>Droit d'accés</th>
                                                                 <th class="no-content"></th>
                                                             </tr>

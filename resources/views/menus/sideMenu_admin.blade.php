@@ -9,7 +9,7 @@
                 </a>
             </li>
             <li class="nav-item theme-text">
-                <a href="index.html" class="nav-link"> CHU Docflow </a>
+                <a href="index.html" class="nav-link">Collabdoc</a>
             </li>
         </ul>
 

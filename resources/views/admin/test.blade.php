@@ -456,7 +456,6 @@
 						</button>
 					</div>
 					<div class="modal-body">
-						<small id="emailHelp1" class="form-text text-muted mb-4">Le deuxième choix est activé si la condition a une tâche d'approbation comme prédecesseur.</small>
 						<div class="custom-control custom-radio custom-control-inline">
 							<input type="radio" id="customRadioInline1" value="metas" name="customRadioInline1" class="custom-control-input">
 							<label class="custom-control-label" for="customRadioInline1">Condition sur les métadonnées</label>
@@ -466,6 +465,7 @@
 							<input type="radio" id="customRadioInline2" value="appro" name="customRadioInline1" class="custom-control-input" disabled>
 							<label class="custom-control-label" for="customRadioInline2">Condition d'approbation</label>
 						</div>
+						<small id="emailHelp1" class="form-text text-muted mb-4">Le deuxième choix est activé si la condition a une tâche d'approbation comme prédecesseur.</small>
 					</div>
 				</div>
 			</div>
@@ -537,7 +537,7 @@
 							{{ csrf_field() }} --}}
 							<div class="form-row">
 								<textarea name="" id="condF" cols="30" rows="10" readonly style="margin-top: 0px; margin-bottom: 10px; margin-left:100px; height: 100px; width:500px"></textarea>
-								<textarea id="condFormule" name="formule" cols="30" rows="10" readonly></textarea>
+								<textarea hidden id="condFormule" name="formule" cols="30" rows="10" readonly></textarea>
 							</div>
 							
 							<div class="modal-footer">

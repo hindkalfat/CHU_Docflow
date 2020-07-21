@@ -11,6 +11,7 @@
 @extends('layout.'.$ext)
 
 @section('link')
+    <link href="{{asset('plugins/notification/snackbar/snackbar.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/css/apps/invoice.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/css/elements/avatar.css')}}" rel="stylesheet" type="text/css" />
 	<link href="{{asset('plugins/perfect-scrollbar/perfect-scrollbar.css')}}" rel="stylesheet" type="text/css" />
@@ -23,6 +24,15 @@
 	</script>
     <script src="{{asset('js/pdf/jquery.media.js')}}"></script>
     <script src="{{asset('js/pdf/pdf-active-1.js')}}"></script>
+    <script>
+        $('.bottom-right-unique').click(function() {
+            Snackbar.show({
+                text: 'Document archivé.',
+                pos: 'bottom-right'
+            });
+		});
+    </script>
+    <script src="{{asset('plugins/notification/snackbar/snackbar.min.js')}}"></script>
     <script>
         $(document).on("click",".feather-eye",function(){
             var type = $(this).attr('name');
@@ -66,12 +76,30 @@
                 });
                 
             });
+
+            //archiver
+            $("#btn-arch").click(function() {
+                event.preventDefault();
+                var data = $('#archiver').serialize(); 
+                $.ajax({
+                    type:'POST',
+                    data:data,
+                    url:'/user/document/archiver',
+                    success:function(data){
+                        $("#etatD").text('Archivé')
+                        $('#archive').click();
+                        $('#btn-arch').remove();
+                    }
+                });
+            });
         });
     </script>
 @endsection
 
 @section('content')
 <!--  BEGIN CONTENT AREA  -->
+<button hidden id="archive" class="btn btn-dark bottom-right-unique">Bottom right</button>
+
 <div id="content" class="main-content">
     <div class="layout-px-spacing">
         <div class="row invoice layout-top-spacing">
@@ -89,12 +117,20 @@
                                         <div class="col-sm-6 col-12">
                                             <h3 class="in-heading"> {{ucfirst($doc->nomD)}} </h3>
                                         </div>
+                                        @if($doc->etatD == 'actif')
                                         <div class="col-sm-6 col-12 align-self-center text-sm-right">
                                             <div class="company-info">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-git-pull-request"><circle cx="18" cy="18" r="3"></circle><circle cx="6" cy="6" r="3"></circle><path d="M13 6h3a2 2 0 0 1 2 2v7"></path><line x1="6" y1="9" x2="6" y2="21"></line></svg>
-                                                <h5 class="inv-brand-name">Workflow</h5>
+                                                <form id="archiver" method="post">
+                                                    {{ csrf_field() }}
+                                                    <input type="hidden" value="{{$doc->idD}}" name="docArchi" id="docArchi">
+                                                </form>
+                                                <a href="#" id="btn-arch" class="row">
+                                                    <p class="inv-brand-name">Archiver</p> &nbsp;
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"  class="feather feather-archive"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg>
+                                                </a>
                                             </div>
                                         </div>
+                                        @endif
                                         
                                     </div>
 
@@ -109,8 +145,9 @@
                                         
                                         <div class="col-sm-7 align-self-center">
                                             <p class="inv-list-number"><span class="inv-title">Titre du document: </span><span class="inv-number">{{ucfirst($doc->titreD)}} </span></p>
-                                            <p class="inv-list-number"><span class="inv-title">Etat du document: </span><span class="inv-number">{{ucfirst($doc->etatD)}} </span></p>
-                                            <p class="inv-list-number"><span class="inv-title">Action(s) courante(s): </span>
+                                            <p class="inv-list-number"><span class="inv-title">Etat du document: </span><span class="inv-number" id="etatD">{{ucfirst($doc->etatD)}} </span></p>
+                                            <p class="inv-list-number"><span class="inv-title">Droits du document : </span><span class="inv-number" id="etatD">{{ucfirst($doc->droitD)}} </span></p>
+                                            <p class="inv-list-number"><span class="inv-title" id="actCr">Action(s) courante(s): </span>
                                             @foreach ($encours as $act)
                                                 <span class="inv-number">
                                                     {{$act->action->nomA}} -
@@ -181,28 +218,49 @@
                                                     </div>
                                             <div class="inv--payment-info">
                                                 <div class="row">
-                                                    <div class="col-sm-12 col-12">
-                                                        <h6 class=" inv-title">Contributeurs:</h6>
-                                                    </div>
-                                                    <div style="margin-left:50px;">
-                                                        <div class="avatar--group">
-                                                            @foreach ($contributeursU as $usr)
+                                                    <div class="col-sm-6 col-6">
+                                                        <div class="col-sm-6 col-6">
+                                                            <h6 class=" inv-title">Contributeurs:</h6>
+                                                        </div>
+                                                        <div style="margin-left:50px;">
+                                                            <div class="avatar--group">
                                                                 <div class="avatar">
-                                                                    <img alt="avatar" src="{{asset('assets/img/profile-12.jpg')}}" class="rounded-circle  bs-tooltip" data-original-title="{{$usr->nomU }} {{$usr->prenomU }}" />
-                                                                </div>            
-                                                            @endforeach
-                                                            @if ($contributeursUG)
-                                                                @foreach ($contributeursUG as $usr)
+                                                                    <img alt="avatar" src="{{asset('assets/img/profile-12.jpg')}}" class="rounded-circle  bs-tooltip" data-original-title="{{$doc->user->nomU }} {{$doc->user->prenomU }}" />
+                                                                </div> 
+                                                                @foreach ($contributeursU as $usr)
                                                                     <div class="avatar">
                                                                         <img alt="avatar" src="{{asset('assets/img/profile-12.jpg')}}" class="rounded-circle  bs-tooltip" data-original-title="{{$usr->nomU }} {{$usr->prenomU }}" />
                                                                     </div>            
                                                                 @endforeach
-                                                            @endif
-                                                            {{-- <div class="avatar">
-                                                                <span class="avatar-title rounded-circle  bs-tooltip" data-original-title="Alan Green">AG</span>
-                                                            </div> --}}
+                                                                @if ($contributeursUG)
+                                                                    @foreach ($contributeursUG as $usr)
+                                                                        <div class="avatar">
+                                                                            <img alt="avatar" src="{{asset('assets/img/profile-12.jpg')}}" class="rounded-circle  bs-tooltip" data-original-title="{{$usr->nomU }} {{$usr->prenomU }}" />
+                                                                        </div>            
+                                                                    @endforeach
+                                                                @endif
+                                                                {{-- <div class="avatar">
+                                                                    <span class="avatar-title rounded-circle  bs-tooltip" data-original-title="Alan Green">AG</span>
+                                                                </div> --}}
+                                                            </div>
                                                         </div>
                                                     </div>
+                                                    @if ($droitsG->count()>0)
+                                                        <div class="col-sm-6 col-6">
+                                                            <h6 class=" inv-title">Groupes:</h6>
+                                                            <div style="margin-left:50px;">
+                                                                <div class="avatar--group">
+                                                                    @foreach ($droitsG as $droitG)
+                                                                        <div class="avatar">
+                                                                            <span class="avatar-title rounded-circle  bs-tooltip" data-original-title="{{$droitG->nomG}}"> {{substr($droitG->nomG,0,2)}} </span>
+                                                                        </div>
+                                                                    @endforeach
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endif
+                                                    
+                                                    
                                                 </div>
                                             </div>
                                         </div>

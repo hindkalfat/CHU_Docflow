@@ -292,41 +292,53 @@
                                                     <div class="modal-body">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x close" data-dismiss="modal"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                                                         <div class="compose-box">
-                                                            <div class="compose-content">
+                                                            <div class="compose-content container">
                                                                 <h5>{{$tache->action->nomA}}</h5>  
-                                                                <h6>{{$tache->action->directiveA}}</h6>
+                                                                <h6>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="orange" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                                                    {{$tache->date_rappelT}}
+                                                                    &nbsp;&nbsp;
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="red" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                                                    {{$tache->date_echeanceT}}
+                                                                </h6>
+                                                                <br>
+                                                                <h6>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                                                    {{$tache->action->directiveA}}
+                                                                </h6>
+                                                                <br>
                                                                 <div class="row">
                                                                     @foreach ( $tache->action->metadonnees as $meta) 
                                                                         @if($meta->typeM == 'Date')
                                                                             <div class="form-group col-md-6">
-                                                                                <div class=" mt-1">
+                                                                                <div class=" mb-1">
                                                                                     <span class="badge outline-badge-info">{{$meta->libelleM}}
                                                                                     </span>
-                                                                                </div><br/>
+                                                                                </div>
                                                                                 <input id="basicFlatpickr" name="{{$meta->idM}}" value="2019-09-04" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">
                                                                             </div>                                                                      
                                                                         @elseif($meta->typeM == 'Heure')
                                                                             <div class="form-group col-md-6">
-                                                                                <div class=" mt-1">
+                                                                                <div class=" mb-1">
                                                                                     <span class="badge outline-badge-info">{{$meta->libelleM}}
                                                                                     </span>
-                                                                                </div><br/>
+                                                                                </div>
                                                                                 <input id="timeFlatpickr" name="{{$meta->idM}}" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">
                                                                             </div>
                                                                         @elseif($meta->typeM == 'Numérique')
                                                                             <div class="form-group col-md-6">
-                                                                                <div class=" mt-1">
+                                                                                <div class=" mb-1">
                                                                                     <span class="badge outline-badge-info">{{$meta->libelleM}}
                                                                                     </span>
-                                                                                </div><br/>
+                                                                                </div>
                                                                                 <input id="demo2" name="{{$meta->idM}}" type="text" value="0" class="form-control">
                                                                             </div>
                                                                         @else
                                                                             <div class="form-group col-md-6">
-                                                                                <div class=" mt-1">
+                                                                                <div class=" mb-1">
                                                                                     <span class="badge outline-badge-info">{{$meta->libelleM}}
                                                                                     </span>
-                                                                                </div><br/>
+                                                                                </div>
                                                                                 <input type="text" name="{{$meta->idM}}" class="form-control" placeholder="{{$meta->libelleM}}">
                                                                             </div>
                                                                         @endif
@@ -335,7 +347,7 @@
                                                                 <div class="attachment file-pdf">
                                                                     <div class="media">
                                                                         <div class="form-group">
-                                                                            <div class=" col-md-12 mb-4">
+                                                                            <div class=" col-md-12">
                                                                             <b> Version(s) récente(s): </b>
                                                                             </div>
                                                                             @if ($tache->versions_recentes())
@@ -465,7 +477,7 @@
                                                 <div class="row container">
                                                     <h5 data-toggle="modal" data-target="#exampleModal{{$tache->idT}}" id="task{{$tache->idT}}" data-id="{{$tache->idT}}" class="todo-heading" data-todoHeading="{{$tache->action->nomA}}">{{$tache->action->nomA}} </h5> <code>(Affectée)</code>
                                                 </div>
-                                                <p class="meta-date">{{$tache->created_at->format('d/m/Y')}}</p>
+                                                <p class="meta-date">Envoyé le:{{$tache->created_at->format('d/m/Y')}}</p>
                                                 @if($tache->action->directiveA)
                                                 <p class="todo-text" data-todoHtml="<p>{{$tache->action->directiveA}}</p>" data-todoText='{"ops":[{"insert":"{{$tache->action->directiveA}}.\n"}]}'>{{$tache->action->directiveA}}.</p>
                                                 @endif
