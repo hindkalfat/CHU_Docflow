@@ -54,7 +54,10 @@ class GroupController extends Controller
             $user_grp->save();
         }
 
-        return response()->json(['success' => "updated" , 'id' => $groupe->idG, 'groupe' => $groupe, 'users' => $groupe->users]);;
+        $usersAvt = $groupe->users->take(3);
+        $nbr = $groupe->users->count()-3;
+
+        return response()->json(['success' => "updated" ,'nbr' => $nbr,'usersAvt'=>$usersAvt, 'id' => $groupe->idG, 'groupe' => $groupe, 'users' => $groupe->users]);;
     }
 
     /**

@@ -128,8 +128,13 @@ function addContact() {
                         '<p class="users-groupe" data-users="'+x+'"></p>'+
                     '</div>' +
                     '<div class="layout-top-spacing">'+
-                        '<ul class="list-inline badge-collapsed-img mb-0 mb-3">'+
+                        '<ul id="avt'+ data.groupe.idG+'" class="list-inline badge-collapsed-img mb-0 mb-3">'+
                            //users
+                           '<li class="list-inline-item badge-notify mr-0">'+
+                                '<div class="notification" id="nbr'+ data.groupe.idG+'">'+
+                                   
+                                '</div>'+
+                            '</li>'+
                         '</ul>'+
                     '</div>'+
                 '</div>' +
@@ -157,9 +162,6 @@ function addContact() {
                                 '<li class="nav-item">'+
                                     '<a class="nav-link active" id="home-tab" data-toggle="tab" href="#home'+ data.groupe.idG+'" role="tab" aria-controls="home" aria-selected="true">Membres</a>'+
                                 '</li>'+
-                                '<li class="nav-item">'+
-                                    '<a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile'+ data.groupe.idG+'" role="tab" aria-controls="profile" aria-selected="false">Droits</a>'+
-                                '</li>'+
                             '</ul>'+
                             '<div class="tab-content" id="myTabContent">'+
                                 '<div class="tab-pane fade show active" id="home'+ data.groupe.idG+'" role="tabpanel" aria-labelledby="home-tab">'+
@@ -176,6 +178,28 @@ function addContact() {
         '</div>';
 
             $(".searchable-items > .items-header-section").after($html);
+            var tmp = 1;
+            $.each(data.usersAvt, function (i, item) {
+              if(tmp==1){
+                $('#avt'+data.groupe.idG).append(
+                  '<li class="list-inline-item chat-online-usr">'+
+                      '<img alt="avatar" src="http://localhost:8000/assets/img/avatar.jpg" class="ml-0">'+
+                  '</li>'
+                  );
+              }else{
+                $('#avt'+data.groupe.idG).append(
+                  '<li class="list-inline-item chat-online-usr">'+
+                      '<img alt="avatar" src="http://localhost:8000/assets/img/avatar.jpg">'+
+                  '</li>'
+                  );
+              }
+               tmp++; 
+            });
+
+            if(data.nbr > 0)
+            {
+              $('#nbr'+data.groupe.idG).append('<span class="badge badge-info badge-pill">+{{$groupe->users->count()-3}} more</span>')
+            }
 
             for(i=0;i<data["users"].length;i++)
             {
@@ -183,7 +207,7 @@ function addContact() {
                 '<li class="list-group-item list-group-item-action">'+
                     '<div class="media">'+
                         '<div class="mr-3">'+
-                            '<img alt="avatar" src="http://localhost:8000/assets/img/profile-1.jpg" class="img-fluid rounded-circle">'+
+                            '<img alt="avatar" src="http://localhost:8000/assets/img/avatar.jpg" class="img-fluid rounded-circle">'+
                         '</div>'+
                         '<div class="media-body">'+
                             '<h6 class="tx-inverse">'+data["users"][i].nomU+' '+data["users"][i].prenomU+'</h6>'+

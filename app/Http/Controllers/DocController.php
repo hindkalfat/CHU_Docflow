@@ -373,18 +373,6 @@ class DocController extends Controller
                                 ->pluck('_idTo');
         $document = Document::find($doc);
 
-        /* $wf = $document->type_doc->workflow;
-        $wfAct = $wf->actions->pluck('idop')->max();
-        $wfCond = $wf->conditions->pluck('idop')->max();
-        $max = max($wfAct,$wfCond); */
-
-        /* if($actionsS->count()==0 && $conditionsS->count()==0){
-            $document->etatD = 'archivé';
-            $document->save();
-            $user = $document->user;
-            Notification::send($user, new archiveNotification($document));
-        } */
-
         foreach ($conditionsS as $conditionS) {
             $cond = Condition::find($conditionS);
             if($cond->typeC == "condApp")
@@ -667,28 +655,6 @@ class DocController extends Controller
         $rq =str_replace('$doc',$doc,$rq);
         
         $metas=DB::select("$rq");
-        //intersect = && // union = ||
-       /*  $metas=DB::select("SELECT  count(*) as 'cpt'
-        FROM metas_docs M
-        WHERE _idM = 11 and valeur='02:00'
-        and _idD = {{$doc}}
-        and created_at IN (select max(created_at) FROM metas_docs md WHERE md._idM = 11)
-        intersect  SELECT  count(*) as 'cpt'
-        FROM metas_docs M
-        WHERE _idM = 13 and valeur='0.170'
-        and _idD = $doc
-        and created_at IN (select max(created_at) FROM metas_docs md WHERE md._idM = 13)
-        union SELECT  count(*) as 'cpt'
-        FROM metas_docs M
-        WHERE _idM = 12 and valeur='01'
-        and _idD = $doc
-        and created_at IN (select max(created_at) FROM metas_docs md WHERE md._idM = 12)
-        intersect  SELECT  count(*) as 'cpt'
-        FROM metas_docs M
-        WHERE _idM = 6 and valeur='05'
-        and _idD = $doc
-        and created_at IN (select max(created_at) FROM metas_docs md WHERE md._idM = 6)"); */
-        
         
         if (count($metas)>1) {
             $r = 1;
@@ -773,6 +739,10 @@ class DocController extends Controller
             $userRoles = Auth::user()->roles->pluck('nomR');
             $id = Auth::user()->id; //Auth
             $user = User::find($id);
+            $docsU = $user->documents->pluck('idD');
+            $groupes = $user->groupes; 
+            $groupesID = $user->groupes->pluck('idG'); 
+            $docsG = GroupeDoc::whereIn('_idG',$groupesID)->pluck('_idD'); 
 
             //METAS
 
@@ -780,7 +750,9 @@ class DocController extends Controller
                 if($userRoles->contains('admin'))
                     $metas = Document::all();
                 else if($userRoles->contains('user'))
-                    $metas = $user->documents;
+                {
+                    $metas = Document::whereIn('idD',$docsG)->orwhereIn('idD',$docsU)->distinct()->get();
+                }
 
                 //$metas = Document::all();
                 $productsM = $metas->pluck('idD');
@@ -798,7 +770,7 @@ class DocController extends Controller
                 if($userRoles->contains('admin'))
                     $types = TypeDoc::all()->pluck('idTd');
                 else if($userRoles->contains('user'))
-                    $types = Document::where('d_idU',Auth::user()->id)->distinct()->pluck('d_idTd');
+                    $types = Document::where('d_idU',Auth::user()->id)->orwhereIn('idD',$productsM)->distinct()->pluck('d_idTd');
             } else {
                 $types = $request->input('typeD'); 
             }
@@ -823,7 +795,10 @@ class DocController extends Controller
             {
                 $docs = Document::join('users','users.id','=','documents.d_idU')
                         ->join('versions','versions.v_idD','=','documents.idD')
-                        ->where('d_idU',Auth::user()->id)
+                        ->where(function($q) use ($docsG,$docsU){
+                            $q->whereIN('idD',$docsG)
+                              ->orWhereIn('idD',$docsU);
+                        })
                         ->whereIn('idD',$productsM)->whereIn('d_idTd',$types)
                         ->whereIn('etatD',$etat)
                         ->get()

@@ -117,7 +117,7 @@
                                                         <?php $var=1; ?>
                                                     @foreach ($groupe->users->take(3) as $user)
                                                         <li class="list-inline-item chat-online-usr">
-                                                            <img alt="avatar" src="{{asset('assets/img/profile-2.jpg')}}" @if($var==1) class="ml-0" @endif>
+                                                            <img alt="avatar" src="{{asset('assets/img/avatar.jpg')}}" @if($var==1) class="ml-0" @endif>
                                                         </li>
                                                         <?php $var++; ?>
                                                     @endforeach
@@ -156,9 +156,6 @@
                                                         <li class="nav-item">
                                                             <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home{{$groupe->idG}}" role="tab" aria-controls="home" aria-selected="true">Membres</a>
                                                         </li>
-                                                        <li class="nav-item">
-                                                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile{{$groupe->idG}}" role="tab" aria-controls="profile" aria-selected="false">Droits</a>
-                                                        </li>
                                                     </ul>
                                                     <div class="tab-content" id="myTabContent">
                                                         <div class="tab-pane fade show active" id="home{{$groupe->idG}}" role="tabpanel" aria-labelledby="home-tab">
@@ -167,7 +164,7 @@
                                                                     <li class="list-group-item list-group-item-action">
                                                                         <div class="media">
                                                                             <div class="mr-3">
-                                                                                <img alt="avatar" src="{{asset('assets/img/profile-1.jpg')}}" class="img-fluid rounded-circle">
+                                                                                <img alt="avatar" src="{{asset('assets/img/avatar.jpg')}}" class="img-fluid rounded-circle">
                                                                             </div>
                                                                             <div class="media-body">
                                                                                 <h6 class="tx-inverse">{{$user->nomU}} {{$user->prenomU}}</h6>

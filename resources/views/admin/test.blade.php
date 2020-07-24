@@ -117,7 +117,7 @@
 								<div class="row">
 									<div class="col-md-12 col-sm-12 col-12">
 										<div class="search container layout-top-spacing">
-											<button class="btn btn-primary  mb-2 mr-2 rounded-circle">
+											<button id="vimeo-video-link" class="btn btn-primary  mb-2 mr-2 rounded-circle">
 												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-help-circle"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
 											</button>
 											<button class="btn btn-danger mb-2 mr-2 rounded-circle">
@@ -550,11 +550,28 @@
 				</div>
 			</div>
 		</div>
+
+		<!-- Modal help video-->
+		<div class="modal fade" id="videoMedia2" tabindex="-1" role="dialog" aria-labelledby="videoMedia2Label" aria-hidden="true">
+			<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content" style="background-color:transparent">
+					<div class="modal-header" id="videoMedia2Label" style="border: none; padding: 0">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						  <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+						</button>
+					</div>
+					<div class="modal-body p-0">
+						<div class="video-container">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 		<!--  END CONTENT AREA  -->
 
 		{{-- <button id="bt">data</button>
 		<input type="text" name="" id="tt"> --}}
-		<input type="hidden" id="count" value="0">
+		<input type="text" id="count" value="0">
 		<input type="hidden" id="actMeta">
 
 		<script>
@@ -699,8 +716,11 @@
 							$('#date_limiteAct').val($('#date_limiteA'+opId).val() ) 
 							$('#date_rappelAct').val($('#date_rappelA'+opId).val() ) 
 							$('#exampleFormControlTextarea1').val($('#directiveA'+opId).val() ) 
+							$("#act_idU").val($('#a_idU'+opId).val()).change();
+							$("#opt_limiteAct").val($('#opt_limiteA'+opId).val()).change();
+							$("#opt_rappelAct").val($('#opt_rappelA'+opId).val()).change();
+							//priorité
 							var prt = $('#prioriteA'+opId).val()
-							
 							switch(prt) {
 								case 'Faible':
 									$("input[name=custom-radio-5-priorite][value='Faible']").prop("checked",true);
@@ -711,11 +731,84 @@
 								default:
 									$("input[name=custom-radio-5-priorite][value='Haute']").prop("checked",true);
 							}
+							//type
+							var tp = $('#typeA'+opId).val()
+							
+							switch(tp) {
+								case 'Approbation':
+									$("input[name=custom-radio-1-typeA][value='Approbation']").prop("checked",true);
+									break;
+								case 'Validation':
+									$("input[name=custom-radio-1-typeA][value='Validation']").prop("checked",true);
+									break;
+							}
+							//version
+							var vr = $('#versionA'+opId).val()
+							
+							switch(vr) {
+								case '1':
+									$("input[name=custom-radio-1-version][value='1']").prop("checked",true);
+									break;
+								case '0':
+									$("input[name=custom-radio-1-version][value='0']").prop("checked",true);
+									break;
+							}
+							//user
+							var gr = $('#a_idG'+opId).val()
+							var us = $('#a_idU'+opId).val()
+							if(gr == ""){
+								$("input[name=custom-radio-1-user][value='User']").prop("checked",true);
+								$('#usr_chk').css("display","block");
+								$('#grp_chk').css("display","none");
+							}
+							else{
+								$("input[name=custom-radio-1-user][value='Grp']").prop("checked",true);
+								$('#usr_chk').css("display","none");
+								$('#grp_chk').css("display","block");
+							}
+							//metas
+							var selectedMetas = $('#metasA'+opId).val()
+							var dataarray=selectedMetas.split(",");
+							$("#metasAct").val(dataarray);
+							$("#metasAct").selectpicker("refresh");
+
 							$('#count').val(0)
 							$("#addAction").modal("show");
 						  }
-						else if($flowchart.flowchart('getOperatorTitle', opId).includes("Email"))
+						else if($flowchart.flowchart('getOperatorTitle', opId).includes("Email")){
+							$('#objetAct').val($('#objetA'+opId).val() ) 
+							$('#destE').val($('#destinataireIA'+opId).val() ) 
+							$('.ql-editor').html($('#messageA'+opId).val() ) 
+							$("#destI").val($('#a_destinataireU'+opId).val()).change();
+							//typeDest
+							var intr = $('#a_destinataireU'+opId).val()
+							var ext = $('#destinataireIA'+opId).val()
+							if(ext == ""){
+								$("input[name=custom-radio-1-email][value='Interne']").prop("checked",true);
+								$('#destE').val('');
+								$('#destE').attr('disabled', 'disabled');
+								$('#destI').removeAttr("disabled");
+								$('.selectpicker').selectpicker('refresh');
+							}
+							else{
+								$("input[name=custom-radio-1-email][value='Externe']").prop("checked",true);
+								$('#destI').val('');
+								$('#destE').removeAttr("disabled");
+								$('#destI').attr('disabled', 'disabled');
+								$('.selectpicker').selectpicker('refresh');
+							}
+							
+							switch(vr) {
+								case '1':
+									$("input[name=custom-radio-1-version][value='1']").prop("checked",true);
+									break;
+								case '0':
+									$("input[name=custom-radio-1-version][value='0']").prop("checked",true);
+									break;
+							}
 							$("#sendEmail").modal("show");
+						}
+							
 						else if($flowchart.flowchart('getOperatorTitle', opId).includes("Condition"))
 						{
 							var cc= $flowchart.flowchart('getData');
@@ -878,6 +971,11 @@
 			$('#next').click(function() {
 				var count = $('#count').val()*1
 				$('#count').val(count*1+1)
+			});
+
+			$('#previous').click(function() {
+				var count = $('#count').val()*1
+				$('#count').val(count*1-1)
 			});
 
 			$( "#addAction" ).on('shown', function(){
@@ -1443,6 +1541,22 @@
 		const ps = new PerfectScrollbar('.invoice-inbox');
 		const pslist = new PerfectScrollbar('.inv-list-container');
 	</script>
+
+	<script>//video
+		$('#vimeo-video-link').click(function () {
+			var src = 'https://player.vimeo.com/video/1084537';
+			$('#videoMedia2').modal('show');
+			$('<iframe>').attr({
+				'src': src,
+				'width': '800',
+				'height': '480',
+				'allow': 'encrypted-media'
+			}).css('border', '0').appendTo('#videoMedia2 .video-container');
+		});
+		$('#videoMedia1 button, #videoMedia2 button').click(function () {
+			$('#videoMedia1 iframe, #videoMedia2 iframe').remove();
+		});
+	</script> 
 
 
 </body>

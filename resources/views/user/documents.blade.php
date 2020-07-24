@@ -53,6 +53,8 @@
                             .row( $('#items'+data.id) )
                             .remove()
                             .draw();
+                            /* $('#items'+data.id).remove();
+                            table.state.save(); */
                             $('#deleteConformation').modal('hide');
                        }else{
                             $('#mdp').css("display","block");
@@ -271,7 +273,8 @@
             data:{'search':$value , 'typeD':$valueT, 'etatD':$valueE},
             success:function(data){
 
-                $('#bodyDoc').empty();
+                $('#zero-config').DataTable().clear().draw();
+
                 $.each(data.docs, function (i, item) {
                     var dateC = new Date(item.created_at);
                     var datecreated_at = dateC.getDate() + "/" +(dateC.getMonth() + 1) + "/" + dateC.getFullYear();
@@ -279,7 +282,7 @@
                     var dateU = new Date(item.updated_at);
                     var dateupdated_at = dateU.getDate() + "/" +(dateU.getMonth() + 1) + "/" + dateU.getFullYear();
 
-                    $('#bodyDoc').append(
+                    var table_rows = 
                                         '<tr id="items'+item.idD+'" role="row">'+
                                             '<td>'+ item.nomD+'</td>'+
                                             '<td>'+ datecreated_at+' </td>'+
@@ -296,19 +299,20 @@
                                                 '</a>'+                                       
                                             '</td>'+
                                         '</tr>'
-                                    );
+                                    ;
                     
                     if (item.droitD== "privé"){
-                        $('#drt'+item.idD).append(
+                        var droit =
                             '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-lock"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>&nbsp;'+
-                            item.droitD
-                        )   
+                            item.droitD;
+                          
                     }else{
-                        $('#drt'+item.idD).append(
+                        var droit =
                         '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> &nbsp;'+
-                            item.droitD
-                        )
+                            item.droitD;
                     }
+                    $('#zero-config').DataTable().rows.add($(table_rows)).draw();
+                    $('#zero-config').DataTable().cell($('#drt'+item.idD)).data(droit).draw();
                 });
             }
             });
@@ -323,7 +327,8 @@
             url : '{{URL::to('search')}}',
             data:{'typeD':$value , 'search':$valueM, 'etatD':$valueE},
             success:function(data){
-                $('#bodyDoc').empty();
+                $('#zero-config').DataTable().clear().draw();
+
                 $.each(data.docs, function (i, item) {
                     var dateC = new Date(item.created_at);
                     var datecreated_at = dateC.getDate() + "/" +(dateC.getMonth() + 1) + "/" + dateC.getFullYear();
@@ -331,7 +336,7 @@
                     var dateU = new Date(item.updated_at);
                     var dateupdated_at = dateU.getDate() + "/" +(dateU.getMonth() + 1) + "/" + dateU.getFullYear();
 
-                    $('#bodyDoc').append(
+                    var table_rows = 
                                         '<tr id="items'+ item.idD+'" role="row">'+
                                             '<td>'+ item.nomD+'</td>'+
                                             '<td>'+ datecreated_at+' </td>'+
@@ -348,18 +353,19 @@
                                                 '</a>'+                                        
                                             '</td>'+
                                         '</tr>'
-                                    );
+                                    ;
                     if (item.droitD== "privé"){
-                        $('#drt'+item.idD).append(
-                            '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-lock"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> &nbsp;'+
-                            item.droitD
-                        )   
+                        var droit =
+                            '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-lock"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>&nbsp;'+
+                            item.droitD;
+                          
                     }else{
-                        $('#drt'+item.idD).append(
-                            '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> &nbsp;'+
-                                item.droitD
-                        )
+                        var droit =
+                        '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> &nbsp;'+
+                            item.droitD;
                     }
+                    $('#zero-config').DataTable().rows.add($(table_rows)).draw();
+                    $('#zero-config').DataTable().cell($('#drt'+item.idD)).data(droit).draw();
                 });
             }
             });
@@ -374,7 +380,7 @@
             url : '{{URL::to('search')}}',
             data:{'etatD':$value,'typeD':$valueT , 'search':$valueM},
             success:function(data){
-                $('#bodyDoc').empty();
+                $('#zero-config').DataTable().clear().draw();
                 $.each(data.docs, function (i, item) {
                     var dateC = new Date(item.created_at);
                     var datecreated_at = dateC.getDate() + "/" +(dateC.getMonth() + 1) + "/" + dateC.getFullYear();
@@ -382,7 +388,7 @@
                     var dateU = new Date(item.updated_at);
                     var dateupdated_at = dateU.getDate() + "/" +(dateU.getMonth() + 1) + "/" + dateU.getFullYear();
 
-                    $('#bodyDoc').append(
+                    var table_rows = 
                                         '<tr id="items'+ item.idD+'" role="row">'+
                                             '<td>'+ item.nomD+'</td>'+
                                             '<td>'+ datecreated_at+' </td>'+
@@ -399,18 +405,19 @@
                                                 '</a>'+                                       
                                             '</td>'+
                                         '</tr>'
-                                    );
+                                    ;
                     if (item.droitD== "privé"){
-                        $('#drt'+item.idD).append(
-                            '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-lock"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> &nbsp;'+
-                            item.droitD
-                        )   
+                        var droit =
+                            '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-lock"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>&nbsp;'+
+                            item.droitD;
+                          
                     }else{
-                        $('#drt'+item.idD).append(
+                        var droit =
                         '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> &nbsp;'+
-                            item.droitD
-                        )
+                            item.droitD;
                     }
+                    $('#zero-config').DataTable().rows.add($(table_rows)).draw();
+                    $('#zero-config').DataTable().cell($('#drt'+item.idD)).data(droit).draw();
                 });
             }
             });

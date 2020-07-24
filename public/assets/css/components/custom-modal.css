@@ -70,8 +70,8 @@
 }
 .modal-video .modal#videoMedia1 .modal-header,
 .modal-video .modal#videoMedia2 .modal-header {
-    border: none;
-    padding: 0;
+    border: none !important;
+    padding: 0 !important;
 }
 .modal-video .video-container iframe,
 .modal-video .video-container object,

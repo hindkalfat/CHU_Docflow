@@ -213,10 +213,10 @@
                 $(this).after( 
                                 '<div class="metaslist addmeta'+cpt+' row mb-4">'+
                                     '<div class="col-lg-6">'+
-                                        '<input id="TlibelleM" type="text" class=" TlibelleM form-control" placeholder="Intitulé">'+
+                                        '<input required id="TlibelleM" type="text" class=" TlibelleM form-control" placeholder="Intitulé">'+
                                     '</div>'+
                                     '<div class="col-lg-6">'+
-                                        '<select onchange="myFunction('+cpt+')" id="TtypeM'+cpt+'"  class="TtypeM form-control" data-width="fit">'+
+                                        '<select required onchange="myFunction('+cpt+')" id="TtypeM'+cpt+'"  class="TtypeM form-control" data-width="fit">'+
                                             '<option>Type document</option>'+
                                             '<option value="Date" >Date</option>'+
                                             '<option value="Heure" >Heure</option>'+

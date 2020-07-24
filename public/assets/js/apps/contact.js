@@ -224,7 +224,7 @@ function addContact() {
                 '</div>';
 
             $(".searchable-items > .items-header-section").after($html);
-            $('#usr-img').attr("src", "http://localhost:8000/assets/img/profile-15.jpg");
+            $('#usr-img').attr("src", "http://localhost:8000/assets/img/avatar.jpg");
             $('#addContactModal').modal('hide');
             var $_setNameValueEmpty = $_name.val('');
             var $_setPrenomValueEmpty = $_prenom.val('');
