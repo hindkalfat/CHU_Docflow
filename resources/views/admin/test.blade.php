@@ -210,6 +210,10 @@
 
 				<div class="modal-header" id="loginModalLabel">
 					<h5 class="modal-title">Créer nouveau workflow</h5>
+					<a href="{{asset('/admin/workflows')}}" class="close">
+						<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+					</a>
+
 				</div>
 				<div class="modal-body">
 					<form id="form-addWF" method="POST">
@@ -269,7 +273,9 @@
 												<select id="act_idU" name="responsableA" class="selectpicker" data-live-search="true" data-width="100%">
 													<option value="" disabled selected >Responsable</option>
 													@foreach ($users as $user)
-														<option value="{{$user->id}}"> {{$user->nomU}} {{$user->prenomU}} </option>
+														@if($user->roles->pluck('nomR')->contains('user'))
+															<option value="{{$user->id}}"> {{$user->nomU}} {{$user->prenomU}} </option>
+														@endif
 													@endforeach
 												</select>
 											</div>
@@ -552,7 +558,7 @@
 		</div>
 
 		<!-- Modal help video-->
-		<div class="modal fade" id="videoMedia2" tabindex="-1" role="dialog" aria-labelledby="videoMedia2Label" aria-hidden="true">
+		<div data-keyboard="false" data-backdrop="static" class="modal fade" id="videoMedia2" tabindex="-1" role="dialog" aria-labelledby="videoMedia2Label" aria-hidden="true">
 			<div class="modal-dialog modal-lg" role="document">
 				<div class="modal-content" style="background-color:transparent">
 					<div class="modal-header" id="videoMedia2Label" style="border: none; padding: 0">
@@ -571,7 +577,7 @@
 
 		{{-- <button id="bt">data</button>
 		<input type="text" name="" id="tt"> --}}
-		<input type="text" id="count" value="0">
+		<input type="hidden" id="count" value="0">
 		<input type="hidden" id="actMeta">
 
 		<script>
@@ -717,6 +723,7 @@
 							$('#date_rappelAct').val($('#date_rappelA'+opId).val() ) 
 							$('#exampleFormControlTextarea1').val($('#directiveA'+opId).val() ) 
 							$("#act_idU").val($('#a_idU'+opId).val()).change();
+							$("#act_idG").val($('#a_idG'+opId).val()).change();
 							$("#opt_limiteAct").val($('#opt_limiteA'+opId).val()).change();
 							$("#opt_rappelAct").val($('#opt_rappelA'+opId).val()).change();
 							//priorité
@@ -1544,7 +1551,7 @@
 
 	<script>//video
 		$('#vimeo-video-link').click(function () {
-			var src = 'https://player.vimeo.com/video/1084537';
+			var src = 'http://localhost:8000/video/Colladoc_Demo.mp4';
 			$('#videoMedia2').modal('show');
 			$('<iframe>').attr({
 				'src': src,

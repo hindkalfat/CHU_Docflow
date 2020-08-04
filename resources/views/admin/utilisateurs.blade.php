@@ -189,7 +189,7 @@
                                                 <span class="new-control-indicator"></span>
                                                 </label>
                                             </div>
-                                            <img src="{{asset('assets/img/avatar.jpg')}}" alt="avatar">
+                                            <img src="{{asset("assets/img/Avatar/$user->photoU")}}" alt="avatar">
                                             <div class="user-meta-info">
                                                 <p class="user-ID" data-ID="{{$user->id}}"></p>
                                                 <p class="user-name user-prenom" data-name="{{$user->nomU}}" data-prenom="{{$user->prenomU}}">{{$user->nomU}} {{$user->prenomU}}</p>

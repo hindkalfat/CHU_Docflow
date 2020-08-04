@@ -183,13 +183,13 @@ function addContact() {
               if(tmp==1){
                 $('#avt'+data.groupe.idG).append(
                   '<li class="list-inline-item chat-online-usr">'+
-                      '<img alt="avatar" src="http://localhost:8000/assets/img/avatar.jpg" class="ml-0">'+
+                      '<img alt="avatar" src="http://localhost:8000/assets/img/Avatar/'+item.photoU+'" class="ml-0">'+
                   '</li>'
                   );
               }else{
                 $('#avt'+data.groupe.idG).append(
                   '<li class="list-inline-item chat-online-usr">'+
-                      '<img alt="avatar" src="http://localhost:8000/assets/img/avatar.jpg">'+
+                      '<img alt="avatar" src="http://localhost:8000/assets/img/Avatar/'+item.photoU+'">'+
                   '</li>'
                   );
               }
@@ -207,7 +207,7 @@ function addContact() {
                 '<li class="list-group-item list-group-item-action">'+
                     '<div class="media">'+
                         '<div class="mr-3">'+
-                            '<img alt="avatar" src="http://localhost:8000/assets/img/avatar.jpg" class="img-fluid rounded-circle">'+
+                            '<img alt="avatar" src="http://localhost:8000/assets/img/Avatar/'+data["users"][i].photoU+'" class="img-fluid rounded-circle">'+
                         '</div>'+
                         '<div class="media-body">'+
                             '<h6 class="tx-inverse">'+data["users"][i].nomU+' '+data["users"][i].prenomU+'</h6>'+
@@ -315,7 +315,7 @@ function editContact() {
                 '<li class="list-group-item list-group-item-action">'+
                     '<div class="media">'+
                         '<div class="mr-3">'+
-                            '<img alt="avatar" src="http://localhost:8000/assets/img/profile-1.jpg" class="img-fluid rounded-circle">'+
+                            '<img alt="avatar" src="http://localhost:8000/assets/img/Avatar/'+data["users"][i].photoU+'" class="img-fluid rounded-circle">'+
                         '</div>'+
                         '<div class="media-body">'+
                             '<h6 class="tx-inverse">'+data["users"][i].nomU+' '+data["users"][i].prenomU+'</h6>'+

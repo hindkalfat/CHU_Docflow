@@ -31,6 +31,7 @@ use Notification;
 use Mail;
 use App\Message;
 use App\Media;
+use App\ActionMeta;
 
 
 
@@ -126,12 +127,14 @@ class DocController extends Controller
 
         }
 
-        
-        foreach ($groupes as $groupe) {
-            $grp_doc = new GroupeDoc;
-            $grp_doc->_idD = $document->idD;
-            $grp_doc->_idG = $groupe;
-            $grp_doc->save();
+        if($groupes)
+        {
+            foreach ($groupes as $groupe) {
+                $grp_doc = new GroupeDoc;
+                $grp_doc->_idD = $document->idD;
+                $grp_doc->_idG = $groupe;
+                $grp_doc->save();
+            }
         }
 
         return $this->actions($document->idD,$document,$version);
@@ -225,7 +228,7 @@ class DocController extends Controller
                                 ->where('a_idW',$workflow->idWf)
                                 ->select('groupes.*')
                                 ->distinct('groupes.id')
-                                ->get();
+                                ->get(); 
         $actionsDoc = $workflow->actions->pluck('idA');  
         $encours = Tache::whereIn('t_idA',$actionsDoc)->where('etatT',1)->get(); 
         $contributeursUG = null; 
@@ -237,7 +240,7 @@ class DocController extends Controller
                             ->where('_idD',$id)
                             ->get();
                         
-        return view('user.document',['doc' => $document,'versions' => $versions, 'contributeursU' => $contributeursU, 'contributeursUG' => $contributeursUG, 'encours' => $encours, 'metas' => $metas, 'droitsG' =>$droitsG]);
+        return view('user.document',['doc' => $document,'versions' => $versions, 'contributeursU' => $contributeursU, 'contributeursG' => $contributeursG, 'encours' => $encours, 'metas' => $metas, 'droitsG' =>$droitsG]);
     }
 
     public static function actions($id,$document,$version) //$id
@@ -716,18 +719,20 @@ class DocController extends Controller
         $typeD = $tache->document->type_doc;
         $metas = $typeD->metadonnees;
 
-        foreach ($metas as $meta ) {
-            $a = $meta->idM;
-            $metaDoc = new MetaDoc;
-            $metaDoc->_idM = $meta->idM;
-            $metaDoc->_idD = $document->idD;
-            $metaDoc->_idUT = $user_tache->idUT;
-                if ($request->input("".$a)) 
-                    $metaDoc->valeur = $request->input("".$a);
-                else
-                    $metaDoc->valeur = null;
-            $metaDoc->save();
-        }
+        $actMeta = ActionMeta::join('metadonnees','metadonnees.idM','=','actions_metas._idM')->where('_idA',$tache->action->idA);
+        if($actMeta)
+            foreach ($actMeta as $meta ) {
+                $a = $meta->idM;
+                $metaDoc = new MetaDoc;
+                $metaDoc->_idM = $meta->idM;
+                $metaDoc->_idD = $document->idD;
+                $metaDoc->_idUT = $user_tache->idUT;
+                    if ($request->input("".$a)) 
+                        $metaDoc->valeur = $request->input("".$a);
+                    else
+                        $metaDoc->valeur = null;
+                $metaDoc->save();
+            }
 
         return $this->nextActions($tache->action->idA,$document->idD,$tache->idT);
     }

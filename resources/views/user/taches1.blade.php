@@ -37,8 +37,8 @@
              if($('#basicFlatpickr').length > 0){
                 var f1 = flatpickr(document.getElementById('basicFlatpickr'));
             }
-            if($('input[name="demo2"]').length > 0){
-                $("input[name='demo2']").TouchSpin({
+            if($('#demo2').length > 0){
+                $("#demo2").TouchSpin({
                     min: 0,
                     max: 1000000,
                     step: 0.1,
@@ -49,8 +49,8 @@
                     buttonup_class: "btn btn-outline-dark"
                 });
             }
-            if($('.timeFlatpickr').length > 0){
-                $('.timeFlatpickr').each(function() {
+            if($('#timeFlatpickr').length > 0){
+                $('#timeFlatpickr').each(function() {
                     var f4 = flatpickr(document.getElementById('timeFlatpickr'), {
                         enableTime: true,
                         noCalendar: true,
@@ -93,7 +93,6 @@
             var type = $(this).attr('name');
             var id = $(this).attr('id').substring(1);
             $('#typeTache'+id).val(type)
-           // var data = $('#formT'+id).serialize(); 
             var form = $('#formT'+id);
             var data = new FormData(form[0]); 
 
@@ -112,6 +111,33 @@
                     new dynamicBadgeNotification('allList');
                     $('#exampleModal'+data['idT']).modal('hide');
                     $('#task'+data['idT']).removeAttr('data-target');
+                }
+            });
+        });
+
+        $(".submitG").click(function() { 
+
+            var type = $(this).attr('name');
+            var id = $(this).attr('id').substring(1);
+            $('#typeTache'+id).val(type)
+            var form = $('#formG'+id);
+            var data = new FormData(form[0]); 
+
+            $.ajax({
+                type:'POST',
+                data:data,
+                url:'/user/taches',
+                cache: false,
+                processData: false,
+                contentType : false,
+                success:function(data){
+                    console.log(data)
+                    $('#tacheT'+id).attr("class","todo-item todo-task-done")
+                    $(".todo-item").parents('.todo-item').addClass('todo-task-done');
+                    new dynamicBadgeNotification('completedList')
+                    new dynamicBadgeNotification('allList');
+                    $('#exampleModal'+data['idT']).modal('hide');
+                    $('#taskT'+data['idT']).removeAttr('data-target');
                 }
             });
         });
@@ -164,6 +190,7 @@
                         $('#tacheT'+id).attr("class","todo-item all-list aff")
                         $(".todo-item").parents('.todo-item').addClass('all-list aff');
                         $('#aff').css("display","block");
+                        $('#taskT'+id).attr('data-target','#exampleModal'+id);
                         new dynamicBadgeNotification('importantList')
                         new dynamicBadgeNotification('allList');
                     }else{
@@ -315,7 +342,7 @@
                                                                                     <span class="badge outline-badge-info">{{$meta->libelleM}}
                                                                                     </span>
                                                                                 </div>
-                                                                                <input id="basicFlatpickr" name="{{$meta->idM}}" value="2019-09-04" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">
+                                                                                <input id="basicFlatpickr" name="{{$meta->idM}}" value="{{App\MetaDoc::where('_idM',$meta->idM)->orderBy('created_at', 'desc')->first()->valeur}}" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">
                                                                             </div>                                                                      
                                                                         @elseif($meta->typeM == 'Heure')
                                                                             <div class="form-group col-md-6">
@@ -323,7 +350,7 @@
                                                                                     <span class="badge outline-badge-info">{{$meta->libelleM}}
                                                                                     </span>
                                                                                 </div>
-                                                                                <input id="timeFlatpickr" name="{{$meta->idM}}" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">
+                                                                                <input name="{{$meta->idM}}" value="{{App\MetaDoc::where('_idM',$meta->idM)->orderBy('created_at', 'desc')->first()->valeur}}" class="form-control" type="time" placeholder="Select Time..">
                                                                             </div>
                                                                         @elseif($meta->typeM == 'Numérique')
                                                                             <div class="form-group col-md-6">
@@ -331,7 +358,7 @@
                                                                                     <span class="badge outline-badge-info">{{$meta->libelleM}}
                                                                                     </span>
                                                                                 </div>
-                                                                                <input id="demo2" name="{{$meta->idM}}" type="text" value="0" class="form-control">
+                                                                                <input id="demo2" name="{{$meta->idM}}" type="text" value="{{App\MetaDoc::where('_idM',$meta->idM)->orderBy('created_at', 'desc')->first()->valeur}}" class="form-control">
                                                                             </div>
                                                                         @else
                                                                             <div class="form-group col-md-6">
@@ -339,7 +366,7 @@
                                                                                     <span class="badge outline-badge-info">{{$meta->libelleM}}
                                                                                     </span>
                                                                                 </div>
-                                                                                <input type="text" name="{{$meta->idM}}" class="form-control" placeholder="{{$meta->libelleM}}">
+                                                                                <input type="text" value="{{App\MetaDoc::where('_idM',$meta->idM)->orderBy('created_at', 'desc')->first()->valeur}}" name="{{$meta->idM}}" class="form-control" placeholder="{{$meta->libelleM}}">
                                                                             </div>
                                                                         @endif
                                                                     @endforeach
@@ -541,7 +568,7 @@
                                                                                     <span class="badge outline-badge-info">{{$meta->libelleM}}
                                                                                     </span>
                                                                                 </div><br/>
-                                                                                <input id="basicFlatpickr" name="{{$meta->idM}}" value="2019-09-04" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">
+                                                                                <input id="basicFlatpickr" name="{{$meta->idM}}" value="{{App\MetaDoc::where('_idM',$meta->idM)->orderBy('created_at', 'desc')->first()->valeur}}" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">
                                                                             </div>                                                                      
                                                                         @elseif($meta->typeM == 'Heure')
                                                                             <div class="form-group col-md-6">
@@ -549,7 +576,7 @@
                                                                                     <span class="badge outline-badge-info">{{$meta->libelleM}}
                                                                                     </span>
                                                                                 </div><br/>
-                                                                                <input id="timeFlatpickr" name="{{$meta->idM}}" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">
+                                                                                <input name="{{$meta->idM}}" value="{{App\MetaDoc::where('_idM',$meta->idM)->orderBy('created_at', 'desc')->first()->valeur}}" class="form-control" type="time" placeholder="Select time..">
                                                                             </div>
                                                                         @elseif($meta->typeM == 'Numérique')
                                                                             <div class="form-group col-md-6">
@@ -557,7 +584,7 @@
                                                                                     <span class="badge outline-badge-info">{{$meta->libelleM}}
                                                                                     </span>
                                                                                 </div><br/>
-                                                                                <input id="demo2" name="{{$meta->idM}}" type="text" value="0" class="form-control">
+                                                                                <input id="demo2" name="{{$meta->idM}}" type="text" value="{{App\MetaDoc::where('_idM',$meta->idM)->orderBy('created_at', 'desc')->first()->valeur}}" class="form-control">
                                                                             </div>
                                                                         @else
                                                                             <div class="form-group col-md-6">
@@ -565,7 +592,7 @@
                                                                                     <span class="badge outline-badge-info">{{$meta->libelleM}}
                                                                                     </span>
                                                                                 </div><br/>
-                                                                                <input type="text" name="{{$meta->idM}}" class="form-control" placeholder="{{$meta->libelleM}}">
+                                                                                <input type="text" value="{{App\MetaDoc::where('_idM',$meta->idM)->orderBy('created_at', 'desc')->first()->valeur}}"   name="{{$meta->idM}}" class="form-control" placeholder="{{$meta->libelleM}}">
                                                                             </div>
                                                                         @endif
                                                                     @endforeach
@@ -755,11 +782,121 @@
                                                     <button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
                                                     <form id="affecterU" method="post">
                                                         {{ csrf_field() }}
-                                                        <input type="text" value="" name="idG" id="idG">
-                                                        <input type="text" value="{{$tacheT->t_idA}}" name="idT" id="idT">
-                                                        <input type="text" value="{{$tacheT->idT}}" name="tache">
+                                                        <input type="hidden" value="" name="idG" id="idG">
+                                                        <input type="hidden" value="{{$tacheT->t_idA}}" name="idT" id="idT">
+                                                        <input type="hidden" value="{{$tacheT->idT}}" name="tache">
                                                     </form>
                                                     <button type="button" class="btn btn-success" id="affecter">Save</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal fade" id="exampleModal{{$tacheT->idT}}" tabindex="-1" role="dialog" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <form id="formG{{$tacheT->idT}}" enctype="multipart/form-data">
+                                                        {{ csrf_field() }}
+                                                    <input type="hidden" value="{{$tacheT->idT}}" id="idTache{{$tacheT->idT}}" name="idTache">
+                                                    <input type="hidden" value="" id="typeTache{{$tacheT->idT}}" name="typeTache">
+                                                    <div class="modal-body">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x close" data-dismiss="modal"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                                        <div class="compose-box">
+                                                            <div class="compose-content container">
+                                                                <h5>{{$tacheT->action->nomA}}</h5>  
+                                                                <h6>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="orange" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                                                    {{$tacheT->date_rappelT}}
+                                                                    &nbsp;&nbsp;
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="red" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                                                    {{$tacheT->date_echeanceT}}
+                                                                </h6>
+                                                                <br>
+                                                                <h6>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                                                    {{$tacheT->action->directiveA}}
+                                                                </h6>
+                                                                <br>
+                                                                <div class="row">
+                                                                    @foreach ( $tacheT->action->metadonnees as $meta) 
+                                                                        @if($meta->typeM == 'Date')
+                                                                            <div class="form-group col-md-6">
+                                                                                <div class=" mb-1">
+                                                                                    <span class="badge outline-badge-info">{{$meta->libelleM}}
+                                                                                    </span>
+                                                                                </div>
+                                                                                <input id="basicFlatpickr" name="{{$meta->idM}}" value="{{App\MetaDoc::where('_idM',$meta->idM)->orderBy('created_at', 'desc')->first()->valeur}}" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">
+                                                                            </div>                                                                      
+                                                                        @elseif($meta->typeM == 'Heure')
+                                                                            <div class="form-group col-md-6">
+                                                                                <div class=" mb-1">
+                                                                                    <span class="badge outline-badge-info">{{$meta->libelleM}}
+                                                                                    </span>
+                                                                                </div>
+                                                                                <input name="{{$meta->idM}}" value="{{App\MetaDoc::where('_idM',$meta->idM)->orderBy('created_at', 'desc')->first()->valeur}}" class="form-control" type="time" placeholder="Select Time..">
+                                                                            </div>
+                                                                        @elseif($meta->typeM == 'Numérique')
+                                                                            <div class="form-group col-md-6">
+                                                                                <div class=" mb-1">
+                                                                                    <span class="badge outline-badge-info">{{$meta->libelleM}}
+                                                                                    </span>
+                                                                                </div>
+                                                                                <input id="demo2" name="{{$meta->idM}}" type="text" value="{{App\MetaDoc::where('_idM',$meta->idM)->orderBy('created_at', 'desc')->first()->valeur}}" class="form-control">
+                                                                            </div>
+                                                                        @else
+                                                                            <div class="form-group col-md-6">
+                                                                                <div class=" mb-1">
+                                                                                    <span class="badge outline-badge-info">{{$meta->libelleM}}
+                                                                                    </span>
+                                                                                </div>
+                                                                                <input type="text" name="{{$meta->idM}}" value="{{App\MetaDoc::where('_idM',$meta->idM)->orderBy('created_at', 'desc')->first()->valeur}}" class="form-control" placeholder="{{$meta->libelleM}}">
+                                                                            </div>
+                                                                        @endif
+                                                                    @endforeach
+                                                                </div>
+                                                                <div class="attachment file-pdf">
+                                                                    <div class="media">
+                                                                        <div class="form-group">
+                                                                            <div class=" col-md-12">
+                                                                            <b> Version(s) récente(s): </b>
+                                                                            </div>
+                                                                            @if ($tacheT->versions_recentes())
+                                                                                @foreach ( $tacheT->versions_recentes() as $tv) 
+                                                                                <div class=" col-md-12">
+                                                                                    <div class=" media-body">
+                                                                                        <p class="file-name ">
+                                                                                            <a class="container" onMouseOver="this.style.color='#e7515a'" onMouseOut="this.style.color='#515365'" href="{{asset('pdf/'.$tv->doc)}}" download="{{$tv->document->nomD}}_V{{$tv->numV}}"> 
+                                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                                                                                {{$tv->nomV}}
+                                                                                            </a>
+                                                                                        </p>
+                                                                                    </div>
+                                                                                </div>
+                                                                                @endforeach
+                                                                            @endif
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                                @if ($tacheT->action->versionA==1)
+                                                                    <div class="custom-file mb-4">
+                                                                        <input required type="file" class="custom-file-input" id="customFile" name="versionTache">
+                                                                        <label required class="custom-file-label" for="customFile">Choose file</label>
+                                                                    </div>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <div class="modal-footer">
+                                                    <button class="btn" data-dismiss="modal"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg> Close</button>
+                                                    @if ($tacheT->action->typeA == "Validation")
+                                                        <button id="V{{$tacheT->idT}}" name="Valider" type="button" class="submitG btn btn-success">Valider</button>
+                                                    @elseif($tacheT->action->typeA == "Approbation")
+                                                        <button id="R{{$tacheT->idT}}" name="Rejeter" type="button" class="submitG btn btn-danger">Rejeter</button>
+                                                        <button id="A{{$tacheT->idT}}" name="Accepter" type="button" class="submitG btn btn-success">Accepter</button>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>

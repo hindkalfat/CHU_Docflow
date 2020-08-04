@@ -14,7 +14,7 @@ class AddPhotoTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            $table->string('photoU',150)->after('serviceU')->default('avatar.jpg')->nullable();
         });
     }
 

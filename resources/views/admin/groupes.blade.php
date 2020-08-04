@@ -63,7 +63,7 @@
                                                                 <div class="form-group col-md-12">
                                                                     <select name="userG[]" id="c-users" class="selectpicker form-control" multiple data-live-search="true" data-actions-box="true">
                                                                         @foreach ($users as $user)
-                                                                            <option value="{{$user->id}}"> {{$user->nomU}} </option>
+                                                                            <option value="{{$user->id}}"> {{$user->nomU}} {{$user->prenomU}} </option>
                                                                         @endforeach
                                                                         
                                                                     </select>
@@ -117,7 +117,7 @@
                                                         <?php $var=1; ?>
                                                     @foreach ($groupe->users->take(3) as $user)
                                                         <li class="list-inline-item chat-online-usr">
-                                                            <img alt="avatar" src="{{asset('assets/img/avatar.jpg')}}" @if($var==1) class="ml-0" @endif>
+                                                            <img alt="avatar" src="{{asset("assets/img/Avatar/$user->photoU")}}" @if($var==1) class="ml-0" @endif>
                                                         </li>
                                                         <?php $var++; ?>
                                                     @endforeach
@@ -164,7 +164,7 @@
                                                                     <li class="list-group-item list-group-item-action">
                                                                         <div class="media">
                                                                             <div class="mr-3">
-                                                                                <img alt="avatar" src="{{asset('assets/img/avatar.jpg')}}" class="img-fluid rounded-circle">
+                                                                                <img alt="avatar" src="{{asset("assets/img/Avatar/$user->photoU")}}" class="img-fluid rounded-circle">
                                                                             </div>
                                                                             <div class="media-body">
                                                                                 <h6 class="tx-inverse">{{$user->nomU}} {{$user->prenomU}}</h6>

@@ -64,15 +64,18 @@
                 var cpt = 1;
                 $('#valMeta').empty()
                 $( a ).each(function( index ) {
-                    $('#valMeta').append(
+                    if(this.valeur != null){
+                        $('#valMeta').append(
                         '<tr class="table-default">'+
                             '<td class="text-center">'+cpt+'</td>'+
                             '<td>'+this.valeur+'</td>'+
                             '<td>'+this.nomU+' '+this.prenomU+'</td>'+
                             '<td>'+this.created_at+'</td>'+
                         '</tr>'
-                    )
-                    cpt++;
+                        )
+                        cpt++;
+                    }
+                   
                 });
                 
             });
@@ -156,8 +159,8 @@
                                         </div>
                                         <div class="col-sm-5 align-self-center  text-sm-right order-2">
                                             <p class="inv-list-number"><span class="inv-title">Nombre de version(s) : </span> <span class="inv-number"> {{$versions->count()}} </span></p>
-                                            <p class="inv-list-number"><span class="inv-title">Date de création : </span> <span class="inv-number">20 Aug 2019</span></p>
-                                            <p class="inv-list-number"><span class="inv-title">Date de modification: </span> <span class="inv-number">26 Aug 2019</span></p>
+                                            <p class="inv-list-number"><span class="inv-title">Date de création : </span> <span class="inv-number">{{$doc->created_at->format('d/m/Y')}}</span></p>
+                                            <p class="inv-list-number"><span class="inv-title">Date de modification: </span> <span class="inv-number">{{$doc->updated_at->format('d/m/Y')}}</span></p>
                                         </div>
                                     </div>
 
@@ -209,7 +212,7 @@
                                                                 <div class="row align-self-center">
                                                                     @foreach ($metas as $meta)
                                                                         <a href="#" data-toggle="modal" @if(App\MetaDoc::join('users_taches','metas_docs._idUT','users_taches.idUT')->join('users','users_taches._idU','users.id')->where('_idM',$meta->idM)->count()>0) data-target="#exampleModalCenter" @endif  data-valeur="{{App\MetaDoc::join('users_taches','metas_docs._idUT','users_taches.idUT')->join('users','users_taches._idU','users.id')->where('_idM',$meta->idM)->get()}}">
-                                                                            <h6 class="inv-list-number"> {{$meta->libelleM}}:  <span class="inv-title">{{App\MetaDoc::where('_idM',$meta->idM)->latest()->first()->valeur}} </span> | </h6>
+                                                                            <h6 class="inv-list-number"> {{$meta->libelleM}}:  <span class="inv-title">{{App\MetaDoc::where('_idM',$meta->idM)->whereNotNull('valeur')->orderBy('created_at', 'desc')->first()->valeur}} </span> | </h6>
                                                                         </a>
                                                                     @endforeach
                                                                 </div>  
@@ -225,18 +228,24 @@
                                                         <div style="margin-left:50px;">
                                                             <div class="avatar--group">
                                                                 <div class="avatar">
-                                                                    <img alt="avatar" src="{{asset('assets/img/profile-12.jpg')}}" class="rounded-circle  bs-tooltip" data-original-title="{{$doc->user->nomU }} {{$doc->user->prenomU }}" />
+                                                                    <img alt="avatar" src="http://localhost:8000/assets/img/Avatar/{{$doc->user->photoU}}" class="rounded-circle  bs-tooltip" data-original-title="{{$doc->user->nomU }} {{$doc->user->prenomU }}" />
                                                                 </div> 
                                                                 @foreach ($contributeursU as $usr)
-                                                                    <div class="avatar">
-                                                                        <img alt="avatar" src="{{asset('assets/img/profile-12.jpg')}}" class="rounded-circle  bs-tooltip" data-original-title="{{$usr->nomU }} {{$usr->prenomU }}" />
-                                                                    </div>            
-                                                                @endforeach
-                                                                @if ($contributeursUG)
-                                                                    @foreach ($contributeursUG as $usr)
+                                                                    @if($usr->id != $doc->user->id )
                                                                         <div class="avatar">
-                                                                            <img alt="avatar" src="{{asset('assets/img/profile-12.jpg')}}" class="rounded-circle  bs-tooltip" data-original-title="{{$usr->nomU }} {{$usr->prenomU }}" />
-                                                                        </div>            
+                                                                            <img alt="avatar" src="{{asset("assets/img/Avatar/$usr->photoU")}}" class="rounded-circle  bs-tooltip" data-original-title="{{$usr->nomU }} {{$usr->prenomU }}" />
+                                                                        </div> 
+                                                                    @endif           
+                                                                @endforeach
+                                                                @if ($contributeursG)
+                                                                    @foreach ($contributeursG as $grp)
+                                                                        @foreach ($grp->users as $usr)
+                                                                            @if($usr->id != $doc->user->id )
+                                                                                <div class="avatar">
+                                                                                    <img alt="avatar" src="{{asset("assets/img/Avatar/$usr->photoU")}}" class="rounded-circle  bs-tooltip" data-original-title="{{$usr->nomU }} {{$usr->prenomU }}" />
+                                                                                </div>  
+                                                                            @endif   
+                                                                        @endforeach           
                                                                     @endforeach
                                                                 @endif
                                                                 {{-- <div class="avatar">
@@ -247,7 +256,7 @@
                                                     </div>
                                                     @if ($droitsG->count()>0)
                                                         <div class="col-sm-6 col-6">
-                                                            <h6 class=" inv-title">Groupes:</h6>
+                                                            <h6 class=" inv-title">Partagé avec:</h6>
                                                             <div style="margin-left:50px;">
                                                                 <div class="avatar--group">
                                                                     @foreach ($droitsG as $droitG)

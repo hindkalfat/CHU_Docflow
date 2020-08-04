@@ -41,7 +41,7 @@
                         <a href="{{url('admin/groupes')}}"> Groupes </a>
                     </li>
                     <li>
-                        <a href="{{url('admin/users')}}"> Utilisateur </a>
+                        <a href="{{url('admin/users')}}"> Utilisateurs </a>
                     </li>
                 </ul>
             </li>
