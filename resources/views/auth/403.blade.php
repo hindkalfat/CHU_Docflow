@@ -9,7 +9,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
-    <title>CHU Docflow </title>
+    <title>CollabDoc</title>
     <link rel="icon" type="image/x-icon" href="{{asset('assets/img/favicon.ico')}}"/>
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
     <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
@@ -35,7 +35,11 @@
             <h1 class="error-number">403</h1>
             <p class="mini-text">Ooops!</p>
             <p class="error-text mb-4 mt-1">Accès refusé!</p>
-            <a href="index.html" class="btn btn-primary mt-5">Retour</a>
+            @if(Auth::user()->roles->pluck('nomR')->contains("admin"))
+                <a href="{{url('admin/documents')}}" class="btn btn-primary mt-5">Retour</a>
+            @else
+                <a href="{{url('user/documents')}}" class="btn btn-primary mt-5">Retour</a>
+            @endif
         </div>
     </div>    
     <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->

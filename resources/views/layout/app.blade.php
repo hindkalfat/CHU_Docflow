@@ -10,7 +10,7 @@
 	<!-- CSRF Token -->
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	
-	<title>CHU Docflow </title>
+	<title>CollabDoc </title>
     <link rel="icon" type="image/x-icon" href="{{asset('assets/img/favicon.ico')}}"/>
     <link href="{{asset('assets/css/loader.css')}}" rel="stylesheet" type="text/css" />
     <script src="{{asset('assets/js/loader.js')}}"></script>

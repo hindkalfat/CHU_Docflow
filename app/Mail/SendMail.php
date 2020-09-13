@@ -31,6 +31,6 @@ class SendMail extends Mailable
      */
     public function build()
     {
-        return $this->from('chudocflow@gmail.com', 'CHUDocflow')->subject($this->subject)->view('emails.sendMail')->with('details', $this->details);
+        return $this->from('chudocflow@gmail.com', 'CollabDoc')->subject($this->subject)->view('emails.sendMail')->with('details', $this->details);
     }
 }

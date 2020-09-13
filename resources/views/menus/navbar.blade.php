@@ -202,7 +202,7 @@
                     aria-labelledby="userProfileDropdown">
                     <div class="user-profile-section">
                         <div class="media mx-auto">
-                            <img src="{{asset('assets/img/profile-7.jpg')}}" class="img-fluid mr-2" alt="avatar">
+                            <img src="http://localhost:8000/assets/img/Avatar/{{Auth::user()->photoU}}" class="img-fluid mr-2" alt="avatar">
                             <div class="media-body">
                                 <h5> {{ Auth::user()->nomU }} {{ Auth::user()->prenomU }}</h5>
                                 <p>{{ Auth::user()->professionU }}</p>
@@ -220,7 +220,7 @@
                         </a>
                     </div>
                     <div class="dropdown-item">
-                        <a href="apps_mailbox.html">
+                        <a href="{{url('mailbox')}}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round" class="feather feather-inbox">

@@ -113,7 +113,7 @@
                                                 <p hidden class="users-groupe" data-users="{{$x}}"></p>
                                             </div>
                                             <div class="layout-top-spacing">
-                                                <ul class="list-inline badge-collapsed-img mb-0 mb-3">
+                                                <ul id="avt{{$groupe->idG}}" class="list-inline badge-collapsed-img mb-0 mb-3">
                                                         <?php $var=1; ?>
                                                     @foreach ($groupe->users->take(3) as $user)
                                                         <li class="list-inline-item chat-online-usr">
@@ -122,7 +122,7 @@
                                                         <?php $var++; ?>
                                                     @endforeach
                                                     <li class="list-inline-item badge-notify mr-0">
-                                                        <div class="notification">
+                                                        <div class="notification" id="nbr{{$groupe->idG}}">
                                                             @if ($groupe->users->count()-3 > 0)
                                                                 <span class="badge badge-info badge-pill">+{{$groupe->users->count()-3}} more</span>
                                                             @endif

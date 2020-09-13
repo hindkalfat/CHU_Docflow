@@ -3,6 +3,7 @@
 @section('link')
 <link href="{{asset('plugins/notification/snackbar/snackbar.min.css')}}" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" type="text/css" href="{{asset('plugins/select2/select2.min.css')}}">
+<link href="{{asset('assets/css/elements/tooltip.css')}}" rel="stylesheet" type="text/css" />
 @endsection
 
 @section('script')
@@ -193,6 +194,8 @@
     }
 </script>
 
+<script src="{{asset('assets/js/elements/tooltip.js')}}"></script>
+
 <script>
         $(document).ready(function () {
             //select2
@@ -222,8 +225,8 @@
                                             '<option value="Heure" >Heure</option>'+
                                             '<option value="Texte" >Texte</option>'+
                                             '<option value="Numérique" >Numérique</option>'+
-                                            '<option value="Enuméré" >Enuméré</option>'+
-                                        '</select>'+
+/*                                             '<option value="Enuméré" >Enuméré</option>'+
+ */                                        '</select>'+
                                     '</div>'+
                                 '</div>');
                 $('#cpt').val(cpt*1+1);
@@ -324,10 +327,11 @@
                                 for(i=0;i<data["metas"].length;i++)
                                 {
                                     $('#widget-content'+data["metas"][i].m_idTd).append(
-                                        '<span class="badge outline-badge-primary">'+ 
+                                        '<span id="mtd'+data["metas"][i].idM+'" class="badge outline-badge-primary" data-toggle="tooltip" title="Hooray!">'+ 
                                                 data["metas"][i].libelleM+
                                         '</span>'+'&nbsp;'  
                                     );
+                                    $('[data-toggle="tooltip"]').tooltip();  
                                 }
                             }
                         });   
@@ -407,6 +411,7 @@
             });
         });
 </script>
+
 
 <div id="content" >
     <input type="hidden" id="cpt" value="0">
@@ -515,11 +520,10 @@
                 
                                     <div class="row layout-top-spacing">
                                         <div class="col-lg-12 layout-spacing">
-                                            <div class="statbox widget box">
+                                            <div class="">
                                                 <div id="accordionBasic" class="widget-header">
-                                                    <div class=" row">
+                                                    <div class=" row container">
                                                         <div class="col-xl-12 col-md-12 col-sm-12 col-12">
-                                                            <br>
                                                             <button type="button" class="btn btn-success mb-2 mr-2" data-toggle="modal" data-target="#fadeupModal">Nouveau</button>
                                                         </div>
                                                     </div>
@@ -560,7 +564,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="widget-content widget-content-area">
+                                                <div class="widget-content layout-top-spacing container ">
                                                     <div id="toggleAccordion">
                                                         <?php $var=1; ?>
                                                         @foreach ($typesDoc as $typeDoc)
@@ -584,7 +588,7 @@
                                                                     </p>
                                                                     <div class="widget-content container">
                                                                         @foreach ($typeDoc->metadonnees as $metadonnee)
-                                                                            <span class="badge outline-badge-primary"> {{$metadonnee->libelleM}} </span>
+                                                                            <span class="badge outline-badge-primary rounded bs-tooltip" data-placement="top" title="{{$metadonnee->typeM}}"> {{$metadonnee->libelleM}} </span>
                                                                         @endforeach
                                                                     </div> 
                                                                 </div>

@@ -119,8 +119,11 @@ class GroupController extends Controller
 
         $groupe->save();
 
+        $usersAvt = $groupe->users->take(3);
+        $nbr = $groupe->users->count();
+
         $usersF = User::whereIn('id',$users)->get();
-        return response()->json(['success' => "updated", "users" => $usersF]);
+        return response()->json(['success' => "updated", "users" => $usersF, 'nbr' => $nbr,'usersAvt'=>$usersAvt, 'groupe' => $groupe,]);
     }
 
     /**

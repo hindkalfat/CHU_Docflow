@@ -124,8 +124,9 @@ function addContact() {
                         '</label>' +
                     '</div>' +
                     '<div class="user-meta-info">' +
+                        '<p hidden class="group-ID" data-ID="'+ data.groupe.idG +'"></p>'+
                         '<p class="user-name" data-name="'+ data.groupe.nomG+'">'+ data.groupe.nomG+'</p>' +
-                        '<p class="users-groupe" data-users="'+x+'"></p>'+
+                        '<p hidden class="users-groupe" data-users="'+x+'"></p>'+
                     '</div>' +
                     '<div class="layout-top-spacing">'+
                         '<ul id="avt'+ data.groupe.idG+'" class="list-inline badge-collapsed-img mb-0 mb-3">'+
@@ -308,7 +309,36 @@ function editContact() {
             var  setUpdatedAttrUsersValue = $_users.attr('data-users', $_usersValue);
 
             $('#ul'+$_IDAttrValue).empty();
+//
+            $('#avt'+data.groupe.idG).empty();
+            var tmp = 1;
+            $.each(data.usersAvt, function (i, item) {
+              if(tmp==1){
+                $('#avt'+data.groupe.idG).append(
+                  '<li class="list-inline-item chat-online-usr">'+
+                      '<img alt="avatar" src="http://localhost:8000/assets/img/Avatar/'+item.photoU+'" class="ml-0">'+
+                  '</li>'
+                  );
+              }else{
+                $('#avt'+data.groupe.idG).append(
+                  '<li class="list-inline-item chat-online-usr">'+
+                      '<img alt="avatar" src="http://localhost:8000/assets/img/Avatar/'+item.photoU+'">'+
+                  '</li>'
+                  );
+              }
+               tmp++; 
+            });
 
+            if(data.nbr-3 > 0)
+            {
+              var nb = data.nbr-3;
+              $('#avt'+data.groupe.idG).append('<li class="list-inline-item badge-notify mr-0">'+
+                '<div class="notification" id="nbr'+data.groupe.idG+'">'+
+                  '<span class="badge badge-info badge-pill">+'+nb+' more</span>'+
+                '</div>'+
+              '</li>') 
+            }
+//
             for(i=0;i<data["users"].length;i++)
             {
               $('#ul'+$_IDAttrValue).append(

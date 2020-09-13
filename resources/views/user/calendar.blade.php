@@ -11,15 +11,13 @@
                             <div class="row">
                                 <div class="col-md-8 col-12">
                                     <div class="labels">
-                                        <p class="label label-primary">Work</p>
-                                        <p class="label label-warning">Travel</p>
-                                        <p class="label label-success">Personal</p>
-                                        <p class="label label-danger">Important</p>
+                                        <p class="label label-danger">Tâches en attente</p>
+                                        <p class="label label-success">Tâches terminées</p>
                                     </div>
                                 </div>                                                
                                 <div class="col-md-4 col-12">
                                     <form action="javascript:void(0);" class="form-horizontal mt-md-0 mt-3 text-md-right text-center">
-                                        <button id="myBtn" class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar mr-2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> Add Event</button>
+                                        <button hidden id="myBtn" class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar mr-2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> Add Event</button>
                                     </form>
                                 </div>
                             </div>
@@ -28,6 +26,10 @@
                     </div>
                 </div>
             </div>
+
+            @foreach ($taches as $tache)
+                <input hidden name="mesTaches" type="text" value="{{$tache}}">
+            @endforeach
 
             <!-- The Modal -->
             <div id="addEventsModal" class="modal animated fadeIn">
@@ -91,32 +93,19 @@
 
                                                     <div class="d-sm-flex d-block">
                                                         <div class="n-chk">
-                                                            <label class="new-control new-radio radio-primary">
-                                                                <input type="radio" class="new-control-input" name="marker" value="bg-primary">
-                                                                <span class="new-control-indicator"></span>Work
-                                                            </label>
-                                                        </div>
-
-                                                        <div class="n-chk">
-                                                            <label class="new-control new-radio radio-warning">
-                                                                <input type="radio" class="new-control-input" name="marker" value="bg-warning">
-                                                                <span class="new-control-indicator"></span>Travel
+                                                            <label class="new-control new-radio radio-danger">
+                                                                <input type="radio" class="new-control-input" name="marker" value="bg-danger">
+                                                                <span class="new-control-indicator"></span>Tâches en attente
                                                             </label>
                                                         </div>
 
                                                         <div class="n-chk">
                                                             <label class="new-control new-radio radio-success">
                                                                 <input type="radio" class="new-control-input" name="marker" value="bg-success">
-                                                                <span class="new-control-indicator"></span>Personal
+                                                                <span class="new-control-indicator"></span>Tâches terminées
                                                             </label>
                                                         </div>
 
-                                                        <div class="n-chk">
-                                                            <label class="new-control new-radio radio-danger">
-                                                                <input type="radio" class="new-control-input" name="marker" value="bg-danger">
-                                                                <span class="new-control-indicator"></span>Important
-                                                            </label>
-                                                        </div>
                                                     </div>
 
                                                 </div>

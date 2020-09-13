@@ -157,4 +157,12 @@ class TacheController extends Controller
     {
         //
     }
+
+    public function calendar()
+    {
+        $taches = Tache::join('actions', 'taches.t_idA', '=', 'actions.idA')
+                        ->where('a_idU',Auth::user()->id)->get();
+        return view('user.calendar',['taches' => $taches]);
+
+    }
 }

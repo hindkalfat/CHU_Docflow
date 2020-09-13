@@ -343,7 +343,7 @@ class DocController extends Controller
             $cond = Condition::find($conditionS);
 
 
-                $result= static::testCondition($cond,$doc);
+                $result= static::testCondition($cond,$doc); 
                 $nextA_oui = $cond->_idAo;
                 $nextA_non = $cond->_idAn;
                 $nextC_oui = $cond->_idCo;
@@ -719,7 +719,7 @@ class DocController extends Controller
         $typeD = $tache->document->type_doc;
         $metas = $typeD->metadonnees;
 
-        $actMeta = ActionMeta::join('metadonnees','metadonnees.idM','=','actions_metas._idM')->where('_idA',$tache->action->idA);
+        $actMeta = ActionMeta::join('metadonnees','metadonnees.idM','=','actions_metas._idM')->where('_idA',$tache->action->idA)->get();
         if($actMeta)
             foreach ($actMeta as $meta ) {
                 $a = $meta->idM;

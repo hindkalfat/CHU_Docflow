@@ -559,7 +559,19 @@
                                                         <div class="compose-box">
                                                             <div class="compose-content">
                                                                 <h5>{{$tache->action->nomA}}</h5>  
-                                                                <h6>{{$tache->action->directiveA}}</h6>
+                                                                <h6>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="orange" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                                                    {{$tache->date_rappelT}}
+                                                                    &nbsp;&nbsp;
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="red" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                                                    {{$tache->date_echeanceT}}
+                                                                </h6>
+                                                                <br>
+                                                                <h6>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                                                    {{$tache->action->directiveA}}
+                                                                </h6>
+                                                                <br>
                                                                 <div class="row">
                                                                     @foreach ( $tache->action->metadonnees as $meta) 
                                                                         @if($meta->typeM == 'Date')
@@ -624,8 +636,7 @@
                                                                 
                                                                 @if ($tache->action->versionA==1)
                                                                     <div class="custom-file mb-4">
-                                                                        <input required type="file" class="custom-file-input" id="customFile" name="versionTache">
-                                                                        <label class="custom-file-label" for="customFile">Choose file</label>
+                                                                        <input name="versionTache" required type="file" class="form-control-file" id="exampleFormControlFile1">
                                                                     </div>
                                                                 @endif
                                                             </div>

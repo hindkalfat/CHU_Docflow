@@ -90,7 +90,7 @@
                                             '<span class="badge outline-badge-info">'+this.libelleM+
                                             '</span>'+
                                         '</div><br/>'+
-                                        '<input id="basicFlatpickr" name="'+this.idM+'" value="2019-09-04" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">'+
+                                        '<input id="basicFlatpickr" name="'+this.idM+'" value="{{date('Y-m-d')}}" class="form-control flatpickr flatpickr-input active" type="text" placeholder="Select Date..">'+
                                     '</div>'
                                 );
                                 var f1 = flatpickr(document.getElementById('basicFlatpickr'));
@@ -456,7 +456,7 @@
                             {{ csrf_field() }}
                             <div class="modal-body">
                                 <div class="form-group">
-                                    <p>Droit d'accés</p>
+                                    <p>Droit d'accés <code>Optionnel</code></p>
                                     <select id="grp" name="grp[]" class="selectpicker form-control" multiple data-live-search="true" data-actions-box="true">
                                         @foreach ($groupes as $groupe)
                                             <option value="{{$groupe->idG}}"> {{$groupe->nomG}} </option>

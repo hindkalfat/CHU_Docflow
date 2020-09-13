@@ -61,8 +61,22 @@
         $(document).ready(function () {
             $("#exampleModalCenter").on('show.bs.modal', function(event) {
                 var a = $(event.relatedTarget).data('valeur');
+                var b = $(event.relatedTarget).data('original');
                 var cpt = 1;
                 $('#valMeta').empty()
+                $( b ).each(function( index ) {
+                    if(this.valeur != null){
+                        $('#valMeta').append(
+                            '<tr class="table-default">'+
+                                '<td class="text-center">'+cpt+'</td>'+
+                                '<td>'+this.valeur+'</td>'+
+                                '<td>Moi</td>'+
+                                '<td>'+this.created_at+'</td>'+
+                            '</tr>'
+                        )
+                    }
+                });
+                cpt++;
                 $( a ).each(function( index ) {
                     if(this.valeur != null){
                         $('#valMeta').append(
@@ -211,8 +225,8 @@
                                                             <div style="margin-left:50px;">
                                                                 <div class="row align-self-center">
                                                                     @foreach ($metas as $meta)
-                                                                        <a href="#" data-toggle="modal" @if(App\MetaDoc::join('users_taches','metas_docs._idUT','users_taches.idUT')->join('users','users_taches._idU','users.id')->where('_idM',$meta->idM)->count()>0) data-target="#exampleModalCenter" @endif  data-valeur="{{App\MetaDoc::join('users_taches','metas_docs._idUT','users_taches.idUT')->join('users','users_taches._idU','users.id')->where('_idM',$meta->idM)->get()}}">
-                                                                            <h6 class="inv-list-number"> {{$meta->libelleM}}:  <span class="inv-title">{{App\MetaDoc::where('_idM',$meta->idM)->whereNotNull('valeur')->orderBy('created_at', 'desc')->first()->valeur}} </span> | </h6>
+                                                                        <a href="#" data-toggle="modal" @if(App\MetaDoc::join('users_taches','metas_docs._idUT','users_taches.idUT')->join('users','users_taches._idU','users.id')->where('_idM',$meta->idM)->where('_idD',$doc->idD)->count()>0) data-target="#exampleModalCenter" @endif  data-original="{{App\MetaDoc::where('_idM',$meta->idM)->where('_idD',$doc->idD)->get()}}" data-valeur="{{App\MetaDoc::join('users_taches','metas_docs._idUT','users_taches.idUT')->join('users','users_taches._idU','users.id')->where('_idM',$meta->idM)->get()}}">
+                                                                            <h6 class="inv-list-number"> {{$meta->libelleM}}:  <span class="inv-title">{{App\MetaDoc::where('_idM',$meta->idM)->where('_idD',$doc->idD)->whereNotNull('valeur')->orderBy('created_at', 'desc')->first()->valeur}} </span> | </h6>
                                                                         </a>
                                                                     @endforeach
                                                                 </div>  

@@ -32,7 +32,7 @@ class LoginController extends Controller
         if($userRoles->contains('admin')){
             return 'admin/documents';
         }else if($userRoles->contains('user')){
-            return 'user/documents';
+            return 'user/calendar';
         }else{
             return '/accesrefuse';
         }

@@ -35,6 +35,6 @@ class Document extends Model
 
     public function metadonnees()
     {
-        return $this->belongsToMany(Metadonnee::class)->using('App\MetaDoc');
+        return $this->belongsToMany(Metadonnee::class,'metas_docs', '_idD', '_idM');
     }
 }

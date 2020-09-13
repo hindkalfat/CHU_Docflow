@@ -26,24 +26,9 @@ Route::get('/admin/nouveauWf', function () {
 
 /******USER******* */
 
-Route::get('/user/dash', function () {
-    return view('user/dash');
-});
-
-Route::get('/user/calendar', function () {
-    return view('user/calendar');
-});
-
-
-Route::get('admin/pdf', function () {
-    return view('admin/pdf');
-});
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/action/{id}', 'DocController@actions');
-Route::get('/nextActions/{id}/{doc}/{idT}', 'DocController@nextActions');
 
 
 
@@ -108,6 +93,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/metas','DocController@metas');
 
         //tache
+        Route::get('/user/calendar', 'TacheController@calendar');
         Route::get('/user/taches','TacheController@index');
         Route::post('/user/taches','DocController@effectuerTache');
         Route::post('/user/affecter/tache','TacheController@affecter');

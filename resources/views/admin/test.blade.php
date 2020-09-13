@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
-    <title>CHU Docflow</title>
+    <title>CollabDoc</title>
     <link rel="icon" type="image/x-icon" href="{{asset('assets/img/favicon.ico')}}"/>
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
     <link href="{{asset('https://fonts.googleapis.com/css?family=Nunito:400,600,700')}}" rel="stylesheet">
@@ -197,7 +197,7 @@
 					</div>
 					<div class="modal-footer">
 						<button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> Annuler</button>
-						<button id="saveWorkflow" type="button" class="btn btn-primary dlt">Confirmer</button>
+						<button id="saveWorkflow" onclick="capture()" type="button" class="btn btn-primary dlt">Confirmer</button>
 					</div>
 				</div>
 			</div>
@@ -471,7 +471,8 @@
 							<input type="radio" id="customRadioInline2" value="appro" name="customRadioInline1" class="custom-control-input" disabled>
 							<label class="custom-control-label" for="customRadioInline2">Condition d'approbation</label>
 						</div>
-						<small id="emailHelp1" class="form-text text-muted mb-4">Le deuxième choix est activé si la condition a une tâche d'approbation comme prédecesseur.</small>
+						<br>
+						<code>Le deuxième choix est activé si la condition a une tâche d'approbation comme prédecesseur.</code>
 					</div>
 				</div>
 			</div>
@@ -580,7 +581,19 @@
 		<input type="hidden" id="count" value="0">
 		<input type="hidden" id="actMeta">
 
+		<script src="{{asset('js/screenshot/html2canvas.js')}}"></script>
+		<script src="{{asset('js/screenshot/html2canvas.min.js')}}"></script>
 		<script>
+			function capture() {
+				html2canvas($('body'),{
+					onrendered: function (canvas) {                     
+						var imgString = canvas.toDataURL("image/png");
+						window.open(imgString);
+						alert(imgString)
+					}                  
+				});
+			}
+
 			function dateP(params) {
 				var date = $('#basicFlatpickr1').val()
 				$('#basicFlatpickr1').val(date)
@@ -1221,8 +1234,18 @@
 					}));
 
 					$('#opCompar').append($('<option>', {
+						value: '>=',
+						text: 'supérieur ou égale à'
+					}));
+
+					$('#opCompar').append($('<option>', {
 						value: '<',
 						text: 'inférieur à'
+					}));
+
+					$('#opCompar').append($('<option>', {
+						value: '<=',
+						text: 'inférieur ou égale à'
 					}));
 
 					$('#opCompar').append($('<option>', {
@@ -1551,7 +1574,7 @@
 
 	<script>//video
 		$('#vimeo-video-link').click(function () {
-			var src = 'http://localhost:8000/video/Colladoc_Demo.mp4';
+			var src = 'http://localhost:8000/video/CollaDoc_Demo.mp4';
 			$('#videoMedia2').modal('show');
 			$('<iframe>').attr({
 				'src': src,
