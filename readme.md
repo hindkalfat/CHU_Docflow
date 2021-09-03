@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img src="public/assets/img/logo.svg" width="50" height="50" class="navbar-logo" alt="logo">
+  <img src="public/assets/img/logo.svg" width="70" height="70" class="navbar-logo" alt="logo">
   <p align="center">CollabDoc</p>
 </p>
 
@@ -28,13 +28,21 @@ décision automatique.
 * L’application permet aux utilisateurs de suivre et de consulter leurs
 documents tout au long de leurs cycles de vie. 
 
+## CollabDoc workflow
+L’éditeur ci-dessous permet à l’administrateur de
+modéliser les flux des documents, en glissant les composants qui se trouvent dans le menu
+gauche et en les reliant entre eux pour former le workflow documentaire souhaité. 
+<p align="center">
+    <img src="public/assets/img/wfc.PNG" width="550" height="330" class="navbar-logo" alt="wf">
+</p>
+Cet éditeur est une extension du plugin [JQuery.flowchart](https://github.com/sdrdis/jquery.flowchart)
+
 ## Technologies 
 Les principales technologies utilisées sont:
 * Coté client:
   * [Bootstrap](https://getbootstrap.com/): Version 4.0
   * [JQuery](https://example.com): Version 3.2
   * [JQuery.flowchart](https://github.com/sdrdis/jquery.flowchart)
-
 
 * Coté serveur
   * [Laravel](https://laravel.com/): Version 5.7
