@@ -35,6 +35,8 @@ gauche et en les reliant entre eux pour former le workflow documentaire souhait√
 <p align="center">
     <img src="public/assets/img/wfc.PNG" width="550" height="330" class="navbar-logo" alt="wf">
 </p>
+
+
 Cet √©diteur est une extension du plugin [JQuery.flowchart](https://github.com/sdrdis/jquery.flowchart)
 
 ## Technologies 
